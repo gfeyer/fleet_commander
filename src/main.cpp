@@ -9,10 +9,14 @@ tgui::ChildWindow::Ptr createPopup() {
     // Create Popup Window (ChildWindow)
     auto popup = tgui::ChildWindow::create("Widget Showcase");
     popup->setRenderer(theme->getRenderer("ChildWindow"));
-    popup->setSize({"400px", "800px"});
+    popup->setSize({"350px", "350px"});
     popup->setPosition({"50%", "50%"});
     popup->setOrigin(0.5f, 0.5f);
     popup->setTitleButtons(tgui::ChildWindow::TitleButton::Close);
+    popup->setResizable(true);  // Enable resizing for the popup
+    popup->onSizeChange([](tgui::Vector2f newSize) {
+        std::cout << "Popup resized to: " << newSize.x << "x" << newSize.y << std::endl;
+    });
 
     // ─── Label ───
     auto label = tgui::Label::create("Welcome to TGUI Widgets!");
@@ -118,8 +122,8 @@ tgui::ChildWindow::Ptr createPopup() {
     auto closeButton = tgui::Button::create("Close");
     closeButton->setRenderer(theme->getRenderer("Button"));
     closeButton->setSize({"100px", "30px"});
-    closeButton->setPosition({"50%", "95%"});
-    closeButton->setOrigin(0.5f, 0.5f);
+    closeButton->setPosition({"95%", "95%"});
+    closeButton->setOrigin(0.9f, 0.9f);
     closeButton->onPress([popup]() {
         std::cout << "Popup Closed!" << std::endl;
         if (popup->getParent()) {
