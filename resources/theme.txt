@@ -1,0 +1,21 @@
+Button {
+    BackgroundColor = #3498db;
+    BackgroundColorHover = #2980b9;
+    BackgroundColorDown = #1f618d;
+    TextColor = #ffffff;
+    BorderColor = #1c2833;
+    TextSize = 18;
+}
+
+EditBox {
+    BackgroundColor = #ecf0f1;
+    TextColor = #2c3e50;
+    CaretColor = #e74c3c;
+    BorderColor = #bdc3c7;
+    TextSize = 16;
+}
+
+Label {
+    TextColor = #f1c40f;
+    TextSize = 20;
+}
