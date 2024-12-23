@@ -3,100 +3,96 @@
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <iostream>
 
-// Global flag for dragging UI panel
-bool isDragging = false;
-sf::Vector2f dragOffset;
+// Function to create and show a popup window
+void createPopup(tgui::Gui& gui, const std::string& title, const std::vector<std::string>& inputLabels) {
+    // Create a modal ChildWindow
+    auto popup = tgui::ChildWindow::create();
+    popup->setTitle(title);
+    popup->setSize({400, 300}); // Use floats for size
+    popup->setPosition({"50%", "50%"}); // Center on screen
+    popup->setOrigin(0.5f, 0.5f); // Set origin to center
+    popup->setResizable(false);
+    popup->setTitleButtons(tgui::ChildWindow::TitleButton::Close);
+
+    // Capture `gui` by reference in the lambda
+    popup->onClose([&gui, popup]() mutable {
+        gui.remove(popup); // Properly remove the popup
+    });
+
+    // Dynamic layout for input fields and labels
+    float yOffset = 40;
+    std::vector<std::shared_ptr<tgui::EditBox>> inputBoxes;
+    for (const auto& label : inputLabels) {
+        auto lbl = tgui::Label::create(label);
+        lbl->setPosition({10, yOffset});
+        lbl->setTextSize(16);
+        popup->add(lbl);
+
+        auto inputBox = tgui::EditBox::create();
+        inputBox->setPosition({150, yOffset});
+        inputBox->setSize({200, 30});
+        popup->add(inputBox);
+        inputBoxes.push_back(inputBox);
+
+        yOffset += 50;
+    }
+
+    // Add a Submit button
+    auto submitButton = tgui::Button::create("Submit");
+    submitButton->setSize({100, 40});
+    submitButton->setPosition({150, yOffset + 10});
+    submitButton->onPress([=, &gui]() mutable {
+        std::cout << "Popup Inputs:\n";
+        for (size_t i = 0; i < inputBoxes.size(); ++i) {
+            std::cout << inputLabels[i] << ": " << inputBoxes[i]->getText().toStdString() << "\n";
+        }
+        gui.remove(popup); // Properly remove the popup after submission
+    });
+    popup->add(submitButton);
+
+    // Add the popup to the GUI
+    gui.add(popup);
+}
 
 int main() {
-    // Create SFML Window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Game with TGUI UI");
+    // Main window
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML with TGUI Popups");
     tgui::Gui gui(window);
 
-    // -----------------
-    // Game Content
-    // -----------------
-    sf::CircleShape player(30);
-    player.setFillColor(sf::Color::Green);
-    player.setPosition(400, 300);
+    // Background content (for context)
+    // auto mainLabel = tgui::Label::create("Main Window");
+    // mainLabel->setPosition({10, 10});
+    // mainLabel->setTextSize(24);
+    // gui.add(mainLabel);
 
-    // -----------------
-    // UI Panel (Movable)
-    // -----------------
-    auto panel = tgui::Panel::create({"300px", "200px"});
-    panel->setPosition({"200px", "150px"});
-    panel->getRenderer()->setBackgroundColor(sf::Color(50, 50, 50, 200));
-    gui.add(panel);
+    // auto openPopup1 = tgui::Button::create("Open Login Popup");
+    // openPopup1->setPosition({10, 50});
+    // openPopup1->setSize({200, 40});
+    // openPopup1->onPress([&]() {
+    //     createPopup(gui, "Login", {"Username", "Password"});
+    // });
+    // gui.add(openPopup1);
 
-    // Label inside the panel
-    auto label = tgui::Label::create("Game Controls");
-    label->setTextSize(18);
-    label->setPosition({"10px", "10px"});
-    panel->add(label);
+    // auto openPopup2 = tgui::Button::create("Open Feedback Popup");
+    // openPopup2->setPosition({10, 100});
+    // openPopup2->setSize({200, 40});
+    // openPopup2->onPress([&]() {
+    //     createPopup(gui, "Feedback", {"Name", "Email", "Comments"});
+    // });
+    // gui.add(openPopup2);
 
-    // Button inside the panel
-    auto button = tgui::Button::create("Click Me");
-    button->setSize({"100px", "40px"});
-    button->setPosition({"10px", "50px"});
-    button->onPress([]() {
-        std::cout << "Button Clicked!" << std::endl;
-    });
-    panel->add(button);
-
-    // Text Box inside the panel
-    auto textBox = tgui::EditBox::create();
-    textBox->setSize({"200px", "30px"});
-    textBox->setPosition({"10px", "110px"});
-    textBox->setDefaultText("Type something...");
-    panel->add(textBox);
-
-    // -----------------
-    // Main Loop
-    // -----------------
+    // Main loop
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            // Handle window close
-            if (event.type == sf::Event::Closed) {
+            if (event.type == sf::Event::Closed)
                 window.close();
-            }
 
-            // Handle Mouse Events for Dragging the Panel
-            if (event.type == sf::Event::MouseButtonPressed) {
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    sf::Vector2f mousePos(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-                    if (panel->isMouseOnWidget(mousePos)) {
-                        isDragging = true;
-                        // dragOffset = mousePos - panel->getPosition();
-                    }
-                }
-            }
-
-            if (event.type == sf::Event::MouseButtonReleased) {
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    isDragging = false;
-                }
-            }
-
-            if (event.type == sf::Event::MouseMoved && isDragging) {
-                sf::Vector2f mousePos(static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y));
-                panel->setPosition({mousePos.x - dragOffset.x, mousePos.y - dragOffset.y});
-            }
-
-            // Pass events to TGUI
-            gui.handleEvent(event);
+            gui.handleEvent(event); // Pass events to TGUI
         }
 
-        // -----------------
-        // Rendering
-        // -----------------
         window.clear(sf::Color::Black);
-
-        // Draw Game Content
-        window.draw(player); 
-
-        // Draw GUI
         gui.draw();
-
         window.display();
     }
 
