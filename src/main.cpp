@@ -8,6 +8,9 @@
 #include "config.hpp"
 
 int main() {
+    // seed srand
+    srand(time(NULL));
+
     // Create SFML Window
     sf::RenderWindow window(sf::VideoMode(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT), "In-Game Popup Example");
     window.setFramerateLimit(60);

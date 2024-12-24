@@ -3,15 +3,12 @@
 #include "util/logger.hpp"
 #include "resource.hpp"
 #include "gui.hpp"
+#include "config.hpp"
 
-Factory::Factory(sf::Vector2f pos, float rot, sf::Vector2f scale) : Entity()
+void Factory::initialize()
 {
-    log_info << "Creating Factory";
-
-    setPosition(pos);
-
     // Shape
-    rectangleShape = sf::RectangleShape({50,50});
+    rectangleShape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
     rectangleShape.setFillColor(sf::Color::Cyan);
 
     // Label
@@ -19,6 +16,21 @@ Factory::Factory(sf::Vector2f pos, float rot, sf::Vector2f scale) : Entity()
     label = GUI::Manager::getInstance().buildLabel();
     label->setText("Factory #23");
     label->setTextSize(18);
+}
+
+Factory::Factory() : Entity()
+{
+    initialize();
+}
+
+Factory::Factory(sf::Vector2f pos, float rot, sf::Vector2f scale) : Entity()
+{
+    initialize();
+    log_info << "Creating Factory at " << pos.x << ", " << pos.y;
+
+    setPosition(pos);
+    setRotation(rot);
+    setScale(scale);
 }
 
 Factory::~Factory()
@@ -39,5 +51,6 @@ void Factory::handleInput(sf::Event &event)
 
 void Factory::render(sf::RenderWindow &window)
 {
+    // only non-gui elements need to be drawn
     window.draw(rectangleShape);
 }

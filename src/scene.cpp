@@ -4,6 +4,7 @@
 #include "factory.hpp"
 #include "resource.hpp"
 #include "config.hpp"
+#include "outpost.hpp"
 
 Scene::Scene()
 {
@@ -26,10 +27,15 @@ Scene::Scene()
         static_cast<float>(windowSize.y) / textureSize.y
     );
 
-    // Create Entities
-    entities.push_back(std::make_shared<Factory>(sf::Vector2f(100, 100), 0, sf::Vector2f(1, 1)));
-    entities.push_back(std::make_shared<Factory>(sf::Vector2f(300, 400), 0, sf::Vector2f(1, 1)));
-    entities.push_back(std::make_shared<Factory>(sf::Vector2f(600, 250), 0, sf::Vector2f(1, 1)));
+    // Create Factories
+    entities.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
+
+    // Create Outposts
+    entities.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
 
 
 }
