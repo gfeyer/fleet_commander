@@ -2,12 +2,13 @@
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 
+#include "util/resource_manager.hpp"
 namespace GUI {
 
     const unsigned int FONT_SIZE = 18;
     
 tgui::ChildWindow::Ptr createPopup() {
-    tgui::Theme::Ptr theme = tgui::Theme::create("resources/Dark.txt");
+    tgui::Theme::Ptr theme = ResourceManager::getTheme("resources/Dark.txt");
 
     // Create Popup Window (ChildWindow)
     auto popup = tgui::ChildWindow::create("Widget Showcase");

@@ -31,3 +31,14 @@ sf::Font& ResourceManager::getFont(const std::string& fontName) {
     // Return the found or newly inserted font
     return *instance.fonts[fontName];
 }
+
+tgui::Theme::Ptr ResourceManager::getTheme(const std::string &themePath)
+{
+    ResourceManager& instance = ResourceManager::getInstance(); // Get reference to the instance
+
+    if (instance.theme == nullptr) {
+        instance.theme = tgui::Theme::create(themePath);
+    }
+
+    return instance.theme;
+}
