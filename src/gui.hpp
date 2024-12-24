@@ -6,11 +6,52 @@
 #include <TGUI/Backend/SFML-Graphics.hpp>
 
 #include "resource.hpp"
+#include <memory>
 
 namespace GUI {
 
-    const unsigned int FONT_SIZE = 18;
+const unsigned int FONT_SIZE = 18;
+
+class Manager{
+private:
+    sf::RenderWindow* window;   // Managed external to the class
+    std::unique_ptr<tgui::Gui> gui;
     
+public:
+    Manager(const Manager&) = delete;
+    Manager& operator=(const Manager&) = delete;
+    
+    static Manager& getInstance() {
+        static Manager instance; // Singleton instance but allocate once on stack instead of heap, thread-safe
+        return instance;
+    }
+
+    void initialize(sf::RenderWindow& window) {
+        this->window = &window;
+        gui = std::make_unique<tgui::Gui>(window);
+
+        gui->setFont("resources/fonts/toxigenesis.otf");
+        // gui->setRelativeView({0,0,0.9f,0.9f});
+        gui->setOpacity(0.8f);
+    }
+
+    void add(tgui::Widget::Ptr widget) {
+        gui->add(widget);
+    }
+
+    void draw() {
+        gui->draw();
+    }
+
+    bool handleEvent(const sf::Event& event) {
+        return gui->handleEvent(event);
+    }
+
+private:
+    Manager() = default;
+    ~Manager() = default;
+};
+
 tgui::ChildWindow::Ptr createPopup() {
     auto theme = Resource::Manager::getInstance().getTheme(Resource::Paths::DARK_THEME);
     

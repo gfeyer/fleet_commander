@@ -15,6 +15,7 @@ int main() {
     const sf::Texture& backgroundTexture = Resource::Manager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
 
     // Create a sprite for the background
+    // TODO: belongs in scene
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(backgroundTexture);
 
@@ -26,16 +27,14 @@ int main() {
         static_cast<float>(windowSize.y) / textureSize.y
     );
 
-    // TODO: separate GUI namespace & singleton
-    tgui::Gui gui(window);
-    gui.setFont("resources/fonts/toxigenesis.otf");
-    // gui.setRelativeView({0,0,0.9f,0.9f});
+    // GUI initialization
+    GUI::Manager::getInstance().initialize(window);
 
     // Main Game UI: Background Label
     auto mainLabel = tgui::Label::create("Game Window Running...");
     mainLabel->setPosition({"10%", "10%"});
     mainLabel->setTextSize(24);
-    gui.add(mainLabel);
+    GUI::Manager::getInstance().add(mainLabel);
 
     // Open Popup with Main Button
     auto openPopupButton = tgui::Button::create("Open Popup");
@@ -43,10 +42,10 @@ int main() {
     openPopupButton->setPosition({"10%", "80%"});
     openPopupButton->onPress([&]() {
         auto popup = GUI::createPopup();
-        gui.add(popup);
+        GUI::Manager::getInstance().add(popup);
     });
 
-    gui.add(openPopupButton);
+    GUI::Manager::getInstance().add(openPopupButton);
 
     Scene scene;
     auto time = sf::Clock();
@@ -61,7 +60,7 @@ int main() {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 window.close();
             }
-            bool handled = gui.handleEvent(event); // Pass events to GUI
+            bool handled = GUI::Manager::getInstance().handleEvent(event);
             
             if(!handled && event.type == sf::Event::MouseButtonPressed) {
                 if(event.mouseButton.button == sf::Mouse::Left) {
@@ -78,7 +77,7 @@ int main() {
         // window.draw(backgroundSprite); // Draw the background image
 
         scene.render(window);
-        gui.draw();
+        GUI::Manager::getInstance().draw();
 
         window.display();
     }
