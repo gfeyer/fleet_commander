@@ -18,9 +18,9 @@ tgui::ChildWindow::Ptr createPopup() {
     popup->setTitleButtons(tgui::ChildWindow::TitleButton::Close);
     popup->setTextSize(FONT_SIZE);
     popup->setResizable(true);  // Enable resizing for the popup
-    popup->onSizeChange([](tgui::Vector2f newSize) {
-        std::cout << "Popup resized to: " << newSize.x << "x" << newSize.y << std::endl;
-    });
+    // popup->onSizeChange([](tgui::Vector2f newSize) {
+    //     std::cout << "Popup resized to: " << newSize.x << "x" << newSize.y << std::endl;
+    // });
 
     // ─── Label ───
     auto label = tgui::Label::create("Welcome to TGUI Widgets!");

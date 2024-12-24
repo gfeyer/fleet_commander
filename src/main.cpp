@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "gui.hpp"
+#include "world.hpp"
 
 int main() {
     // Create SFML Window
@@ -31,8 +32,7 @@ int main() {
 
     gui.add(openPopupButton);
 
-    // World world;
-
+    World world;
     auto time = sf::Clock();
 
 
@@ -52,11 +52,11 @@ int main() {
         }
 
         // Update(dt)
-        // world.update(time.restart().asSeconds());
+        world.update(time.restart().asSeconds());
 
         // Draw(window)
         window.clear(sf::Color(50, 50, 50));
-        // world.render(window);
+        world.render(window);
         gui.draw();
 
         window.display();

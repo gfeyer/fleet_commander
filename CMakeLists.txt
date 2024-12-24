@@ -14,7 +14,7 @@ find_package(TGUI CONFIG REQUIRED)
 # message(STATUS "TGUI Include Dir: ${TGUI_INCLUDE_DIR}")
 
 # Define the executable
-file(GLOB SOURCES src/*.cpp)
+file(GLOB_RECURSE SOURCES src/*.cpp)
 add_executable(main ${SOURCES})
 
 # Link libraries to the executable
