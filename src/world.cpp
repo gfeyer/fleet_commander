@@ -18,5 +18,10 @@ void World::update(float dt)
 
 void World::render(sf::RenderWindow &window)
 {
+}
+
+void World::handleInput(sf::Event &event)
+{
+    log_info << "World Input Handled";
     
 }
