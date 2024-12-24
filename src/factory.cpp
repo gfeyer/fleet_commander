@@ -4,19 +4,20 @@
 #include "resource.hpp"
 #include "gui.hpp"
 
-Factory::Factory(sf::Vector2f pos, float rot, sf::Vector2f scale) : Entity(pos, rot, scale)
+Factory::Factory(sf::Vector2f pos, float rot, sf::Vector2f scale) : Entity()
 {
     log_info << "Creating Factory";
+
+    setPosition(pos);
 
     // Shape
     rectangleShape = sf::RectangleShape({50,50});
     rectangleShape.setFillColor(sf::Color::Cyan);
-    rectangleShape.setPosition(position);
 
     // Label
+    // GUI elements don't need to be drawn, handled by GUI manager
     label = GUI::Manager::getInstance().buildLabel();
     label->setText("Factory #23");
-    label->setPosition(rectangleShape.getPosition().x + rectangleShape.getSize().x, rectangleShape.getPosition().y + 5);
     label->setTextSize(18);
 }
 
@@ -27,6 +28,9 @@ Factory::~Factory()
 
 void Factory::update(float dt)
 {
+    rectangleShape.setPosition(getPosition());
+    label->setPosition(getPosition().x + rectangleShape.getSize().x, getPosition().y + 5);
+
 }
 
 void Factory::handleInput(sf::Event &event)

@@ -5,15 +5,12 @@
 
 #include <SFML/Graphics.hpp>
 
-class Entity{
-// Entity is a base class for game objects such as sprites, positions, and basic behaviors.
+class Entity : public sf::Transformable{
+// Base class for a game object
+// Uses sf::Transformable to manage position, rotation and scale
 
 protected:
-    // Transform data
-    sf::Vector2f position;
-    float rotation;  
-    sf::Vector2f scale;  
-
+ 
     // Visual Representation
     sf::Sprite sprite;
     std::unique_ptr<sf::Shape> shape;
@@ -25,7 +22,7 @@ protected:
     std::string id;
 
 public:
-    Entity(sf::Vector2f pos, float rot, sf::Vector2f scale);
+    Entity();
     virtual ~Entity();
 
     virtual void update(float dt) = 0;
@@ -33,9 +30,9 @@ public:
     virtual void handleInput(sf::Event& event) = 0;
 
     // Transform
-    void setPosition(sf::Vector2f pos);
-    void setPosition(float x, float y);
-    sf::Vector2f getPosition();
+    // void setPosition(sf::Vector2f pos);
+    // void setPosition(float x, float y);
+    // sf::Vector2f getPosition();
 
     // Collision Detection
     virtual bool checkCollision(const Entity& other) const;

@@ -2,9 +2,8 @@
 
 #include "util/logger.hpp"
 
-Entity::Entity(sf::Vector2f pos, float rot, sf::Vector2f scale) : position(pos), rotation(rot), scale(scale)
+Entity::Entity() : sf::Transformable()
 {
-    
 }
 
 Entity::~Entity()
