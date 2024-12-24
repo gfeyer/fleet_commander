@@ -26,11 +26,7 @@ int main() {
     openPopupButton->setSize({"150px", "50px"});
     openPopupButton->setPosition({"10%", "80%"});
     openPopupButton->onPress([&]() {
-        auto popup = GUI::Manager::getInstance().buildPopup();
-        popup->setSize({"400px", "400px"});
-        popup->setPosition({"50%", "50%"});
-        popup->setOrigin(0.5f, 0.5f);
-        popup->setTitle("Popup Window");
+        auto popup = GUI::Manager::getInstance().buildPopupShowcase();
     });
 
     Scene scene;
