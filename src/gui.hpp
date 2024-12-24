@@ -2,22 +2,24 @@
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 
-#include "util/resource_manager.hpp"
+#include "resource.hpp"
+
 namespace GUI {
 
     const unsigned int FONT_SIZE = 18;
     
 tgui::ChildWindow::Ptr createPopup() {
-    tgui::Theme::Ptr theme = ResourceManager::getTheme("resources/Dark.txt");
-
+    auto theme = Resource::Manager::getInstance().getTheme(Resource::Paths::DARK_THEME);
+    
     // Create Popup Window (ChildWindow)
-    auto popup = tgui::ChildWindow::create("Widget Showcase");
+    auto popup = tgui::ChildWindow::create("Widgets Popup");
     popup->setRenderer(theme->getRenderer("ChildWindow"));
+    popup->setTitleTextSize(FONT_SIZE);
+    popup->setTextSize(FONT_SIZE);
     popup->setSize({"400px", "400px"});
     popup->setPosition({"50%", "50%"});
     popup->setOrigin(0.5f, 0.5f);
     popup->setTitleButtons(tgui::ChildWindow::TitleButton::Close);
-    popup->setTextSize(FONT_SIZE);
     popup->setResizable(true);  // Enable resizing for the popup
     // popup->onSizeChange([](tgui::Vector2f newSize) {
     //     std::cout << "Popup resized to: " << newSize.x << "x" << newSize.y << std::endl;

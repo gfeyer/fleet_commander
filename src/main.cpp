@@ -12,11 +12,7 @@ int main() {
     window.setFramerateLimit(60);
 
     // Load background texture
-    sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("resources/background/Background-4.png")) {
-        std::cerr << "Failed to load background image!" << std::endl;
-        return -1;
-    }
+    const sf::Texture& backgroundTexture = Resource::Manager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
 
     // Create a sprite for the background
     sf::Sprite backgroundSprite;
