@@ -16,10 +16,10 @@ int main() {
     GUI::Manager::getInstance().initialize(window);
 
     // Main Game UI: Background Label
-    auto mainLabel = tgui::Label::create("Game Window Running...");
-    mainLabel->setPosition({"10%", "10%"});
-    mainLabel->setTextSize(24);
-    GUI::Manager::getInstance().add(mainLabel);
+    auto label = GUI::Manager::getInstance().buildLabel();
+    label->setText("Game Window Running...");
+    label->setPosition({"10%", "10%"});
+    label->setTextSize(24);
 
     // Open Popup with Main Button
     auto openPopupButton = tgui::Button::create("Open Popup");

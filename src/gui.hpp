@@ -16,23 +16,26 @@ class Manager{
 private:
     sf::RenderWindow* window;   // Managed external to the class
     std::unique_ptr<tgui::Gui> gui;
+    tgui::Theme::Ptr theme;
     
 public:
     Manager(const Manager&) = delete;
     Manager& operator=(const Manager&) = delete;
     
-    static Manager& getInstance() {
-        static Manager instance; // Singleton instance but allocate once on stack instead of heap, thread-safe
-        return instance;
-    }
-
     void initialize(sf::RenderWindow& window) {
         this->window = &window;
         gui = std::make_unique<tgui::Gui>(window);
 
-        gui->setFont("resources/fonts/toxigenesis.otf");
-        // gui->setRelativeView({0,0,0.9f,0.9f});
+        gui->setFont("resources/fonts/toxigenesis.otf"); // todo: move this to resource manager
         gui->setOpacity(0.8f);
+
+        // Initialize Theme
+        this->theme = Resource::Manager::getInstance().getTheme(Resource::Paths::DARK_THEME);
+    }
+
+    static Manager& getInstance() {
+        static Manager instance; // Singleton instance but allocate once on stack instead of heap, thread-safe
+        return instance;
     }
 
     void add(tgui::Widget::Ptr widget) {
@@ -45,6 +48,15 @@ public:
 
     bool handleEvent(const sf::Event& event) {
         return gui->handleEvent(event);
+    }
+
+    tgui::Label::Ptr buildLabel(){
+        auto label = tgui::Label::create("Hello World!");
+        label->setRenderer(theme->getRenderer("Label"));
+        label->setTextSize(FONT_SIZE);
+        label->setPosition({400,400});
+        add(label);
+        return label;
     }
 
 private:
