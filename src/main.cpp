@@ -80,7 +80,6 @@ int main() {
         // Draw(window)
         window.clear(sf::Color(50, 50, 50));
         window.draw(backgroundSprite); // Draw the background image
-        
 
         world.render(window);
         gui.draw();
