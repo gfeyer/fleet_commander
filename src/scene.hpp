@@ -6,13 +6,13 @@
 #include <memory>
 
 class Entity;
-class World{
+class Scene{
 private:
     std::vector<std::shared_ptr<Entity>> entities;
 
 public:
-    World();
-    ~World();   
+    Scene();
+    ~Scene();   
     void update(float dt);
     void render(sf::RenderWindow& window);
     void handleInput(sf::Event& event);

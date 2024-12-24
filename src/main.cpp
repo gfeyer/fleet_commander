@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "gui.hpp"
-#include "world.hpp"
+#include "scene.hpp"
 
 int main() {
     // Create SFML Window
@@ -48,7 +48,7 @@ int main() {
 
     gui.add(openPopupButton);
 
-    World world;
+    Scene scene;
     auto time = sf::Clock();
 
     // Main Game Loop
@@ -65,19 +65,19 @@ int main() {
             
             if(!handled && event.type == sf::Event::MouseButtonPressed) {
                 if(event.mouseButton.button == sf::Mouse::Left) {
-                    world.handleInput(event);
+                    scene.handleInput(event);
                 }
             }
         }
 
         // Update(dt)
-        world.update(time.restart().asSeconds());
+        scene.update(time.restart().asSeconds());
 
         // Draw(window)
         window.clear(sf::Color(50, 50, 50));
         // window.draw(backgroundSprite); // Draw the background image
 
-        world.render(window);
+        scene.render(window);
         gui.draw();
 
         window.display();

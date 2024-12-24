@@ -1,9 +1,9 @@
-#include "world.hpp"
+#include "scene.hpp"
 
 #include "util/logger.hpp"
 #include "factory.hpp"
 
-World::World()
+Scene::Scene()
 {
     log_info << "Creating World";
     entities.push_back(std::make_shared<Factory>(sf::Vector2f(100, 100), 0, sf::Vector2f(1, 1)));
@@ -11,12 +11,12 @@ World::World()
     entities.push_back(std::make_shared<Factory>(sf::Vector2f(600, 250), 0, sf::Vector2f(1, 1)));
 }
 
-World::~World()
+Scene::~Scene()
 {
     log_info << "Destroying World";
 }
 
-void World::update(float dt)
+void Scene::update(float dt)
 {
     for(auto& entity : entities)
     {
@@ -24,7 +24,7 @@ void World::update(float dt)
     }
 }
 
-void World::render(sf::RenderWindow &window)
+void Scene::render(sf::RenderWindow &window)
 {
     for(auto& entity : entities)
     {
@@ -32,7 +32,7 @@ void World::render(sf::RenderWindow &window)
     }
 }
 
-void World::handleInput(sf::Event &event)
+void Scene::handleInput(sf::Event &event)
 {
     log_info << "World Input Handled";
     for(auto& entity : entities)
