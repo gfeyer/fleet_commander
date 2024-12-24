@@ -23,49 +23,21 @@ public:
     Manager(const Manager&) = delete;
     Manager& operator=(const Manager&) = delete;
     
-    void initialize(sf::RenderWindow& window) {
-        this->window = &window;
-        gui = std::make_unique<tgui::Gui>(window);
+    void initialize(sf::RenderWindow& window);
 
-        gui->setFont("resources/fonts/toxigenesis.otf"); // todo: move this to resource manager
-        gui->setOpacity(0.8f);
+    static Manager& getInstance();
 
-        // Initialize Theme
-        this->theme = Resource::Manager::getInstance().getTheme(Resource::Paths::DARK_THEME);
-    }
+    void add(tgui::Widget::Ptr widget);
 
-    static Manager& getInstance() {
-        static Manager instance; // Singleton instance but allocate once on stack instead of heap, thread-safe
-        return instance;
-    }
+    void draw();
 
-    void add(tgui::Widget::Ptr widget) {
-        gui->add(widget);
-    }
+    bool handleEvent(const sf::Event& event);
 
-    void draw() {
-        gui->draw();
-    }
+    tgui::Label::Ptr buildLabel();
 
-    bool handleEvent(const sf::Event& event) {
-        return gui->handleEvent(event);
-    }
+    tgui::Button::Ptr buildButton();
 
-    tgui::Label::Ptr buildLabel(){
-        auto label = tgui::Label::create("Hello World!");
-        label->setRenderer(theme->getRenderer("Label"));
-        label->setTextSize(FONT_SIZE);
-        add(label);
-        return label;
-    }
-
-    tgui::Button::Ptr buildButton(){
-        auto button = tgui::Button::create("Click Me");
-        button->setRenderer(theme->getRenderer("Button"));
-        button->setTextSize(FONT_SIZE);
-        add(button);
-        return button;
-    }
+    tgui::ChildWindow::Ptr buildPopup();
 
 private:
     Manager() = default;
