@@ -7,6 +7,8 @@ World::World()
 {
     log_info << "Creating World";
     entities.push_back(std::make_shared<Factory>(sf::Vector2f(100, 100), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Factory>(sf::Vector2f(300, 400), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Factory>(sf::Vector2f(600, 250), 0, sf::Vector2f(1, 1)));
 }
 
 World::~World()
