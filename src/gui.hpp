@@ -1,3 +1,6 @@
+#ifndef GUI_HPP
+#define GUI_HPP
+
 #include <SFML/Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
@@ -155,3 +158,5 @@ tgui::ChildWindow::Ptr createPopup() {
 }
 
 }
+
+#endif // GUI_HPP

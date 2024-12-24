@@ -26,6 +26,7 @@ int main() {
         static_cast<float>(windowSize.y) / textureSize.y
     );
 
+    // TODO: separate GUI namespace & singleton
     tgui::Gui gui(window);
     gui.setFont("resources/fonts/toxigenesis.otf");
     // gui.setRelativeView({0,0,0.9f,0.9f});
@@ -49,7 +50,6 @@ int main() {
 
     World world;
     auto time = sf::Clock();
-
 
     // Main Game Loop
     while (window.isOpen()) {
@@ -75,7 +75,7 @@ int main() {
 
         // Draw(window)
         window.clear(sf::Color(50, 50, 50));
-        window.draw(backgroundSprite); // Draw the background image
+        // window.draw(backgroundSprite); // Draw the background image
 
         world.render(window);
         gui.draw();
