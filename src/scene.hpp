@@ -1,5 +1,5 @@
-#ifndef WORLD_HPP
-#define WORLD_HPP
+#ifndef SCENE_HPP
+#define SCENE_HPP
 
 #include <SFML/Graphics.hpp>
 #include <iostream>;
@@ -9,6 +9,7 @@ class Entity;
 class Scene{
 private:
     std::vector<std::shared_ptr<Entity>> entities;
+    sf::Sprite backgroundSprite;
 
 public:
     Scene();
@@ -18,4 +19,4 @@ public:
     void handleInput(sf::Event& event);
 };
 
-#endif // WORLD_HPP
+#endif // SCENE_HPP

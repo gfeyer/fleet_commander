@@ -5,27 +5,12 @@
 
 #include "gui.hpp"
 #include "scene.hpp"
+#include "config.hpp"
 
 int main() {
     // Create SFML Window
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "In-Game Popup Example");
+    sf::RenderWindow window(sf::VideoMode(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT), "In-Game Popup Example");
     window.setFramerateLimit(60);
-
-    // Load background texture
-    const sf::Texture& backgroundTexture = Resource::Manager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
-
-    // Create a sprite for the background
-    // TODO: belongs in scene
-    sf::Sprite backgroundSprite;
-    backgroundSprite.setTexture(backgroundTexture);
-
-    // Scale the background to fit the window
-    sf::Vector2u windowSize = window.getSize();
-    sf::Vector2u textureSize = backgroundTexture.getSize();
-    backgroundSprite.setScale(
-        static_cast<float>(windowSize.x) / textureSize.x,
-        static_cast<float>(windowSize.y) / textureSize.y
-    );
 
     // GUI initialization
     GUI::Manager::getInstance().initialize(window);
