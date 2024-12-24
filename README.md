@@ -7,4 +7,4 @@ Colonization simulator 2D
     - change shape color
     - add shield (circle)
 - GUI
-    - consider refactoring into a singleton
+    - Refactor into hpp and cpp (problem with multiple imports)

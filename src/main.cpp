@@ -18,19 +18,17 @@ int main() {
     // Main Game UI: Background Label
     auto label = GUI::Manager::getInstance().buildLabel();
     label->setText("Game Window Running...");
-    label->setPosition({"10%", "10%"});
+    label->setPosition({"5%", "5%"});
     label->setTextSize(24);
 
     // Open Popup with Main Button
-    auto openPopupButton = tgui::Button::create("Open Popup");
+    auto openPopupButton = GUI::Manager::getInstance().buildButton();
     openPopupButton->setSize({"150px", "50px"});
     openPopupButton->setPosition({"10%", "80%"});
     openPopupButton->onPress([&]() {
-        auto popup = GUI::createPopup();
-        GUI::Manager::getInstance().add(popup);
+        // auto popup = GUI::createPopup();
+        // GUI::Manager::getInstance().add(popup);
     });
-
-    GUI::Manager::getInstance().add(openPopupButton);
 
     Scene scene;
     auto time = sf::Clock();

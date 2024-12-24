@@ -15,7 +15,7 @@ void Entity::render(sf::RenderWindow &window)
 {
     if(sprite.getTexture() != nullptr){
         window.draw(sprite);
-    }else{
+    }else if(shape != nullptr){
         window.draw(*shape);
     }
 }
