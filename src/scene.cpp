@@ -5,10 +5,13 @@
 #include "resource.hpp"
 #include "config.hpp"
 #include "outpost.hpp"
+#include "config.hpp"
+#include "drone.hpp"
+
 
 Scene::Scene()
 {
-    log_info << "Creating World";
+    log_info << "Creating Scene";
 
     // Load background texture
     const sf::Texture& backgroundTexture = Resource::Manager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
@@ -28,21 +31,25 @@ Scene::Scene()
     );
 
     // Create Factories
-    entities.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
-    entities.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
-    entities.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
 
     // Create Outposts
-    entities.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
-    entities.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
-    entities.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % 1000, rand() % 700), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
 
+    // Create Drones
+    entities.push_back(std::make_shared<Drone>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), rand() % 360, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Drone>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), rand() % 360, sf::Vector2f(1, 1)));
+    entities.push_back(std::make_shared<Drone>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), rand() % 360, sf::Vector2f(1, 1)));
 
 }
 
 Scene::~Scene()
 {
-    log_info << "Destroying World";
+    log_info << "Destroying Scene";
 }
 
 void Scene::update(float dt)
