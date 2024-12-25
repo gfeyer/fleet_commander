@@ -2,20 +2,20 @@
 #define MOVEMENT_SYSTEM_HPP
 
 #include <unordered_map>
+#include <cmath>
 
 #include "Core/Entity.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Config.hpp"
-#include <cmath>
-
-#include <cmath>
+#include "Utils/Logger.hpp"
 
 namespace Systems {
     void MovementSystem(std::unordered_map<int, Entity>& entities, float dt) {
         for (auto& [id, entity] : entities) {
             auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* move = entity.getComponent<Components::MoveComponent>();
+            auto* tag = entity.getComponent<Components::TagComponent>();
 
             if (transform && move) {
                 // Handle movement towards target
@@ -23,7 +23,9 @@ namespace Systems {
                     sf::Vector2f direction = move->targetPosition - transform->getPosition();
                     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
-                    if (distance > 1.0f) { // Stop if close enough
+                    float stoppingDistance = std::max(5.0f, move->speed * 0.1f); // 10% of speed, min 5 pixels
+                    if (distance > stoppingDistance) { // Stop if close enough
+
                         direction /= distance; // Normalize direction vector
 
                         // Move towards the target
@@ -45,6 +47,10 @@ namespace Systems {
                         // Snap to target when very close
                         transform->transform.setPosition(move->targetPosition);
                         move->moveToTarget = false; // Stop movement
+
+                        if(tag){
+                            log_info << tag->tag << " arrived at " << move->targetPosition.x << ", " << move->targetPosition.y;
+                        }
                     }
                 }
 

@@ -15,8 +15,8 @@ namespace Components {
         MoveComponent(float speed, float angularVelocity)
             : speed(speed), angularVelocity(angularVelocity), moveToTarget(false) {}
 
-        MoveComponent(float speed, float angularVelocity, const sf::Vector2f& target)
-            : speed(speed), angularVelocity(angularVelocity), targetPosition(target), moveToTarget(true) {}    
+        MoveComponent(const sf::Vector2f& target, float speed, float angularVelocity)
+            : moveToTarget(true), speed(speed), angularVelocity(angularVelocity), targetPosition(target) {}    
     };
 }
 

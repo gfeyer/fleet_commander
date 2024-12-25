@@ -9,6 +9,7 @@
 #include "Components/SpriteComponent.hpp"
 #include "Components/ShapeComponent.hpp"
 #include "Components/TextComponent.hpp"
+#include "Components/TagComponent.hpp"
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
 #include "Systems/TextUpdateSystem.hpp"
@@ -76,6 +77,7 @@ Scene::Scene()
     for(int i=0; i<12; ++i){
         Entity drone;
         drone.addComponent(Components::DroneComponent{"Drone_" + std::to_string(i)});
+        drone.addComponent(Components::TagComponent{"Drone_" + std::to_string(i)});
         drone.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), float(rand() % 360), sf::Vector2f(1, 1)});
         
         auto shape = std::make_shared<sf::ConvexShape>();
@@ -94,7 +96,7 @@ Scene::Scene()
             sf::Vector2f(Config::DRONE_LENGTH*2, 5)
         });
 
-        drone.addComponent(Components::MoveComponent{1000, 0.f, sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT)});
+        drone.addComponent(Components::MoveComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT),1000, 0.f});
 
         entities.emplace(drone.id, std::move(drone));
     }
