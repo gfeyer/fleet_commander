@@ -5,6 +5,8 @@
 
 #include "Core/Entity.hpp"
 #include "Components/HoverComponent.hpp"
+#include "Components/TagComponent.hpp"
+
 #include "Config.hpp"
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
@@ -25,6 +27,7 @@ namespace Systems {
 
         for (auto& [id, entity] : entities) {
             auto* hoverComp = entity.getComponent<Components::HoverComponent>();
+            auto* tagComponent = entity.getComponent<Components::TagComponent>();
 
             if (hoverComp && hoverComp->isHovered) {
                 entityHovered = true;
@@ -32,10 +35,12 @@ namespace Systems {
                 infoPanel->setRenderer(theme->getRenderer("Panel"));
                 infoPanel->removeAllWidgets();
 
-                auto label = tgui::Label::create("Factory Info\nID: " + std::to_string(id));
-                label->setRenderer(theme->getRenderer("Label"));
-                label->setTextSize(Config::GUI_TEXT_SIZE);
-                infoPanel->add(label);
+                if (tagComponent) {
+                    auto label = tgui::Label::create("Info\n" + tagComponent->tag);
+                    label->setRenderer(theme->getRenderer("Label"));
+                    label->setTextSize(Config::GUI_TEXT_SIZE);
+                    infoPanel->add(label);
+                }
 
                 infoPanel->setPosition({hoverComp->position.x, hoverComp->position.y});
                 break; // Show info for the first hovered entity only

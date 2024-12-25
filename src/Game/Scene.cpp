@@ -50,7 +50,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
             )
         }
     );
-    // entityManager.emplace(background.id, std::move(background));
+    // entities.emplace(background.id, std::move(background));
 
     for(int i=0; i < 6; ++i){
         // Create Factories
@@ -67,6 +67,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
             sf::Vector2f(Config::FACTORY_SIZE+5, 5)
         });
         factory.addComponent(Components::HoverComponent{});
+        factory.addComponent(Components::TagComponent{"Factory_" + std::to_string(i)});
 
         entities.emplace(factory.id, std::move(factory));
     }
@@ -134,14 +135,14 @@ void Scene::update(float dt)
     Systems::HudSystem(entities, *gui);
 }
 
-void Scene::render(sf::RenderWindow &window)
+void Scene::render()
 {
-    Systems::RenderSystem(entities, window);
+    Systems::RenderSystem(entities, windowRef);
     gui->draw();
 }
 
-void Scene::handleInput(sf::Event &event, sf::RenderWindow& window)
+void Scene::handleInput(sf::Event &event)
 {
     log_info << "Handling Scene Input";
-    Systems::InputSystem(event, entities, window);
+    Systems::InputSystem(event, entities, windowRef);
 }

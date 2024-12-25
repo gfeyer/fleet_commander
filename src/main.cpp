@@ -12,31 +12,14 @@ int main() {
     // seed srand
     srand(time(NULL));
 
-    // Create SFML Window
+    // Create Window
     sf::RenderWindow window(sf::VideoMode(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT), "Colony Simulator");
     window.setFramerateLimit(60);
-
-    // GUI initialization
-    // GUI::ResourceManager::getInstance().initialize(window);
-
-    // Main Game UI: Background Label
-    // auto label = GUI::ResourceManager::getInstance().buildLabel();
-    // label->setText("Game Window Running...");
-    // label->setPosition({"5%", "5%"});
-    // label->setTextSize(24);
-
-    // // Open Popup with Main Button
-    // auto openPopupButton = GUI::ResourceManager::getInstance().buildButton();
-    // openPopupButton->setSize({"150px", "50px"});
-    // openPopupButton->setPosition({"10%", "80%"});
-    // openPopupButton->onPress([&]() {
-    //     auto popup = GUI::ResourceManager::getInstance().buildPopupShowcase();
-    // });
 
     Scene scene(window);
     auto time = sf::Clock();
 
-    // Main Game Loop
+    // Game Loop
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -46,25 +29,18 @@ int main() {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 window.close();
             }
-            // bool handled = GUI::ResourceManager::getInstance().handleEvent(event);
             
-            if(event.type == sf::Event::MouseButtonPressed) {
-                if(event.mouseButton.button == sf::Mouse::Left) {
-                    scene.handleInput(event, window);
-                }
+            if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                scene.handleInput(event);
             }
         }
 
-        // Update(dt)
+        // Update logic
         scene.update(time.restart().asSeconds());
 
-        // Draw(window)
+        // Render window
         window.clear(sf::Color(50, 50, 50));
-        // window.draw(backgroundSprite); // Draw the background image
-
-        scene.render(window);
-        // GUI::ResourceManager::getInstance().draw();
-
+        scene.render();
         window.display();
     }
 
