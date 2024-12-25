@@ -10,7 +10,7 @@
 class EntityOld;
 class Scene{
 private:
-    std::unordered_map<int, Entity> entityManager;
+    std::unordered_map<int, Entity> entities;
 
 public:
     Scene();

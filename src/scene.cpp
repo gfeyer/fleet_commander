@@ -46,7 +46,7 @@ Scene::Scene()
             sf::Vector2f(Config::FACTORY_SIZE+5, 5)
         });
 
-        entityManager.emplace(factory.id, std::move(factory));
+        entities.emplace(factory.id, std::move(factory));
     }
 
     // Create Outposts
@@ -64,7 +64,7 @@ Scene::Scene()
             sf::Vector2f(Config::OUTPOST_RADIUS*2, 5)
         });
 
-        entityManager.emplace(outpost.id, std::move(outpost));
+        entities.emplace(outpost.id, std::move(outpost));
     }
 
     // Create Drones
@@ -91,7 +91,7 @@ Scene::Scene()
 
         drone.addComponent(MoveComponent{sf::Vector2f(rand() % 50 - 25, rand() % 50 - 25), 0.f});
 
-        entityManager.emplace(drone.id, std::move(drone));
+        entities.emplace(drone.id, std::move(drone));
     }
 
 }
@@ -103,13 +103,13 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
-    TextUpdateSystem(entityManager, dt);
-    MovementSystem(entityManager, dt);
+    TextUpdateSystem(entities, dt);
+    MovementSystem(entities, dt);
 }
 
 void Scene::render(sf::RenderWindow &window)
 {
-    RenderSystem(entityManager, window);
+    RenderSystem(entities, window);
 }
 
 void Scene::handleInput(sf::Event &event)
