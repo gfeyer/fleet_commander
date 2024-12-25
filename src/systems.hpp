@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include "Core/Entity.hpp"
-#include "components.hpp"
+#include "Components/Components.hpp"
 #include "util/logger.hpp"
 
 void RenderSystem(std::unordered_map<int, Entity>& entities, sf::RenderWindow& window) {

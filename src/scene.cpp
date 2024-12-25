@@ -4,7 +4,7 @@
 #include "resource.hpp"
 #include "config.hpp"
 #include "config.hpp"
-#include "components.hpp"
+#include "Components/Components.hpp"
 #include "Core/Entity.hpp"
 #include "systems.hpp"
 
