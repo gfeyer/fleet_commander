@@ -3,7 +3,6 @@
 #include "util/logger.hpp"
 #include "Resources/ResourceManager.hpp"
 #include "config.hpp"
-#include "config.hpp"
 #include "Components/Components.hpp"
 #include "Core/Entity.hpp"
 #include "Systems/Systems.hpp"
