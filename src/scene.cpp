@@ -103,13 +103,13 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
-    TextUpdateSystem(entities, dt);
-    MovementSystem(entities, dt);
+    Systems::TextUpdateSystem(entities, dt);
+    Systems::MovementSystem(entities, dt);
 }
 
 void Scene::render(sf::RenderWindow &window)
 {
-    RenderSystem(entities, window);
+    Systems::RenderSystem(entities, window);
 }
 
 void Scene::handleInput(sf::Event &event)

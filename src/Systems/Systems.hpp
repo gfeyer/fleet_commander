@@ -8,6 +8,8 @@
 #include "util/logger.hpp"
 #include "config.hpp"
 
+namespace Systems {
+    
 void RenderSystem(std::unordered_map<int, Entity>& entities, sf::RenderWindow& window) {
     for (auto& [id, entity] : entities) {
         auto* transform = entity.getComponent<TransformComponent>();
@@ -74,5 +76,5 @@ void TextUpdateSystem(std::unordered_map<int, Entity>& entities, float dt) {
     }
 }
 
-
+} // namespace Systems
 #endif // SYSTEMS_HPP
