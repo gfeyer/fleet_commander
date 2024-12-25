@@ -16,11 +16,11 @@ Scene::Scene()
     Entity background;
 
     auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
-    background.addComponent(SpriteComponent{texture});
+    background.addComponent(Components::SpriteComponent{texture});
     sf::Vector2u windowSize = sf::Vector2u(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT);
     sf::Vector2u textureSize = texture.getSize();
     background.addComponent(
-        TransformComponent{
+        Components::TransformComponent{
             sf::Vector2f(0, 0),
             0.f,
             sf::Vector2f(
@@ -34,12 +34,12 @@ Scene::Scene()
     for(int i=0; i < 6; ++i){
         // Create Factories
         Entity factory; 
-        factory.addComponent(FactoryComponent{"Factory_" + std::to_string(i)});
-        factory.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)});
+        factory.addComponent(Components::FactoryComponent{"Factory_" + std::to_string(i)});
+        factory.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)});
         auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
         shape.setFillColor(sf::Color::Cyan);
-        factory.addComponent(ShapeComponent{std::make_shared<sf::RectangleShape>(shape)});
-        factory.addComponent(TextComponent{"Factory #" + std::to_string(i), 
+        factory.addComponent(Components::ShapeComponent{std::make_shared<sf::RectangleShape>(shape)});
+        factory.addComponent(Components::TextComponent{"Factory #" + std::to_string(i), 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
@@ -52,12 +52,12 @@ Scene::Scene()
     // Create Outposts
     for(int i=0; i<6; ++i){
         Entity outpost;
-        outpost.addComponent(OutpostComponent{"Outpost_" + std::to_string(i)});
-        outpost.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - Config::OUTPOST_RADIUS, rand() % Config::SCREEN_HEIGHT-Config::OUTPOST_RADIUS), 0, sf::Vector2f(1, 1)});
+        outpost.addComponent(Components::OutpostComponent{"Outpost_" + std::to_string(i)});
+        outpost.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - Config::OUTPOST_RADIUS, rand() % Config::SCREEN_HEIGHT-Config::OUTPOST_RADIUS), 0, sf::Vector2f(1, 1)});
         auto shape = sf::CircleShape(Config::OUTPOST_RADIUS);
         shape.setFillColor(sf::Color::Green);
-        outpost.addComponent(ShapeComponent{std::make_shared<sf::CircleShape>(shape)});
-        outpost.addComponent(TextComponent{"Outpost #" + std::to_string(i), 
+        outpost.addComponent(Components::ShapeComponent{std::make_shared<sf::CircleShape>(shape)});
+        outpost.addComponent(Components::TextComponent{"Outpost #" + std::to_string(i), 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
@@ -70,8 +70,8 @@ Scene::Scene()
     // Create Drones
     for(int i=0; i<12; ++i){
         Entity drone;
-        drone.addComponent(DroneComponent{"Drone_" + std::to_string(i)});
-        drone.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), float(rand() % 360), sf::Vector2f(1, 1)});
+        drone.addComponent(Components::DroneComponent{"Drone_" + std::to_string(i)});
+        drone.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), float(rand() % 360), sf::Vector2f(1, 1)});
         
         auto shape = std::make_shared<sf::ConvexShape>();
         shape->setPointCount(3);
@@ -81,15 +81,15 @@ Scene::Scene()
         shape->setPoint(2, sf::Vector2f(Config::DRONE_LENGTH, Config::DRONE_LENGTH));  // Bottom-right point
 
         shape->setFillColor(sf::Color::Red);
-        drone.addComponent(ShapeComponent{shape});
-        drone.addComponent(TextComponent{"Drone #" + std::to_string(i), 
+        drone.addComponent(Components::ShapeComponent{shape});
+        drone.addComponent(Components::TextComponent{"Drone #" + std::to_string(i), 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
             sf::Vector2f(Config::DRONE_LENGTH*2, 5)
         });
 
-        drone.addComponent(MoveComponent{sf::Vector2f(rand() % 50 - 25, rand() % 50 - 25), 0.f});
+        drone.addComponent(Components::MoveComponent{sf::Vector2f(rand() % 50 - 25, rand() % 50 - 25), 0.f});
 
         entities.emplace(drone.id, std::move(drone));
     }
