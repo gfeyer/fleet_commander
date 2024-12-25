@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
+// The text will be rendered relative to the parent
+// This is not part of GUI
 namespace Components {
     struct TextComponent {
         sf::Text text;

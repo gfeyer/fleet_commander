@@ -33,7 +33,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     gui->setFont("assets/fonts/toxigenesis.otf"); // todo: move this to resource manager
     gui->setOpacity(0.9f);
 
-    // Create Background
+    // Create Background Entity
     Entity background;
 
     auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
@@ -52,8 +52,8 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     );
     // entities.emplace(background.id, std::move(background));
 
+    // Create Factories
     for(int i=0; i < 6; ++i){
-        // Create Factories
         Entity factory; 
         factory.addComponent(Components::FactoryComponent{"Factory_" + std::to_string(i)});
         factory.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)});
@@ -143,6 +143,5 @@ void Scene::render()
 
 void Scene::handleInput(sf::Event &event)
 {
-    log_info << "Handling Scene Input";
     Systems::InputSystem(event, entities, windowRef);
 }
