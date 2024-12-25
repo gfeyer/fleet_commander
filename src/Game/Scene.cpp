@@ -2,10 +2,16 @@
 
 #include "Utils/Logger.hpp"
 #include "Resources/ResourceManager.hpp"
-#include "config.hpp"
-#include "Components/Components.hpp"
+#include "Config.hpp"
 #include "Core/Entity.hpp"
-#include "Systems/Systems.hpp"
+#include "Components/Components.hpp"
+#include "Components/TransformComponent.hpp"
+#include "Components/SpriteComponent.hpp"
+#include "Components/ShapeComponent.hpp"
+#include "Components/TextComponent.hpp"
+#include "Systems/MovementSystem.hpp"
+#include "Systems/RenderSystem.hpp"
+#include "Systems/TextUpdateSystem.hpp"
 
 Scene::Scene()
 {

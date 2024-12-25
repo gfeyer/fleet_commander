@@ -5,7 +5,7 @@
 
 #include "gui.hpp"
 #include "Game/Scene.hpp"
-#include "config.hpp"
+#include "Config.hpp"
 
 #include "Core/Entity.hpp"
 int main() {
