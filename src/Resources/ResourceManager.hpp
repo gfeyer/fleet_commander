@@ -12,7 +12,7 @@ namespace Resource::Paths{
     constexpr const char* BACKGROUND_4 = "assets/background/Background-4.png";
 
     // Themes
-    constexpr const char* DARK_THEME = "assets/Dark.txt";
+    constexpr const char* DARK_THEME = "assets/themes/Dark.txt";
 
     // Fonts
     constexpr const char* FONT_TOXIGENESIS = "assets/fonts/toxigenesis.otf";
