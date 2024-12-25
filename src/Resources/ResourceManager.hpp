@@ -21,15 +21,15 @@ namespace Resource::Paths{
 
 namespace Resource{
 
-class Manager {
+class ResourceManager {
 private:
     std::map<std::string, std::unique_ptr<sf::Texture>> textures;
     std::map<std::string, tgui::Theme::Ptr> themes;
     std::map<std::string, std::unique_ptr<sf::Font>> fonts;
 
 private:
-    Manager();  // Private constructor
-    ~Manager();
+    ResourceManager();  // Private constructor
+    ~ResourceManager();
 
     void loadTexture(const char* path);
     void loadTheme(const char* path);
@@ -37,7 +37,7 @@ private:
 
 public:
     // Get the singleton instance
-    static Manager& getInstance();
+    static ResourceManager& getInstance();
 
     const sf::Texture& getTexture(const char* path) const;
     const tgui::Theme::Ptr getTheme(const char* path) const;

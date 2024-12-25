@@ -1,7 +1,7 @@
 #include "gui.hpp"
 
 namespace GUI {
-  void Manager::initialize(sf::RenderWindow& window) {
+  void ResourceManager::initialize(sf::RenderWindow& window) {
         this->window = &window;
         gui = std::make_unique<tgui::Gui>(window);
 
@@ -9,27 +9,27 @@ namespace GUI {
         gui->setOpacity(0.8f);
 
         // Initialize Theme
-        this->theme = Resource::Manager::getInstance().getTheme(Resource::Paths::DARK_THEME);
+        this->theme = Resource::ResourceManager::getInstance().getTheme(Resource::Paths::DARK_THEME);
     }
 
-    Manager& Manager::getInstance() {
-        static Manager instance; // Singleton instance but allocate once on stack instead of heap, thread-safe
+    ResourceManager& ResourceManager::getInstance() {
+        static ResourceManager instance; // Singleton instance but allocate once on stack instead of heap, thread-safe
         return instance;
     }
 
-    void Manager::add(tgui::Widget::Ptr widget) {
+    void ResourceManager::add(tgui::Widget::Ptr widget) {
         gui->add(widget);
     }
 
-    void Manager::draw() {
+    void ResourceManager::draw() {
         gui->draw();
     }
 
-    bool Manager::handleEvent(const sf::Event& event) {
+    bool ResourceManager::handleEvent(const sf::Event& event) {
         return gui->handleEvent(event);
     }
 
-    tgui::Label::Ptr Manager::buildLabel(){
+    tgui::Label::Ptr ResourceManager::buildLabel(){
         auto label = tgui::Label::create("Hello World!");
         label->setRenderer(theme->getRenderer("Label"));
         label->setTextSize(FONT_SIZE);
@@ -37,7 +37,7 @@ namespace GUI {
         return label;
     }
 
-    tgui::Button::Ptr Manager::buildButton(){
+    tgui::Button::Ptr ResourceManager::buildButton(){
         auto button = tgui::Button::create("Click Me");
         button->setRenderer(theme->getRenderer("Button"));
         button->setTextSize(FONT_SIZE);
@@ -45,7 +45,7 @@ namespace GUI {
         return button;
     }
 
-    tgui::ChildWindow::Ptr Manager::buildPopup(){
+    tgui::ChildWindow::Ptr ResourceManager::buildPopup(){
         auto popup = tgui::ChildWindow::create("Popup");
         popup->setRenderer(theme->getRenderer("ChildWindow"));
         popup->setTitleTextSize(FONT_SIZE);
@@ -55,7 +55,7 @@ namespace GUI {
         return popup;
     }
 
-    tgui::ChildWindow::Ptr Manager::buildPopupShowcase(){
+    tgui::ChildWindow::Ptr ResourceManager::buildPopupShowcase(){
         
     // Create Popup Window (ChildWindow)
     auto popup = tgui::ChildWindow::create("Widgets Popup");

@@ -17,20 +17,20 @@ int main() {
     window.setFramerateLimit(60);
 
     // GUI initialization
-    GUI::Manager::getInstance().initialize(window);
+    GUI::ResourceManager::getInstance().initialize(window);
 
     // Main Game UI: Background Label
-    // auto label = GUI::Manager::getInstance().buildLabel();
+    // auto label = GUI::ResourceManager::getInstance().buildLabel();
     // label->setText("Game Window Running...");
     // label->setPosition({"5%", "5%"});
     // label->setTextSize(24);
 
     // // Open Popup with Main Button
-    // auto openPopupButton = GUI::Manager::getInstance().buildButton();
+    // auto openPopupButton = GUI::ResourceManager::getInstance().buildButton();
     // openPopupButton->setSize({"150px", "50px"});
     // openPopupButton->setPosition({"10%", "80%"});
     // openPopupButton->onPress([&]() {
-    //     auto popup = GUI::Manager::getInstance().buildPopupShowcase();
+    //     auto popup = GUI::ResourceManager::getInstance().buildPopupShowcase();
     // });
 
     Scene scene;
@@ -46,7 +46,7 @@ int main() {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 window.close();
             }
-            bool handled = GUI::Manager::getInstance().handleEvent(event);
+            bool handled = GUI::ResourceManager::getInstance().handleEvent(event);
             
             if(!handled && event.type == sf::Event::MouseButtonPressed) {
                 if(event.mouseButton.button == sf::Mouse::Left) {
@@ -63,7 +63,7 @@ int main() {
         // window.draw(backgroundSprite); // Draw the background image
 
         scene.render(window);
-        GUI::Manager::getInstance().draw();
+        GUI::ResourceManager::getInstance().draw();
 
         window.display();
     }

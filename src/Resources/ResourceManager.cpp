@@ -5,18 +5,18 @@
 
 namespace Resource{
 
-Manager::Manager() {
+ResourceManager::ResourceManager() {
     log_info << "Loading assets";
     loadTexture(Paths::BACKGROUND_4);
     loadTheme(Paths::DARK_THEME);
     loadFont(Paths::FONT_TOXIGENESIS);
 }
 
-Manager::~Manager() {
+ResourceManager::~ResourceManager() {
     log_info << "Unloading assets";
 }
 
-void Manager::loadTexture(const char *path)
+void ResourceManager::loadTexture(const char *path)
 {
     auto texture = std::make_unique<sf::Texture>();
     if (!texture->loadFromFile(path)) {
@@ -25,13 +25,13 @@ void Manager::loadTexture(const char *path)
     textures.insert_or_assign(path, std::move(texture));
 }
 
-void Manager::loadTheme(const char *path)
+void ResourceManager::loadTheme(const char *path)
 {
     auto theme = tgui::Theme::create(path);
     themes.insert_or_assign(path, theme);
 }
 
-void Manager::loadFont(const char *path)
+void ResourceManager::loadFont(const char *path)
 {
     auto font = std::make_unique<sf::Font>();
     if (!font->loadFromFile(path)) {
@@ -40,22 +40,22 @@ void Manager::loadFont(const char *path)
     fonts.insert_or_assign(path, std::move(font));
 }
 
-Manager& Manager::getInstance() {
-    static Manager instance; // Singleton instance but allocate once on stack instead of heap, thread-safe
+ResourceManager& ResourceManager::getInstance() {
+    static ResourceManager instance; // Singleton instance but allocate once on stack instead of heap, thread-safe
     return instance;
 }
 
-const sf::Texture& Manager::getTexture(const char *path) const
+const sf::Texture& ResourceManager::getTexture(const char *path) const
 {
     return *textures.at(path);
 }
 
-const tgui::Theme::Ptr Manager::getTheme(const char *path) const
+const tgui::Theme::Ptr ResourceManager::getTheme(const char *path) const
 {
     return themes.at(path);
 }
 
-const sf::Font& Manager::getFont(const char *path) const
+const sf::Font& ResourceManager::getFont(const char *path) const
 {
     return *fonts.at(path);
 }

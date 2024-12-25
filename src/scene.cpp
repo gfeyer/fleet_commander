@@ -15,7 +15,7 @@ Scene::Scene()
     // Create Background
     Entity background;
 
-    auto& texture = Resource::Manager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
+    auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
     background.addComponent(SpriteComponent{texture});
     sf::Vector2u windowSize = sf::Vector2u(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT);
     sf::Vector2u textureSize = texture.getSize();
@@ -40,7 +40,7 @@ Scene::Scene()
         shape.setFillColor(sf::Color::Cyan);
         factory.addComponent(ShapeComponent{std::make_shared<sf::RectangleShape>(shape)});
         factory.addComponent(TextComponent{"Factory #" + std::to_string(i), 
-            Resource::Manager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
+            Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
             sf::Vector2f(Config::FACTORY_SIZE+5, 5)
@@ -58,7 +58,7 @@ Scene::Scene()
         shape.setFillColor(sf::Color::Green);
         outpost.addComponent(ShapeComponent{std::make_shared<sf::CircleShape>(shape)});
         outpost.addComponent(TextComponent{"Outpost #" + std::to_string(i), 
-            Resource::Manager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
+            Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
             sf::Vector2f(Config::OUTPOST_RADIUS*2, 5)
@@ -83,7 +83,7 @@ Scene::Scene()
         shape->setFillColor(sf::Color::Red);
         drone.addComponent(ShapeComponent{shape});
         drone.addComponent(TextComponent{"Drone #" + std::to_string(i), 
-            Resource::Manager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
+            Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
             sf::Vector2f(Config::DRONE_LENGTH*2, 5)

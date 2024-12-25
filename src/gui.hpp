@@ -13,19 +13,19 @@ namespace GUI {
 
 const unsigned int FONT_SIZE = 18;
 
-class Manager{
+class ResourceManager{
 private:
     sf::RenderWindow* window;   // Managed external to the class
     std::unique_ptr<tgui::Gui> gui;
     tgui::Theme::Ptr theme;
     
 public:
-    Manager(const Manager&) = delete;
-    Manager& operator=(const Manager&) = delete;
+    ResourceManager(const ResourceManager&) = delete;
+    ResourceManager& operator=(const ResourceManager&) = delete;
     
     void initialize(sf::RenderWindow& window);
 
-    static Manager& getInstance();
+    static ResourceManager& getInstance();
 
     void add(tgui::Widget::Ptr widget);
 
@@ -43,8 +43,8 @@ public:
 
 
 private:
-    Manager() = default;
-    ~Manager() = default;
+    ResourceManager() = default;
+    ~ResourceManager() = default;
 };
 
 }
