@@ -1,12 +1,9 @@
 #include "scene.hpp"
 
 #include "util/logger.hpp"
-#include "factory.hpp"
 #include "resource.hpp"
 #include "config.hpp"
-#include "outpost.hpp"
 #include "config.hpp"
-#include "drone.hpp"
 #include "components.hpp"
 #include "entity.hpp"
 #include "systems.hpp"
@@ -34,7 +31,7 @@ Scene::Scene()
     );
     // entityManager.emplace(background.id, std::move(background));
 
-    for(int i=0; i < 3; ++i){
+    for(int i=0; i < 6; ++i){
         // Create Factories
         Entity factory; 
         factory.addComponent(FactoryComponent{"Factory_" + std::to_string(i)});
@@ -53,7 +50,7 @@ Scene::Scene()
     }
 
     // Create Outposts
-    for(int i=0; i<3; ++i){
+    for(int i=0; i<6; ++i){
         Entity outpost;
         outpost.addComponent(OutpostComponent{"Outpost_" + std::to_string(i)});
         outpost.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - Config::OUTPOST_RADIUS, rand() % Config::SCREEN_HEIGHT-Config::OUTPOST_RADIUS), 0, sf::Vector2f(1, 1)});
@@ -71,7 +68,7 @@ Scene::Scene()
     }
 
     // Create Drones
-    for(int i=0; i<3; ++i){
+    for(int i=0; i<12; ++i){
         Entity drone;
         drone.addComponent(DroneComponent{"Drone_" + std::to_string(i)});
         drone.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)});
