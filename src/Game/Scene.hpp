@@ -16,7 +16,7 @@ public:
     ~Scene();   
     void update(float dt);
     void render(sf::RenderWindow& window);
-    void handleInput(sf::Event& event);
+    void handleInput(sf::Event& event, sf::RenderWindow& window);
 };
 
 #endif // SCENE_HPP

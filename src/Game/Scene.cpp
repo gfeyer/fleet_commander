@@ -13,6 +13,7 @@
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
 #include "Systems/TextUpdateSystem.hpp"
+#include "Systems/InputSystem.hpp"
 
 Scene::Scene()
 {
@@ -121,7 +122,8 @@ void Scene::render(sf::RenderWindow &window)
     Systems::RenderSystem(entities, window);
 }
 
-void Scene::handleInput(sf::Event &event)
+void Scene::handleInput(sf::Event &event, sf::RenderWindow& window)
 {
-    log_info << "Scene Input Handled";
+    log_info << "Handling Scene Input";
+    Systems::InputSystem(event, entities, window);
 }

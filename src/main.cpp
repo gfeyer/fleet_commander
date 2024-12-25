@@ -50,7 +50,7 @@ int main() {
             
             if(!handled && event.type == sf::Event::MouseButtonPressed) {
                 if(event.mouseButton.button == sf::Mouse::Left) {
-                    scene.handleInput(event);
+                    scene.handleInput(event, window);
                 }
             }
         }
