@@ -43,6 +43,12 @@ Scene::Scene()
         auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
         shape.setFillColor(sf::Color::Cyan);
         factory.addComponent(ShapeComponent{std::make_shared<sf::RectangleShape>(shape)});
+        factory.addComponent(TextComponent{"Factory #" + std::to_string(i), 
+            Resource::Manager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
+            18, 
+            sf::Color::White, 
+            sf::Vector2f(Config::FACTORY_SIZE+5, 5)
+        });
 
         entityManager[factory.id] = factory;
     }
@@ -66,10 +72,7 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
-    // for(auto& entity : entities_old)
-    // {
-    //     entity->update(dt);
-    // }
+    TextUpdateSystem(entityManager, dt);
 }
 
 void Scene::render(sf::RenderWindow &window)

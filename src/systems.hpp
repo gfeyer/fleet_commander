@@ -30,7 +30,26 @@ void RenderSystem(std::unordered_map<int, Entity>& entities, sf::RenderWindow& w
             shape->shape->setScale(transform->getScale());
             window.draw(*shape->shape);
         }
+
+        // Draw non-gui text
+        auto* textComp = entity.getComponent<TextComponent>();
+        if (textComp) {
+            window.draw(textComp->text);
+        }
     }
 }
+
+void TextUpdateSystem(std::unordered_map<int, Entity>& entities, float dt) {
+    for (auto& [id, entity] : entities) {
+        auto* transform = entity.getComponent<TransformComponent>();
+        auto* textComp = entity.getComponent<TextComponent>();
+
+        if (transform && textComp) {
+            // Update the text position based on parent position + offset
+            textComp->text.setPosition(transform->getPosition() + textComp->offset);
+        }
+    }
+}
+
 
 #endif // SYSTEMS_HPP

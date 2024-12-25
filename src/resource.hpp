@@ -13,6 +13,9 @@ namespace Resource::Paths{
 
     // Themes
     constexpr const char* DARK_THEME = "resources/Dark.txt";
+
+    // Fonts
+    constexpr const char* FONT_TOXIGENESIS = "resources/fonts/toxigenesis.otf";
 }
 
 
@@ -22,6 +25,7 @@ class Manager {
 private:
     std::map<std::string, std::unique_ptr<sf::Texture>> textures;
     std::map<std::string, tgui::Theme::Ptr> themes;
+    std::map<std::string, std::unique_ptr<sf::Font>> fonts;
 
 private:
     Manager();  // Private constructor
@@ -29,6 +33,7 @@ private:
 
     void loadTexture(const char* path);
     void loadTheme(const char* path);
+    void loadFont(const char* path);
 
 public:
     // Get the singleton instance
@@ -36,6 +41,7 @@ public:
 
     const sf::Texture& getTexture(const char* path) const;
     const tgui::Theme::Ptr getTheme(const char* path) const;
+    const sf::Font& getFont(const char* path) const;
 };
 
 }
