@@ -4,8 +4,9 @@ Colonization simulator 2D
 ## TODO
 - Build a factory system to spawn pre-defined game objects
 - Add mouse hover for factory/outpost information menu
-- Add click menu for attacking another base 
 - Add combat system
+- Add resource system (outposts collect resources)
+- Add production system (factories produce drones)
 
 
 ## Screenshot
