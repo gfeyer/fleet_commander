@@ -99,6 +99,8 @@ Scene::Scene()
         entities.emplace(drone.id, std::move(drone));
     }
 
+    // TODO: need a factory to spawn pre-defined game objects 
+
 }
 
 Scene::~Scene()

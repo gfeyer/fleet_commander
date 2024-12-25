@@ -2,6 +2,12 @@
 Colonization simulator 2D
 
 ## TODO
-- Factory
-    - change shape color
-    - add shield (circle)
+- Build a factory system to spawn pre-defined game objects
+- Add mouse hover for factory/outpost information menu
+- Add click menu for attacking another base 
+- Add combat system
+
+
+## Screenshot
+
+![Screenshot](docs/images/screenshot_001.png)

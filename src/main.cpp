@@ -13,7 +13,7 @@ int main() {
     srand(time(NULL));
 
     // Create SFML Window
-    sf::RenderWindow window(sf::VideoMode(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT), "In-Game Popup Example");
+    sf::RenderWindow window(sf::VideoMode(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT), "Colony Simulator");
     window.setFramerateLimit(60);
 
     // GUI initialization
