@@ -6,6 +6,7 @@
 #include "Core/Entity.hpp"
 #include "Components/Components.hpp"
 #include "util/logger.hpp"
+#include "config.hpp"
 
 void RenderSystem(std::unordered_map<int, Entity>& entities, sf::RenderWindow& window) {
     for (auto& [id, entity] : entities) {
