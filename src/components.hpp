@@ -4,17 +4,29 @@
 #include <sfml/System.hpp>
 #include <SFML/Graphics.hpp>
 
-struct TransformComponent {
-    sf::Vector2f position {0.f, 0.f}; // Default to origin (0,0)
-    float rotation {0.f};             // Default to no rotation (0 degrees)
-    sf::Vector2f scale {1.f, 1.f};    // Default to uniform scale (1,1)
+#include <string>
+#include <memory>
 
-    // Default Constructor
+struct TagComponent {
+    std::string tag;
+
+    TagComponent(const std::string& tag) : tag(tag) {}
+};
+
+struct TransformComponent {
+    sf::Transformable transform;
+
     TransformComponent() = default;
 
-    // Parameterized Constructor
-    TransformComponent(const sf::Vector2f& pos, float rot, const sf::Vector2f& scl)
-        : position(pos), rotation(rot), scale(scl) {}
+    TransformComponent(const sf::Vector2f& pos, float rot, const sf::Vector2f& scl) {
+        transform.setPosition(pos);
+        transform.setRotation(rot);
+        transform.setScale(scl);
+    }
+
+    sf::Vector2f getPosition() const { return transform.getPosition(); }
+    float getRotation() const { return transform.getRotation(); }
+    sf::Vector2f getScale() const { return transform.getScale(); }
 };
 
 struct SpriteComponent {
@@ -30,5 +42,43 @@ struct SpriteComponent {
         sprite.setTexture(texture);
     }
 };
+
+struct ShapeComponent {
+    std::shared_ptr<sf::Shape> shape; // Polymorphic shared pointer to any sf::Shape
+
+    // Default Constructor
+    ShapeComponent() = default;
+
+    // Constructor with shape
+    ShapeComponent(std::shared_ptr<sf::Shape> shapePtr)
+        : shape(shapePtr) {}
+
+    // Utility to set fill color
+    void setFillColor(const sf::Color& color) {
+        if (shape) {
+            shape->setFillColor(color);
+        }
+    }
+
+    // Utility to set outline
+    void setOutlineColor(const sf::Color& color) {
+        if (shape) {
+            shape->setOutlineColor(color);
+        }
+    }
+};
+
+struct FactoryComponent {
+    std::string factoryName;
+
+    FactoryComponent(const std::string& factoryName) : factoryName(factoryName) {}
+};
+
+struct OutpostComponent {
+    std::string outpostName;
+
+    OutpostComponent(const std::string& outpostName) : outpostName(outpostName) {}
+};
+
 
 #endif // COMPONENTS_HPP

@@ -17,7 +17,7 @@ Scene::Scene()
 
     // Create Background
     Entity background;
-    
+
     auto& texture = Resource::Manager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
     background.addComponent(SpriteComponent{texture});
     sf::Vector2u windowSize = sf::Vector2u(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT);
@@ -34,10 +34,18 @@ Scene::Scene()
     );
     entityManager[background.id] = background;
 
-    // Create Factories
-    // entities_old.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
-    // entities_old.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
-    // entities_old.push_back(std::make_shared<Factory>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
+
+    for(int i=0; i < 3; ++i){
+        // Create Factories
+        Entity factory; 
+        factory.addComponent(FactoryComponent{"Factory_" + std::to_string(i)});
+        factory.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)});
+        auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
+        shape.setFillColor(sf::Color::Cyan);
+        factory.addComponent(ShapeComponent{std::make_shared<sf::RectangleShape>(shape)});
+
+        entityManager[factory.id] = factory;
+    }
 
     // // Create Outposts
     // entities_old.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
