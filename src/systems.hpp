@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
-#include "entity.hpp"
+#include "Core/Entity.hpp"
 #include "components.hpp"
 #include "util/logger.hpp"
 

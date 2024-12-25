@@ -5,7 +5,7 @@
 #include "config.hpp"
 #include "config.hpp"
 #include "components.hpp"
-#include "entity.hpp"
+#include "Core/Entity.hpp"
 #include "systems.hpp"
 
 Scene::Scene()

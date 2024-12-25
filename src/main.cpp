@@ -7,7 +7,7 @@
 #include "scene.hpp"
 #include "config.hpp"
 
-#include "entity.hpp"
+#include "Core/Entity.hpp"
 int main() {
     // seed srand
     srand(time(NULL));

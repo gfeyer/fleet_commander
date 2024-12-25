@@ -5,7 +5,7 @@
 #include <iostream>
 #include <memory>
 
-#include "entity.hpp"
+#include "Core/Entity.hpp"
 
 class EntityOld;
 class Scene{
