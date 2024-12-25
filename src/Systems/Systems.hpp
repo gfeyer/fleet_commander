@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include "Core/Entity.hpp"
 #include "Components/Components.hpp"
-#include "util/logger.hpp"
+#include "Utils/Logger.hpp"
 #include "config.hpp"
 
 namespace Systems {

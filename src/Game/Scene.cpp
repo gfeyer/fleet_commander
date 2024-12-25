@@ -1,6 +1,6 @@
 #include "Scene.hpp"
 
-#include "util/logger.hpp"
+#include "Utils/Logger.hpp"
 #include "Resources/ResourceManager.hpp"
 #include "config.hpp"
 #include "Components/Components.hpp"
