@@ -5,7 +5,7 @@ namespace GUI {
         this->window = &window;
         gui = std::make_unique<tgui::Gui>(window);
 
-        gui->setFont("resources/fonts/toxigenesis.otf"); // todo: move this to resource manager
+        gui->setFont("assets/fonts/toxigenesis.otf"); // todo: move this to resource manager
         gui->setOpacity(0.8f);
 
         // Initialize Theme
@@ -177,7 +177,7 @@ namespace GUI {
     popup->add(scrollbar);
 
     // ─── Picture ───
-    // auto picture = tgui::Picture::create("resources/sample_image.png");
+    // auto picture = tgui::Picture::create("assets/sample_image.png");
     // picture->setSize({"80px", "80px"});
     // picture->setPosition({"75%", "50%"});
     // popup->add(picture);

@@ -6,14 +6,14 @@
 namespace Resource{
 
 Manager::Manager() {
-    log_info << "Loading resources";
+    log_info << "Loading assets";
     loadTexture(Paths::BACKGROUND_4);
     loadTheme(Paths::DARK_THEME);
     loadFont(Paths::FONT_TOXIGENESIS);
 }
 
 Manager::~Manager() {
-    log_info << "Unloading resources";
+    log_info << "Unloading assets";
 }
 
 void Manager::loadTexture(const char *path)

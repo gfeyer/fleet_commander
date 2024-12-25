@@ -9,13 +9,13 @@
 
 namespace Resource::Paths{
     // Textures
-    constexpr const char* BACKGROUND_4 = "resources/background/Background-4.png";
+    constexpr const char* BACKGROUND_4 = "assets/background/Background-4.png";
 
     // Themes
-    constexpr const char* DARK_THEME = "resources/Dark.txt";
+    constexpr const char* DARK_THEME = "assets/Dark.txt";
 
     // Fonts
-    constexpr const char* FONT_TOXIGENESIS = "resources/fonts/toxigenesis.otf";
+    constexpr const char* FONT_TOXIGENESIS = "assets/fonts/toxigenesis.otf";
 }
 
 
