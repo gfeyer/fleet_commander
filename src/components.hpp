@@ -87,6 +87,16 @@ struct TextComponent {
     }
 };
 
+struct MoveComponent {
+    sf::Vector2f velocity; // Speed and direction (e.g., {1.f, 0.f} moves right)
+    float angularVelocity; // Rotation speed (degrees per second)
+
+    MoveComponent() = default;
+
+    MoveComponent(const sf::Vector2f& velocity, float angularVelocity)
+        : velocity(velocity), angularVelocity(angularVelocity) {}
+};
+
 struct FactoryComponent {
     std::string factoryName;
 

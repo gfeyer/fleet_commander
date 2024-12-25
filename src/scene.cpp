@@ -71,7 +71,7 @@ Scene::Scene()
     for(int i=0; i<12; ++i){
         Entity drone;
         drone.addComponent(DroneComponent{"Drone_" + std::to_string(i)});
-        drone.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)});
+        drone.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), float(rand() % 360), sf::Vector2f(1, 1)});
         
         auto shape = std::make_shared<sf::ConvexShape>();
         shape->setPointCount(3);
@@ -89,6 +89,8 @@ Scene::Scene()
             sf::Vector2f(Config::DRONE_LENGTH*2, 5)
         });
 
+        drone.addComponent(MoveComponent{sf::Vector2f(rand() % 50 - 25, rand() % 50 - 25), 0.f});
+
         entityManager.emplace(drone.id, std::move(drone));
     }
 
@@ -102,27 +104,15 @@ Scene::~Scene()
 void Scene::update(float dt)
 {
     TextUpdateSystem(entityManager, dt);
+    MovementSystem(entityManager, dt);
 }
 
 void Scene::render(sf::RenderWindow &window)
 {
-    // Render background
-    // window.draw(this->backgroundSprite);
-
-    // for(auto& entity : entities_old)
-    // {
-    //     entity->render(window);
-    // }
-
     RenderSystem(entityManager, window);
-
 }
 
 void Scene::handleInput(sf::Event &event)
 {
-    log_info << "World Input Handled";
-    // for(auto& entity : entities_old)
-    // {
-    //     entity->handleInput(event);
-    // }
+    log_info << "Scene Input Handled";
 }

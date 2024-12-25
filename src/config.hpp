@@ -8,6 +8,8 @@ namespace Config {
     const unsigned int FACTORY_SIZE = 50;
     const unsigned int OUTPOST_RADIUS = 25;
     const float DRONE_LENGTH = 10.f;
+
+    constexpr float RAD_TO_DEG = 180.f / 3.14159265358979323846f;
 }
 
 
