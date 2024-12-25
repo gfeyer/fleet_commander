@@ -1,10 +1,10 @@
 #ifndef DRONE_HPP
 #define DRONE_HPP
 
-#include "entity.hpp"
+#include "entity_old.hpp"
 #include "gui.hpp"
 
-class Drone : public Entity {
+class Drone : public EntityOld {
     private:
     sf::ConvexShape triangle;
     tgui::Label::Ptr label;

@@ -2,9 +2,9 @@
 #define OUTPOST_HPP
 
 #include "gui.hpp"
-#include "entity.hpp"
+#include "entity_old.hpp"
 
-class Outpost : public Entity
+class Outpost : public EntityOld
 {
     private:
         sf::CircleShape circleShape;

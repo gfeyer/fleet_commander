@@ -5,10 +5,10 @@
 #include <iostream>
 #include <memory>
 
-class Entity;
+class EntityOld;
 class Scene{
 private:
-    std::vector<std::shared_ptr<Entity>> entities;
+    std::vector<std::shared_ptr<EntityOld>> entities;
     sf::Sprite backgroundSprite;
 
 public:

@@ -18,12 +18,12 @@ void Factory::initialize()
     label->setTextSize(18);
 }
 
-Factory::Factory() : Entity()
+Factory::Factory() : EntityOld()
 {
     initialize();
 }
 
-Factory::Factory(sf::Vector2f pos, float rot, sf::Vector2f scale) : Entity()
+Factory::Factory(sf::Vector2f pos, float rot, sf::Vector2f scale) : EntityOld()
 {
     initialize();
     log_info << "Creating Factory at " << pos.x << ", " << pos.y;

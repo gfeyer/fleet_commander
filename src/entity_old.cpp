@@ -1,16 +1,16 @@
-#include "entity.hpp"
+#include "entity_old.hpp"
 
 #include "util/logger.hpp"
 
-Entity::Entity() : sf::Transformable()
+EntityOld::EntityOld() : sf::Transformable()
 {
 }
 
-Entity::~Entity()
+EntityOld::~EntityOld()
 {
 }
 
-void Entity::render(sf::RenderWindow &window)
+void EntityOld::render(sf::RenderWindow &window)
 {
     if(sprite.getTexture() != nullptr){
         window.draw(sprite);
@@ -19,12 +19,12 @@ void Entity::render(sf::RenderWindow &window)
     }
 }
 
-bool Entity::checkCollision(const Entity &other) const
+bool EntityOld::checkCollision(const EntityOld &other) const
 {
     return sprite.getGlobalBounds().intersects(other.sprite.getGlobalBounds());
 }
 
-void Entity::setShape(std::unique_ptr<sf::Shape> shape)
+void EntityOld::setShape(std::unique_ptr<sf::Shape> shape)
 {
     this->shape = std::move(shape);
 }

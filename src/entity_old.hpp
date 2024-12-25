@@ -5,7 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
-class Entity : public sf::Transformable{
+class EntityOld : public sf::Transformable{
 // Base class for a game object
 // Uses sf::Transformable to manage position, rotation and scale
 
@@ -22,8 +22,8 @@ protected:
     std::string id;
 
 public:
-    Entity();
-    virtual ~Entity();
+    EntityOld();
+    virtual ~EntityOld();
 
     virtual void update(float dt) = 0;
     virtual void render(sf::RenderWindow& window);
@@ -35,7 +35,7 @@ public:
     // sf::Vector2f getPosition();
 
     // Collision Detection
-    virtual bool checkCollision(const Entity& other) const;
+    virtual bool checkCollision(const EntityOld& other) const;
     sf::FloatRect getBoundingBox() const;
 
     // Visual Representation

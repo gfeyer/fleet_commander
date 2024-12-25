@@ -1,10 +1,10 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
 
-#include "entity.hpp"
+#include "entity_old.hpp"
 #include "gui.hpp"
 
-class Factory : public Entity {
+class Factory : public EntityOld {
     private:
         sf::RectangleShape rectangleShape;
         tgui::Label::Ptr label;
