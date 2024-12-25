@@ -1,7 +1,7 @@
 #include "scene.hpp"
 
 #include "util/logger.hpp"
-#include "resource.hpp"
+#include "Resources/ResourceManager.hpp"
 #include "config.hpp"
 #include "config.hpp"
 #include "Components/Components.hpp"

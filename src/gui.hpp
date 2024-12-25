@@ -5,7 +5,7 @@
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 
-#include "resource.hpp"
+#include "Resources/ResourceManager.hpp"
 #include <memory>
 #include <iostream>
 
