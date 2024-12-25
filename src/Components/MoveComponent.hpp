@@ -5,13 +5,18 @@
 
 namespace Components {
     struct MoveComponent {
-        sf::Vector2f velocity; // Speed and direction (e.g., {1.f, 0.f} moves right)
+        float speed;
         float angularVelocity; // Rotation speed (degrees per second)
+        sf::Vector2f targetPosition; // Optional target position
+        bool moveToTarget = false;   // Flag to enable movement to target
 
         MoveComponent() = default;
 
-        MoveComponent(const sf::Vector2f& velocity, float angularVelocity)
-            : velocity(velocity), angularVelocity(angularVelocity) {}
+        MoveComponent(float speed, float angularVelocity)
+            : speed(speed), angularVelocity(angularVelocity), moveToTarget(false) {}
+
+        MoveComponent(float speed, float angularVelocity, const sf::Vector2f& target)
+            : speed(speed), angularVelocity(angularVelocity), targetPosition(target), moveToTarget(true) {}    
     };
 }
 

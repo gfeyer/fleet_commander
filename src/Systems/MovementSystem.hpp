@@ -7,6 +7,9 @@
 #include "Components/TransformComponent.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Config.hpp"
+#include <cmath>
+
+#include <cmath>
 
 namespace Systems {
     void MovementSystem(std::unordered_map<int, Entity>& entities, float dt) {
@@ -15,21 +18,45 @@ namespace Systems {
             auto* move = entity.getComponent<Components::MoveComponent>();
 
             if (transform && move) {
-                // Update position based on velocity
-                sf::Vector2f newPosition = transform->getPosition() + move->velocity * dt;
-                transform->transform.setPosition(newPosition);
+                // Handle movement towards target
+                if (move->moveToTarget) {
+                    sf::Vector2f direction = move->targetPosition - transform->getPosition();
+                    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
-                if (move->velocity.x != 0.f || move->velocity.y != 0.f) {
-                    float angle = std::atan2(move->velocity.y, move->velocity.x) * Config::RAD_TO_DEG;
-                    transform->transform.setRotation(angle + 90.f); // +90 to align triangle tip upwards
+                    if (distance > 1.0f) { // Stop if close enough
+                        direction /= distance; // Normalize direction vector
+
+                        // Move towards the target
+                        float step = move->speed * dt;
+
+                        // Prevent overshooting by clamping step
+                        if (step >= distance) {
+                            transform->transform.setPosition(move->targetPosition);
+                            move->moveToTarget = false; // Stop movement
+                        } else {
+                            sf::Vector2f newPosition = transform->getPosition() + direction * step;
+                            transform->transform.setPosition(newPosition);
+
+                            // Rotate towards target
+                            float angle = std::atan2(direction.y, direction.x) * Config::RAD_TO_DEG;
+                            transform->transform.setRotation(angle + 90.f); // Align triangle tip
+                        }
+                    } else {
+                        // Snap to target when very close
+                        transform->transform.setPosition(move->targetPosition);
+                        move->moveToTarget = false; // Stop movement
+                    }
                 }
 
-                // Update rotation based on angular velocity
+                // Handle angular rotation
                 float newRotation = transform->getRotation() + move->angularVelocity * dt;
                 transform->transform.setRotation(newRotation);
             }
         }
     }
 }
+
+
+
 
 #endif // MOVEMENT_SYSTEM_HPP

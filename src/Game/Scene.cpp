@@ -94,7 +94,7 @@ Scene::Scene()
             sf::Vector2f(Config::DRONE_LENGTH*2, 5)
         });
 
-        drone.addComponent(Components::MoveComponent{sf::Vector2f(rand() % 50 - 25, rand() % 50 - 25), 0.f});
+        drone.addComponent(Components::MoveComponent{1000, 0.f, sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT)});
 
         entities.emplace(drone.id, std::move(drone));
     }
