@@ -7,7 +7,6 @@
 
 #include "Core/Entity.hpp"
 
-class EntityOld;
 class Scene{
 private:
     std::unordered_map<int, Entity> entities;

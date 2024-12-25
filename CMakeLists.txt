@@ -4,6 +4,11 @@ project(ColonySimulator LANGUAGES CXX)
 # Set output directory for executables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# Specify the source directory as an include path
+include_directories(
+    ${CMAKE_SOURCE_DIR}/src
+)
+
 # Find SFML
 find_package(SFML COMPONENTS system window graphics audio CONFIG REQUIRED)
 

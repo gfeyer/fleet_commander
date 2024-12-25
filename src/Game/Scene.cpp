@@ -1,4 +1,4 @@
-#include "scene.hpp"
+#include "Scene.hpp"
 
 #include "util/logger.hpp"
 #include "Resources/ResourceManager.hpp"

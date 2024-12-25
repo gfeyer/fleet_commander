@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "gui.hpp"
-#include "scene.hpp"
+#include "Game/Scene.hpp"
 #include "config.hpp"
 
 #include "Core/Entity.hpp"

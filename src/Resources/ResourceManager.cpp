@@ -1,7 +1,7 @@
 #include "ResourceManager.hpp"
 
 #include <memory>
-#include "../util/logger.hpp"
+#include "util/logger.hpp"
 
 namespace Resource{
 
