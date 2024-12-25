@@ -17,7 +17,7 @@ int main() {
     window.setFramerateLimit(60);
 
     // GUI initialization
-    GUI::ResourceManager::getInstance().initialize(window);
+    // GUI::ResourceManager::getInstance().initialize(window);
 
     // Main Game UI: Background Label
     // auto label = GUI::ResourceManager::getInstance().buildLabel();
@@ -33,7 +33,7 @@ int main() {
     //     auto popup = GUI::ResourceManager::getInstance().buildPopupShowcase();
     // });
 
-    Scene scene;
+    Scene scene(window);
     auto time = sf::Clock();
 
     // Main Game Loop
@@ -46,9 +46,9 @@ int main() {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 window.close();
             }
-            bool handled = GUI::ResourceManager::getInstance().handleEvent(event);
+            // bool handled = GUI::ResourceManager::getInstance().handleEvent(event);
             
-            if(!handled && event.type == sf::Event::MouseButtonPressed) {
+            if(event.type == sf::Event::MouseButtonPressed) {
                 if(event.mouseButton.button == sf::Mouse::Left) {
                     scene.handleInput(event, window);
                 }
@@ -63,7 +63,7 @@ int main() {
         // window.draw(backgroundSprite); // Draw the background image
 
         scene.render(window);
-        GUI::ResourceManager::getInstance().draw();
+        // GUI::ResourceManager::getInstance().draw();
 
         window.display();
     }

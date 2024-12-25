@@ -10,6 +10,9 @@ namespace Config {
     const float DRONE_LENGTH = 10.f;
 
     constexpr float RAD_TO_DEG = 180.f / 3.14159265358979323846f;
+
+    // GUI consts
+    constexpr float GUI_TEXT_SIZE = 18.f;
 }
 
 

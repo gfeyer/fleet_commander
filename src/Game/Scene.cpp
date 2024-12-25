@@ -1,23 +1,37 @@
 #include "Scene.hpp"
 
+#include "TGUI/TGUI.hpp"
+#include "TGUI/Backend/SFML-Graphics.hpp"
+
 #include "Utils/Logger.hpp"
 #include "Resources/ResourceManager.hpp"
 #include "Config.hpp"
+
 #include "Core/Entity.hpp"
+
 #include "Components/Components.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/SpriteComponent.hpp"
 #include "Components/ShapeComponent.hpp"
 #include "Components/TextComponent.hpp"
 #include "Components/TagComponent.hpp"
+#include "Components/HoverComponent.hpp"
+
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
 #include "Systems/TextUpdateSystem.hpp"
 #include "Systems/InputSystem.hpp"
+#include "Systems/InputHoverSystem.hpp"
+#include "Systems/HudSystem.hpp"
 
-Scene::Scene()
+Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 {
     log_info << "Creating Scene";
+
+    // Initialize GUI
+    gui = std::make_unique<tgui::Gui>(window);
+    gui->setFont("assets/fonts/toxigenesis.otf"); // todo: move this to resource manager
+    gui->setOpacity(0.9f);
 
     // Create Background
     Entity background;
@@ -52,6 +66,7 @@ Scene::Scene()
             sf::Color::White, 
             sf::Vector2f(Config::FACTORY_SIZE+5, 5)
         });
+        factory.addComponent(Components::HoverComponent{});
 
         entities.emplace(factory.id, std::move(factory));
     }
@@ -115,11 +130,14 @@ void Scene::update(float dt)
 {
     Systems::TextUpdateSystem(entities, dt);
     Systems::MovementSystem(entities, dt);
+    Systems::InputHoverSystem(entities, windowRef);
+    Systems::HudSystem(entities, *gui);
 }
 
 void Scene::render(sf::RenderWindow &window)
 {
     Systems::RenderSystem(entities, window);
+    gui->draw();
 }
 
 void Scene::handleInput(sf::Event &event, sf::RenderWindow& window)
