@@ -15,23 +15,36 @@ private:
 public:
     unsigned long id; // Unique Entity ID
 
-    Entity();
+    Entity() : id(nextID++) { }
 
     template<typename T>
-    void addComponent(T component);
+    void addComponent(T component) {
+        components[std::type_index(typeid(T))] = std::make_shared<T>(component);
+    }
 
     // Get a component
     template<typename T>
-    T* getComponent();
+    T* getComponent() {
+        auto it = components.find(std::type_index(typeid(T)));
+        return it != components.end() ? std::static_pointer_cast<T>(it->second).get() : nullptr;
+    }
 
     // Remove a component
     template<typename T>
-    void removeComponent();
+    void removeComponent() {
+        auto it = components.find(std::type_index(typeid(T)));
+        if (it != components.end()) {
+            components.erase(it);
+        }
+    }
 
     // Check if a component exists
     template<typename T>
-    bool hasComponent();
+    bool hasComponent() {
+        return components.find(std::type_index(typeid(T))) != components.end();
+    }
 };
+
 
 #endif // ENTITY_HPP
 

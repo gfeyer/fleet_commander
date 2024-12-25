@@ -5,11 +5,15 @@
 #include <iostream>
 #include <memory>
 
+#include "entity.hpp"
+
 class EntityOld;
 class Scene{
 private:
-    std::vector<std::shared_ptr<EntityOld>> entities;
+    std::vector<std::shared_ptr<EntityOld>> entities_old;
     sf::Sprite backgroundSprite;
+
+    std::unordered_map<int, Entity> entityManager;
 
 public:
     Scene();

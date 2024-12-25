@@ -1,5 +1,5 @@
-#ifndef ENTITY_HPP
-#define ENTITY_HPP
+#ifndef ENTITY_OLD_HPP
+#define ENTITY_OLD_HPP
 
 #include <string>
 
@@ -46,4 +46,4 @@ public:
     std::unique_ptr<sf::Shape> getShape() const;
 };
 
-#endif // ENTITY_HPP
+#endif // ENTITY_OLD_HPP
