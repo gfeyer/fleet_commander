@@ -32,8 +32,7 @@ Scene::Scene()
             )
         }
     );
-    entityManager[background.id] = background;
-
+    // entityManager.emplace(background.id, std::move(background));
 
     for(int i=0; i < 3; ++i){
         // Create Factories
@@ -50,18 +49,26 @@ Scene::Scene()
             sf::Vector2f(Config::FACTORY_SIZE+5, 5)
         });
 
-        entityManager[factory.id] = factory;
+        entityManager.emplace(factory.id, std::move(factory));
     }
 
-    // // Create Outposts
-    // entities_old.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
-    // entities_old.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
-    // entities_old.push_back(std::make_shared<Outpost>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)));
+    // Create Outposts
+    for(int i=0; i<3; ++i){
+        Entity outpost;
+        outpost.addComponent(OutpostComponent{"Outpost_" + std::to_string(i)});
+        outpost.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - Config::OUTPOST_RADIUS, rand() % Config::SCREEN_HEIGHT-Config::OUTPOST_RADIUS), 0, sf::Vector2f(1, 1)});
+        auto shape = sf::CircleShape(Config::OUTPOST_RADIUS);
+        shape.setFillColor(sf::Color::Green);
+        outpost.addComponent(ShapeComponent{std::make_shared<sf::CircleShape>(shape)});
+        outpost.addComponent(TextComponent{"Outpost #" + std::to_string(i), 
+            Resource::Manager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
+            18, 
+            sf::Color::White, 
+            sf::Vector2f(Config::OUTPOST_RADIUS*2, 5)
+        });
 
-    // // Create Drones
-    // entities_old.push_back(std::make_shared<Drone>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), rand() % 360, sf::Vector2f(1, 1)));
-    // entities_old.push_back(std::make_shared<Drone>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), rand() % 360, sf::Vector2f(1, 1)));
-    // entities_old.push_back(std::make_shared<Drone>(sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), rand() % 360, sf::Vector2f(1, 1)));
+        entityManager.emplace(outpost.id, std::move(outpost));
+    }
 
 }
 
