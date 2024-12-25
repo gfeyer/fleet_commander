@@ -7,6 +7,7 @@ namespace Config {
 
     const unsigned int FACTORY_SIZE = 50;
     const unsigned int OUTPOST_RADIUS = 25;
+    const float DRONE_LENGTH = 10.f;
 }
 
 

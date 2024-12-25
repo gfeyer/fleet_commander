@@ -70,6 +70,31 @@ Scene::Scene()
         entityManager.emplace(outpost.id, std::move(outpost));
     }
 
+    // Create Drones
+    for(int i=0; i<3; ++i){
+        Entity drone;
+        drone.addComponent(DroneComponent{"Drone_" + std::to_string(i)});
+        drone.addComponent(TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)});
+        
+        auto shape = std::make_shared<sf::ConvexShape>();
+        shape->setPointCount(3);
+        shape->setOrigin(sf::Vector2f(0.f, 0.f));
+        shape->setPoint(0, sf::Vector2f(0.f, -Config::DRONE_LENGTH));  // Top point
+        shape->setPoint(1, sf::Vector2f(-Config::DRONE_LENGTH, Config::DRONE_LENGTH)); // Bottom-left point
+        shape->setPoint(2, sf::Vector2f(Config::DRONE_LENGTH, Config::DRONE_LENGTH));  // Bottom-right point
+
+        shape->setFillColor(sf::Color::Red);
+        drone.addComponent(ShapeComponent{shape});
+        drone.addComponent(TextComponent{"Drone #" + std::to_string(i), 
+            Resource::Manager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
+            18, 
+            sf::Color::White, 
+            sf::Vector2f(Config::DRONE_LENGTH*2, 5)
+        });
+
+        entityManager.emplace(drone.id, std::move(drone));
+    }
+
 }
 
 Scene::~Scene()

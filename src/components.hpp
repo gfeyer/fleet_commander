@@ -99,5 +99,11 @@ struct OutpostComponent {
     OutpostComponent(const std::string& outpostName) : outpostName(outpostName) {}
 };
 
+struct DroneComponent {
+    std::string droneName;
+
+    DroneComponent(const std::string& droneName) : droneName(droneName) {}
+};
+
 
 #endif // COMPONENTS_HPP
