@@ -9,12 +9,6 @@
 
 namespace Components {
 
-    struct TagComponent {
-        std::string tag;
-
-        TagComponent(const std::string& tag) : tag(tag) {}
-    };
-
     struct TransformComponent {
         sf::Transformable transform;
 
