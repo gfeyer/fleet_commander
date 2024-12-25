@@ -47,10 +47,6 @@ namespace Systems {
                         // Snap to target when very close
                         transform->transform.setPosition(move->targetPosition);
                         move->moveToTarget = false; // Stop movement
-
-                        if(tag){
-                            log_info << tag->tag << " arrived at " << move->targetPosition.x << ", " << move->targetPosition.y;
-                        }
                     }
                 }
 
