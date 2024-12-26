@@ -35,6 +35,8 @@ namespace Systems {
                                 if(droneFaction && factionComp && droneFaction->factionID != factionComp->factionID) {
                                     // Drone collided with a different faction's factory or outpost
                                     factionComp->factionID = droneFaction->factionID;
+                                    // TODO: delete drone
+                                    // increase count in the receiver
                                 }
                             }
                         }

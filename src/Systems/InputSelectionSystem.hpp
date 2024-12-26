@@ -56,6 +56,8 @@ namespace Systems {
                                     moveComp->moveToTarget = true;
                                     entities.emplace(drone.id, std::move(drone));
                                 }
+
+                                originFactory->stationedDrones = 0;
                             }
                         }else{
                             // log_info << "Select entity " << id;
