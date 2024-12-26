@@ -5,13 +5,13 @@
 
 #include "Core/Entity.hpp"
 #include "Components/TransformComponent.hpp"
-#include "Components/TextComponent.hpp"
+#include "Components/LabelComponent.hpp"
 
 namespace Systems {
     void TextUpdateSystem(std::unordered_map<EntityID, Entity>& entities, float dt) {
         for (auto& [id, entity] : entities) {
             auto* transform = entity.getComponent<Components::TransformComponent>();
-            auto* textComp = entity.getComponent<Components::TextComponent>();
+            auto* textComp = entity.getComponent<Components::LabelComponent>();
 
             if (transform && textComp) {
                 // Update the text position based on parent position + offset

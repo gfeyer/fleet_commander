@@ -6,13 +6,13 @@
 // The text will be rendered relative to the parent
 // This is not part of GUI
 namespace Components {
-    struct TextComponent {
+    struct LabelComponent {
         sf::Text text;
         sf::Vector2f offset; // Relative position to the parent
 
-        TextComponent() = default;
+        LabelComponent() = default;
 
-        TextComponent(const std::string& label, const sf::Font& font, unsigned int fontSize, const sf::Color& color, sf::Vector2f offset = {0.f, 0.f}) {
+        LabelComponent(const std::string& label, const sf::Font& font, unsigned int fontSize, const sf::Color& color, sf::Vector2f offset = {0.f, 0.f}) {
             text.setFont(font);
             text.setString(label);
             text.setCharacterSize(fontSize);

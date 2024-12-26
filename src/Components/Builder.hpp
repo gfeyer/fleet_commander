@@ -11,7 +11,7 @@
 #include "Components/OutpostComponent.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/ShapeComponent.hpp"
-#include "Components/TextComponent.hpp"
+#include "Components/LabelComponent.hpp"
 #include "Components/HoverComponent.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Components/SelectableComponent.hpp"
@@ -32,7 +32,7 @@ namespace Builder {
         auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
         shape.setFillColor(sf::Color::Color(100, 100, 100));
         factory.addComponent(Components::ShapeComponent{std::make_shared<sf::RectangleShape>(shape)});
-        factory.addComponent(Components::TextComponent{name, 
+        factory.addComponent(Components::LabelComponent{name, 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
@@ -52,7 +52,7 @@ namespace Builder {
         auto shape = sf::CircleShape(Config::OUTPOST_RADIUS);
         shape.setFillColor(sf::Color::Color(100, 100, 100));
         outpost.addComponent(Components::ShapeComponent{std::make_shared<sf::CircleShape>(shape)});
-        outpost.addComponent(Components::TextComponent{name, 
+        outpost.addComponent(Components::LabelComponent{name, 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
@@ -77,7 +77,7 @@ namespace Builder {
 
         shape->setFillColor(sf::Color::Color(100, 100, 100));
         drone.addComponent(Components::ShapeComponent{shape});
-        drone.addComponent(Components::TextComponent{name, 
+        drone.addComponent(Components::LabelComponent{name, 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 

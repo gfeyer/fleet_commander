@@ -17,7 +17,7 @@
 #include "Components/TransformComponent.hpp"
 #include "Components/SpriteComponent.hpp"
 #include "Components/ShapeComponent.hpp"
-#include "Components/TextComponent.hpp"
+#include "Components/LabelComponent.hpp"
 #include "Components/TagComponent.hpp"
 #include "Components/HoverComponent.hpp"
 

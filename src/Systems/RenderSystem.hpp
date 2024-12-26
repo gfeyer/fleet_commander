@@ -8,7 +8,7 @@
 #include "Components/TransformComponent.hpp"
 #include "Components/SpriteComponent.hpp"
 #include "Components/ShapeComponent.hpp"
-#include "Components/TextComponent.hpp"
+#include "Components/LabelComponent.hpp"
 #include "Components/SelectableComponent.hpp"
 #include "Components/FactionComponent.hpp"
 
@@ -57,7 +57,7 @@ namespace Systems {
             }
 
             // Draw non-gui text
-            auto* textComp = entity.getComponent<Components::TextComponent>();
+            auto* textComp = entity.getComponent<Components::LabelComponent>();
             if (textComp) {
                 window.draw(textComp->text);
             }
