@@ -8,6 +8,7 @@
 #include "Components/Builder.hpp"
 
 #include "Utils/Logger.hpp"
+#include "Config.hpp"
 
 namespace Systems {
 
@@ -15,13 +16,14 @@ namespace Systems {
         for (auto& [id, entity] : entities) {
             auto* factory = entity.getComponent<Components::FactoryComponent>();
             auto* transform = entity.getComponent<Components::TransformComponent>();
+            auto* faction = entity.getComponent<Components::FactionComponent>();
 
-            if (factory && transform) {
+            if (factory && transform && faction && faction->factionID) {
                 factory->productionTimer += dt;
 
                 if (factory->productionTimer >= factory->droneProductionRate) {
                     factory->productionTimer = 0.f;
-                    auto drone = Builder::createDrone();
+                    auto drone = Builder::createDrone("", faction->factionID);
 
                     EntityID droneId = drone.id;
                     
@@ -32,7 +34,7 @@ namespace Systems {
                     // Place drone around the factory
                     auto* droneTransform = entities.at(droneId).getComponent<Components::TransformComponent>();
                     if (droneTransform) {
-                        sf::Vector2f offset(rand() % 30, rand() % 30);
+                        sf::Vector2f offset(Config::FACTORY_SIZE + rand() % 100 - 50, Config::FACTORY_SIZE + rand() % 50);
                         droneTransform->transform.setPosition(transform->transform.getPosition() + offset);
                     }
                 }

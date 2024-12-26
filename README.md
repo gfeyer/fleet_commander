@@ -10,7 +10,6 @@ Colonization simulator 2D
     -- Drone travel system
     -- Drone attack system
 - Add resource system (outposts collect resources)
-- Add production system (factories produce drones)
 
 ## Screenshot
 

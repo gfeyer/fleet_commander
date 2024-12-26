@@ -10,12 +10,14 @@
 #include "Components/ShapeComponent.hpp"
 #include "Components/TextComponent.hpp"
 #include "Components/SelectableComponent.hpp"
+#include "Components/FactionComponent.hpp"
 
 namespace Systems {
 
     void RenderSystem(std::unordered_map<EntityID, Entity>& entities, sf::RenderWindow& window) {
         for (auto& [id, entity] : entities) {
             auto* transform = entity.getComponent<Components::TransformComponent>();
+            auto* faction = entity.getComponent<Components::FactionComponent>();
 
             // Draw selectable component first (and draw sprite over it)
             auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
@@ -44,6 +46,13 @@ namespace Systems {
                 shape->shape->setPosition(transform->getPosition());
                 shape->shape->setRotation(transform->getRotation());
                 shape->shape->setScale(transform->getScale());
+
+                if (faction) {
+                    if (faction->factionID == 1) {
+                        shape->shape->setFillColor(sf::Color::Red);
+                    }
+                }
+
                 window.draw(*shape->shape);
             }
 

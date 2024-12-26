@@ -9,6 +9,7 @@
 
 #include "Core/Entity.hpp"
 
+#include "Components/FactionComponent.hpp"
 #include "Components/Builder.hpp"
 #include "Components/FactoryComponent.hpp"
 #include "Components/OutpostComponent.hpp"
@@ -56,14 +57,18 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     );
     // entities.emplace(background.id, std::move(background));
 
-    // Create Factories
-    for(int i=0; i < 2; ++i){
+    // player factory
+    auto factory = Builder::createFactory("Factory #" + std::to_string(0), 1);
+    entities.emplace(factory.id, std::move(factory));
+
+    // Create Neutral Factories
+    for(int i=1; i < 3; ++i){
         auto factory = Builder::createFactory("Factory #" + std::to_string(i));
         entities.emplace(factory.id, std::move(factory));
     }
 
     // Create Outposts
-    for(int i=0; i<1; ++i){
+    for(int i=0; i<3; ++i){
         auto outpost = Builder::createOutpost("Outpost #" + std::to_string(i));
         entities.emplace(outpost.id, std::move(outpost));
     }
