@@ -7,6 +7,7 @@
 #include "Core/Entity.hpp"
 #include "Components/HoverComponent.hpp"
 #include "Components/TagComponent.hpp"
+#include "Components/GarissonComponent.hpp"
 
 #include "Config.hpp"
 #include <TGUI/TGUI.hpp>
@@ -37,11 +38,12 @@ namespace Systems {
                 infoPanel->removeAllWidgets();
 
                 auto* factoryComp = entity.getComponent<Components::FactoryComponent>();
+                auto* garissonComp = entity.getComponent<Components::GarissonComponent>();
 
-                if (factoryComp) {
+                if (factoryComp && garissonComp) {
                     std::stringstream ss;
                     ss << factoryComp->factoryName << "\n";
-                    ss << "Drones stationed: " << factoryComp->stationedDrones << " \n";
+                    ss << "Drones stationed: " << garissonComp->getDroneCount() << " \n";
                     ss << "Production rate: " << factoryComp->droneProductionRate << " s";
 
                     auto label = tgui::Label::create(ss.str());

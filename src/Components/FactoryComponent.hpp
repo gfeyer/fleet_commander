@@ -7,7 +7,6 @@
 namespace Components {
     struct FactoryComponent {
         std::string factoryName;
-        unsigned int stationedDrones = 0;        
         float droneProductionRate = 1.f;
         float productionTimer = 0.f;
 

@@ -45,10 +45,12 @@ namespace Systems {
                             auto* originFactory = entities.at(originEntityID).getComponent<Components::FactoryComponent>();
                             auto* originFaction = entities.at(originEntityID).getComponent<Components::FactionComponent>();
                             auto* originTransform = entities.at(originEntityID).getComponent<Components::TransformComponent>();
-                            if(originFactory && originFaction && originFactory->stationedDrones > 0){
-                                auto totalDrones = originFactory->stationedDrones;
+                            auto* originGarisson = entities.at(originEntityID).getComponent<Components::GarissonComponent>();
 
-                                for(int i=0; i < totalDrones; i++){
+                            if(originFactory && originFaction && originGarisson && originGarisson->getDroneCount() > 0){
+                                auto totalDrones = originGarisson->getDroneCount();
+
+                                for(auto i=0; i < totalDrones; i++){
                                     auto drone = Builder::createDrone(std::string("D") + std::to_string(i), originFaction->factionID);
                                     drone.getComponent<Components::TransformComponent>()->transform.setPosition(originTransform->getPosition());
                                     auto* moveComp = drone.getComponent<Components::MoveComponent>();
@@ -57,7 +59,7 @@ namespace Systems {
                                     entities.emplace(drone.id, std::move(drone));
                                 }
 
-                                originFactory->stationedDrones = 0;
+                                originGarisson->setDroneCount(0);
                             }
                         }else{
                             // log_info << "Select entity " << id;

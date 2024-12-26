@@ -15,7 +15,7 @@
 #include "Components/HoverComponent.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Components/SelectableComponent.hpp"
-
+#include "Components/GarissonComponent.hpp"
 #include "Utils/Logger.hpp"
 #include "Resources/ResourceManager.hpp"
 
@@ -41,6 +41,7 @@ namespace Builder {
         factory.addComponent(Components::HoverComponent{});
         factory.addComponent(Components::SelectableComponent{});
         factory.addComponent(Components::FactionComponent{factionID});
+        factory.addComponent(Components::GarissonComponent{});
         return factory;
     }
 
@@ -59,7 +60,7 @@ namespace Builder {
         });
         outpost.addComponent(Components::SelectableComponent{});
         outpost.addComponent(Components::FactionComponent{factionID});
-
+        outpost.addComponent(Components::GarissonComponent{});
         return outpost;
     }
 

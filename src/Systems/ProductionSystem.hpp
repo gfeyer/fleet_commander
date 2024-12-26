@@ -19,19 +19,20 @@ namespace Systems {
             auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* faction = entity.getComponent<Components::FactionComponent>();
             auto* text = entity.getComponent<Components::TextComponent>(); 
+            auto* garisson = entity.getComponent<Components::GarissonComponent>(); 
 
-            if (factory && transform && faction && faction->factionID) {
+            if (factory && transform && faction && faction->factionID && garisson) {
                 factory->productionTimer += dt;
 
                 if (factory->productionTimer >= factory->droneProductionRate) {
                     factory->productionTimer = 0.f;
-                    factory->stationedDrones++;
+                    garisson->incrementDroneCount();
                 }
             }
 
             if (factory &&text){
                 std::stringstream ss;
-                ss << factory->factoryName << "\nDrones: " << factory->stationedDrones << "";
+                ss << factory->factoryName << "\nDrones: " << garisson->getDroneCount() << "";
                 text->setText(ss.str());
             }
         }
