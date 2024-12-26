@@ -9,7 +9,7 @@ namespace Components {
         std::string factoryName;
         float droneProductionRate = 1.f;
         float productionTimer = 0.f;
-        std::unordered_set<unsigned long> drones;
+        unsigned int stationedDrones = 0;
 
         FactoryComponent(const std::string& factoryName) : factoryName(factoryName) {}
     };

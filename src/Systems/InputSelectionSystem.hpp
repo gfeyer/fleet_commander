@@ -8,6 +8,7 @@
 #include "Config.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Components/SelectableComponent.hpp"
+#include "Components/Builder.hpp"
 
 #include "Utils/Logger.hpp"
 
@@ -18,48 +19,50 @@ namespace Systems {
             sf::Vector2f worldPos = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
 
             // determine if there is already a selection
-            bool selectionExists = false;
-            EntityID selectedEntityID = -1;
+            bool originSelectionExists = false;
+            EntityID originEntityID = -1;
             for (auto& [id, entity] : entities) {
                 auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
                 if (selectableComp && selectableComp->isSelected) {
-                    selectionExists = true;
-                    selectedEntityID = id;
+                    originSelectionExists = true;
+                    originEntityID = id;
                     break;
                 }
             }
 
             // Determine if a new selection was made
             for (auto& [id, entity] : entities) {
-                auto* transform = entity.getComponent<Components::TransformComponent>();
-                auto* shapeComp = entity.getComponent<Components::ShapeComponent>();
-                auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
+                auto* targetTransform = entity.getComponent<Components::TransformComponent>();
+                auto* targetShapeComp = entity.getComponent<Components::ShapeComponent>();
+                auto* targetSelectableComp = entity.getComponent<Components::SelectableComponent>();
 
-                if (transform && shapeComp && selectableComp) {
+                if (targetTransform && targetShapeComp && targetSelectableComp) {
                     // Check if mouse is within entity bounds
-                    if (shapeComp->shape->getGlobalBounds().contains(worldPos)) {
-                        if (selectionExists && selectedEntityID != id) {
-                            log_info << "Attack entity " << id << " from " << selectedEntityID;
+                    if (targetShapeComp->shape->getGlobalBounds().contains(worldPos)) {
+                        if (originSelectionExists && originEntityID != id) {
+                            log_info << "Attack entity " << id << " from " << originEntityID;
 
-                            auto* factory = entities.at(selectedEntityID).getComponent<Components::FactoryComponent>();
-                            if(factory){
-                                for(auto it = factory->drones.begin(); it != factory->drones.end();){
-                                    auto* moveComp = entities.at(*it).getComponent<Components::MoveComponent>();
-                                    if(moveComp){
-                                        moveComp->targetPosition = worldPos;
-                                        moveComp->moveToTarget = true;
-                                        it = factory->drones.erase(it);
-                                    }else{
-                                        ++it;
-                                    }
+                            auto* originFactory = entities.at(originEntityID).getComponent<Components::FactoryComponent>();
+                            auto* originFaction = entities.at(originEntityID).getComponent<Components::FactionComponent>();
+                            auto* originTransform = entities.at(originEntityID).getComponent<Components::TransformComponent>();
+                            if(originFactory && originFaction && originFactory->stationedDrones > 0){
+                                auto totalDrones = originFactory->stationedDrones;
+
+                                for(int i=0; i < totalDrones; i++){
+                                    auto drone = Builder::createDrone(std::string("D") + std::to_string(i), originFaction->factionID);
+                                    drone.getComponent<Components::TransformComponent>()->transform.setPosition(originTransform->getPosition());
+                                    auto* moveComp = drone.getComponent<Components::MoveComponent>();
+                                    moveComp->targetPosition = targetTransform->getPosition();
+                                    moveComp->moveToTarget = true;
+                                    entities.emplace(drone.id, std::move(drone));
                                 }
                             }
                         }else{
                             // log_info << "Select entity " << id;
-                            selectableComp->isSelected = true;
+                            targetSelectableComp->isSelected = true;
                         }
                     } else {
-                        selectableComp->isSelected = false;
+                        targetSelectableComp->isSelected = false;
                         // log_info << "Deselected entity " << id;
                     }
                 }

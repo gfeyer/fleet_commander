@@ -23,20 +23,7 @@ namespace Systems {
 
                 if (factory->productionTimer >= factory->droneProductionRate) {
                     factory->productionTimer = 0.f;
-                    auto drone = Builder::createDrone("", faction->factionID);
-
-                    EntityID droneId = drone.id;
-                    
-                    entities.emplace(droneId, std::move(drone));
-
-                    factory->drones.insert(droneId);
-
-                    // Place drone around the factory
-                    auto* droneTransform = entities.at(droneId).getComponent<Components::TransformComponent>();
-                    if (droneTransform) {
-                        sf::Vector2f offset(Config::FACTORY_SIZE + rand() % 100 - 50, Config::FACTORY_SIZE + rand() % 50);
-                        droneTransform->transform.setPosition(transform->transform.getPosition() + offset);
-                    }
+                    factory->stationedDrones++;
                 }
             }
         }

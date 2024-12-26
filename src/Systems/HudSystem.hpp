@@ -41,7 +41,7 @@ namespace Systems {
                 if (factoryComp) {
                     std::stringstream ss;
                     ss << factoryComp->factoryName << "\n";
-                    ss << "Drones stationed: " << factoryComp->drones.size() << " \n";
+                    ss << "Drones stationed: " << factoryComp->stationedDrones << " \n";
                     ss << "Production rate: " << factoryComp->droneProductionRate << " s";
 
                     auto label = tgui::Label::create(ss.str());
