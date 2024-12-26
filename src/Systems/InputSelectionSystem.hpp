@@ -19,12 +19,12 @@ namespace Systems {
 
             // determine if there is already a selection
             bool selectionExists = false;
-            EntityID selectedEntity = -1;
+            EntityID selectedEntityID = -1;
             for (auto& [id, entity] : entities) {
                 auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
                 if (selectableComp && selectableComp->isSelected) {
                     selectionExists = true;
-                    selectedEntity = id;
+                    selectedEntityID = id;
                     break;
                 }
             }
@@ -38,8 +38,22 @@ namespace Systems {
                 if (transform && shapeComp && selectableComp) {
                     // Check if mouse is within entity bounds
                     if (shapeComp->shape->getGlobalBounds().contains(worldPos)) {
-                        if (selectionExists && selectedEntity != id) {
-                            log_info << "Trigger attack from " << selectedEntity << " to " << id;
+                        if (selectionExists && selectedEntityID != id) {
+                            log_info << "Attack entity " << id << " from " << selectedEntityID;
+
+                            auto* factory = entities.at(selectedEntityID).getComponent<Components::FactoryComponent>();
+                            if(factory){
+                                for(auto it = factory->drones.begin(); it != factory->drones.end();){
+                                    auto* moveComp = entities.at(*it).getComponent<Components::MoveComponent>();
+                                    if(moveComp){
+                                        moveComp->targetPosition = worldPos;
+                                        moveComp->moveToTarget = true;
+                                        it = factory->drones.erase(it);
+                                    }else{
+                                        ++it;
+                                    }
+                                }
+                            }
                         }else{
                             // log_info << "Select entity " << id;
                             selectableComp->isSelected = true;

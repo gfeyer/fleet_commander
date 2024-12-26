@@ -28,6 +28,7 @@
 #include "Systems/InputHoverSystem.hpp"
 #include "Systems/HudSystem.hpp"
 #include "Systems/ProductionSystem.hpp"
+#include "Systems/CollisionSystem.hpp"
 
 Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 {
@@ -86,6 +87,7 @@ void Scene::update(float dt)
     Systems::InputHoverSystem(entities, windowRef);
     Systems::HudSystem(entities, *gui);
     Systems::ProductionSystem(entities, dt);
+    Systems::CollisionSystem(entities, dt);
 }
 
 void Scene::render()
