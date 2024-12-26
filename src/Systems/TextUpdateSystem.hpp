@@ -8,7 +8,7 @@
 #include "Components/TextComponent.hpp"
 
 namespace Systems {
-    void TextUpdateSystem(std::unordered_map<int, Entity>& entities, float dt) {
+    void TextUpdateSystem(std::unordered_map<EntityID, Entity>& entities, float dt) {
         for (auto& [id, entity] : entities) {
             auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* textComp = entity.getComponent<Components::TextComponent>();

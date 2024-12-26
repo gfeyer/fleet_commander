@@ -12,7 +12,7 @@
 
 namespace Systems {
 
-    void RenderSystem(std::unordered_map<int, Entity>& entities, sf::RenderWindow& window) {
+    void RenderSystem(std::unordered_map<EntityID, Entity>& entities, sf::RenderWindow& window) {
         for (auto& [id, entity] : entities) {
             auto* transform = entity.getComponent<Components::TransformComponent>();
 

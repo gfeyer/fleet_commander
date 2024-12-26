@@ -2,7 +2,7 @@
 Colonization simulator 2D
 
 ## TODO
-- Build a factory system to spawn pre-defined game objects
+- Builder pattern to spawn pre-defined game objects
 - Add player factions system
     -- units colored by faction
 - Add combat system

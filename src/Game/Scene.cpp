@@ -9,7 +9,9 @@
 
 #include "Core/Entity.hpp"
 
-#include "Components/Components.hpp"
+#include "Components/FactoryComponent.hpp"
+#include "Components/OutpostComponent.hpp"
+#include "Components/DroneComponent.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/SpriteComponent.hpp"
 #include "Components/ShapeComponent.hpp"

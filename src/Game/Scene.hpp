@@ -11,7 +11,7 @@
 
 class Scene{
 private:
-    std::unordered_map<int, Entity> entities;
+    std::unordered_map<EntityID, Entity> entities;
     std::unique_ptr<tgui::Gui> gui;
     sf::RenderWindow& windowRef;
 

@@ -1,6 +1,7 @@
 #ifndef HUD_SYSTEM_HPP
 #define HUD_SYSTEM_HPP
 
+#include <sstream>
 #include <TGUI/TGUI.hpp>
 
 #include "Core/Entity.hpp"
@@ -12,12 +13,12 @@
 #include <TGUI/Backend/SFML-Graphics.hpp>
 
 namespace Systems {
-    void HudSystem(std::unordered_map<int, Entity>& entities, tgui::Gui& gui) {
+    void HudSystem(std::unordered_map<EntityID, Entity>& entities, tgui::Gui& gui) {
         static tgui::Panel::Ptr infoPanel = nullptr;
         static tgui::Theme::Ptr theme = Resource::ResourceManager::getInstance().getTheme(Resource::Paths::DARK_THEME);
 
         if (!infoPanel) {
-            infoPanel = tgui::Panel::create({"200", "100"});
+            infoPanel = tgui::Panel::create({"230", "100"});
             infoPanel->setVisible(false);
             infoPanel->setRenderer(theme->getRenderer("Panel"));
             gui.add(infoPanel);
@@ -35,8 +36,15 @@ namespace Systems {
                 infoPanel->setRenderer(theme->getRenderer("Panel"));
                 infoPanel->removeAllWidgets();
 
-                if (tagComponent) {
-                    auto label = tgui::Label::create("Info\n" + tagComponent->tag);
+                auto* factoryComp = entity.getComponent<Components::FactoryComponent>();
+
+                if (factoryComp) {
+                    std::stringstream ss;
+                    ss << factoryComp->factoryName << "\n";
+                    ss << "Drones stationed: " << factoryComp->drones.size() << " \n";
+                    ss << "Production rate: " << factoryComp->droneProductionRate << " s";
+
+                    auto label = tgui::Label::create(ss.str());
                     label->setRenderer(theme->getRenderer("Label"));
                     label->setTextSize(Config::GUI_TEXT_SIZE);
                     infoPanel->add(label);

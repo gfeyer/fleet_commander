@@ -9,7 +9,7 @@
 #include "Components/MoveComponent.hpp"
 
 namespace Systems {
-    void InputSystem(const sf::Event& event, std::unordered_map<int, Entity>& entities, const sf::RenderWindow& window) {
+    void InputSystem(const sf::Event& event, std::unordered_map<EntityID, Entity>& entities, const sf::RenderWindow& window) {
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             // Get the click position in world coordinates
             sf::Vector2f clickPosition = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));

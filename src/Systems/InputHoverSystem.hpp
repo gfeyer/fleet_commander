@@ -12,7 +12,7 @@
 #include "Utils/Logger.hpp"
 
 namespace Systems {
-    void InputHoverSystem(std::unordered_map<int, Entity>& entities, const sf::RenderWindow& window) {
+    void InputHoverSystem(std::unordered_map<EntityID, Entity>& entities, const sf::RenderWindow& window) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 

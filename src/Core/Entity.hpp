@@ -5,15 +5,17 @@
 #include <typeindex>
 #include <memory>
 
+using EntityID = unsigned long;
+
 class Entity {
 private:
     std::unordered_map<std::type_index, std::shared_ptr<void>> components;
 
     // Static variable for unique ID generation
-    static unsigned long nextID; 
+    static EntityID nextID; 
 
 public:
-    unsigned long id; // Unique Entity ID
+    EntityID id; // Unique Entity ID
 
     Entity() : id(nextID++) { }
 
