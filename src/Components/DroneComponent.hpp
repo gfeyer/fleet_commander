@@ -9,7 +9,7 @@ namespace Components {
         std::string droneName;
 
         DroneComponent(const std::string& droneName) : droneName(droneName) {}
-        ~DroneComponent(){log_info << "Destroying Drone " << droneName;};
+        ~DroneComponent(){};
     };
 }
 

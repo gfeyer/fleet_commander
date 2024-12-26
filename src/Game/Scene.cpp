@@ -57,7 +57,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     // entities.emplace(background.id, std::move(background));
 
     // Create Factories
-    for(int i=0; i < 6; ++i){
+    for(int i=0; i < 1; ++i){
         auto factory = Builder::createFactory("Factory #" + std::to_string(i));
         entities.emplace(factory.id, std::move(factory));
     }
@@ -69,10 +69,10 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     }
 
     // Create Drones
-    for(int i=0; i<12; ++i){
-        auto drone = Builder::createDrone("Drone #" + std::to_string(i));
-        entities.emplace(drone.id, std::move(drone));
-    }
+    // for(int i=0; i<12; ++i){
+    //     auto drone = Builder::createDrone("Drone #" + std::to_string(i));
+    //     entities.emplace(drone.id, std::move(drone));
+    // }
 
 
 }

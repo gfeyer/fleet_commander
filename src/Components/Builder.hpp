@@ -38,7 +38,7 @@ namespace Builder {
             sf::Vector2f(Config::FACTORY_SIZE+5, 5)
         });
         factory.addComponent(Components::HoverComponent{});
-        return std::move(factory);
+        return factory;
     }
 
     Entity createOutpost(std::string name = "") {
@@ -54,7 +54,7 @@ namespace Builder {
             sf::Color::White, 
             sf::Vector2f(Config::OUTPOST_RADIUS*2, 5)
         });
-        return std::move(outpost);
+        return outpost;
     }
 
     Entity createDrone(std::string name = "") {
@@ -79,7 +79,7 @@ namespace Builder {
 
         drone.addComponent(Components::MoveComponent{100.f, 0.f});
 
-        return std::move(drone);
+        return drone;
     }
 }
 
