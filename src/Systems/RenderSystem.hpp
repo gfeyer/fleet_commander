@@ -9,12 +9,23 @@
 #include "Components/SpriteComponent.hpp"
 #include "Components/ShapeComponent.hpp"
 #include "Components/TextComponent.hpp"
+#include "Components/SelectableComponent.hpp"
 
 namespace Systems {
 
     void RenderSystem(std::unordered_map<EntityID, Entity>& entities, sf::RenderWindow& window) {
         for (auto& [id, entity] : entities) {
             auto* transform = entity.getComponent<Components::TransformComponent>();
+
+            // Draw selectable component first (and draw sprite over it)
+            auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
+            if (selectableComp && selectableComp->isSelected && transform) {
+                sf::CircleShape selectionShape(Config::FACTORY_SIZE);
+                selectionShape.setOrigin(Config::FACTORY_SIZE/2, Config::FACTORY_SIZE/2);
+                selectionShape.setFillColor(sf::Color::Yellow);
+                selectionShape.setPosition(transform->getPosition());
+                window.draw(selectionShape);
+            }
 
             // Render SpriteComponent
             auto* sprite = entity.getComponent<Components::SpriteComponent>();

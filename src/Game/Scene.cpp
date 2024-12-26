@@ -23,7 +23,7 @@
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
 #include "Systems/TextUpdateSystem.hpp"
-#include "Systems/InputSystem.hpp"
+#include "Systems/InputSelectionSystem.hpp"
 #include "Systems/InputHoverSystem.hpp"
 #include "Systems/HudSystem.hpp"
 #include "Systems/ProductionSystem.hpp"
@@ -57,24 +57,16 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     // entities.emplace(background.id, std::move(background));
 
     // Create Factories
-    for(int i=0; i < 1; ++i){
+    for(int i=0; i < 2; ++i){
         auto factory = Builder::createFactory("Factory #" + std::to_string(i));
         entities.emplace(factory.id, std::move(factory));
     }
 
     // Create Outposts
-    for(int i=0; i<6; ++i){
+    for(int i=0; i<1; ++i){
         auto outpost = Builder::createOutpost("Outpost #" + std::to_string(i));
         entities.emplace(outpost.id, std::move(outpost));
     }
-
-    // Create Drones
-    // for(int i=0; i<12; ++i){
-    //     auto drone = Builder::createDrone("Drone #" + std::to_string(i));
-    //     entities.emplace(drone.id, std::move(drone));
-    // }
-
-
 }
 
 Scene::~Scene()
@@ -99,5 +91,5 @@ void Scene::render()
 
 void Scene::handleInput(sf::Event &event)
 {
-    Systems::InputSystem(event, entities, windowRef);
+    Systems::InputSelectionSystem(event, entities, windowRef);
 }

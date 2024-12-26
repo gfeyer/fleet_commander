@@ -2,7 +2,6 @@
 Colonization simulator 2D
 
 ## TODO
-- Builder pattern to spawn pre-defined game objects
 - Add player factions system
     -- units colored by faction
 - Add combat system

@@ -14,6 +14,7 @@
 #include "Components/TextComponent.hpp"
 #include "Components/HoverComponent.hpp"
 #include "Components/MoveComponent.hpp"
+#include "Components/SelectableComponent.hpp"
 
 #include "Utils/Logger.hpp"
 #include "Resources/ResourceManager.hpp"
@@ -38,6 +39,7 @@ namespace Builder {
             sf::Vector2f(Config::FACTORY_SIZE+5, 5)
         });
         factory.addComponent(Components::HoverComponent{});
+        factory.addComponent(Components::SelectableComponent{});
         return factory;
     }
 
