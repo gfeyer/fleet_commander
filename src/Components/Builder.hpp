@@ -44,7 +44,7 @@ namespace Builder {
         return factory;
     }
 
-    Entity createOutpost(std::string name = "") {
+    Entity createOutpost(std::string name = "", unsigned int factionID = 0) {
         Entity outpost;
         outpost.addComponent(Components::OutpostComponent{name});
         outpost.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - Config::OUTPOST_RADIUS, rand() % Config::SCREEN_HEIGHT-Config::OUTPOST_RADIUS), 0, sf::Vector2f(1, 1)});
@@ -57,6 +57,9 @@ namespace Builder {
             sf::Color::White, 
             sf::Vector2f(Config::OUTPOST_RADIUS*2, 5)
         });
+        outpost.addComponent(Components::SelectableComponent{});
+        outpost.addComponent(Components::FactionComponent{factionID});
+
         return outpost;
     }
 
