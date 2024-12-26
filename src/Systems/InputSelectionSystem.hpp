@@ -9,6 +9,7 @@
 #include "Components/MoveComponent.hpp"
 #include "Components/SelectableComponent.hpp"
 #include "Components/Builder.hpp"
+#include "Components/AttackOrderComponent.hpp"
 
 #include "Utils/Logger.hpp"
 
@@ -31,43 +32,36 @@ namespace Systems {
             }
 
             // Determine if a new selection was made
-            for (auto& [id, entity] : entities) {
-                auto* targetTransform = entity.getComponent<Components::TransformComponent>();
-                auto* targetShapeComp = entity.getComponent<Components::ShapeComponent>();
-                auto* targetSelectableComp = entity.getComponent<Components::SelectableComponent>();
+            for (auto& [targetID, targetEntity] : entities) {
+                auto* targetTransform = targetEntity.getComponent<Components::TransformComponent>();
+                auto* targetShapeComp = targetEntity.getComponent<Components::ShapeComponent>();
+                auto* targetSelectableComp = targetEntity.getComponent<Components::SelectableComponent>();
 
                 if (targetTransform && targetShapeComp && targetSelectableComp) {
                     // Check if mouse is within entity bounds
                     if (targetShapeComp->shape->getGlobalBounds().contains(worldPos)) {
-                        if (originSelectionExists && originEntityID != id) {
-                            log_info << "Attack entity " << id << " from " << originEntityID;
+                        if (originSelectionExists && originEntityID != targetID) {
+                            log_info << "Attack entity " << targetID << " from " << originEntityID;
 
-                            auto* originFactory = entities.at(originEntityID).getComponent<Components::FactoryComponent>();
                             auto* originFaction = entities.at(originEntityID).getComponent<Components::FactionComponent>();
-                            auto* originTransform = entities.at(originEntityID).getComponent<Components::TransformComponent>();
                             auto* originGarisson = entities.at(originEntityID).getComponent<Components::GarissonComponent>();
 
-                            if(originFactory && originFaction && originGarisson && originGarisson->getDroneCount() > 0){
+                            if(originFaction && originGarisson && originGarisson->getDroneCount() > 0){
                                 auto totalDrones = originGarisson->getDroneCount();
 
                                 for(auto i=0; i < totalDrones; i++){
-                                    auto drone = Builder::createDrone(std::string("D") + std::to_string(i), originFaction->factionID);
-                                    drone.getComponent<Components::TransformComponent>()->transform.setPosition(originTransform->getPosition());
-                                    auto* moveComp = drone.getComponent<Components::MoveComponent>();
-                                    moveComp->targetPosition = targetTransform->getPosition();
-                                    moveComp->moveToTarget = true;
+                                    auto drone = Builder::createDrone(std::to_string(i), originFaction->factionID);
+                                    drone.addComponent(Components::AttackOrderComponent{originEntityID, targetID});
                                     entities.emplace(drone.id, std::move(drone));
                                 }
 
                                 originGarisson->setDroneCount(0);
                             }
                         }else{
-                            // log_info << "Select entity " << id;
                             targetSelectableComp->isSelected = true;
                         }
                     } else {
                         targetSelectableComp->isSelected = false;
-                        // log_info << "Deselected entity " << id;
                     }
                 }
             }

@@ -7,6 +7,7 @@ namespace Components {
 
         void setDroneCount(unsigned int count) { droneCount = count; }
         void incrementDroneCount() { droneCount++; }
+        void decrementDroneCount() { droneCount--; }
         unsigned int getDroneCount() const { return droneCount; }
     };
 }
