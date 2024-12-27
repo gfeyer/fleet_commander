@@ -2,7 +2,7 @@
 Colonization simulator 2D
 
 ## TODO
-- infinite scrolling
+- Migrate to lists instead of iterating over all IDs
 - Add combat system
     -- Menu to select factory/outpost where drones are located
     -- Menu to attack another factory or outpost (select number of drones)
