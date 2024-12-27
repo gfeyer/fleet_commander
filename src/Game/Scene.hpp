@@ -14,6 +14,11 @@ private:
     std::unordered_map<EntityID, Entity> entities;
     std::unique_ptr<tgui::Gui> gui;
     sf::RenderWindow& windowRef;
+    
+    // Camera
+    sf::View camera;
+    sf::Vector2f cameraPosition;
+    float cameraSpeed = 200.f;
 
 public:
     Scene(sf::RenderWindow& window);

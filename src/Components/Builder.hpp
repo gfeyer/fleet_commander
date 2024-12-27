@@ -31,8 +31,8 @@ namespace Builder {
         factory.addComponent(Components::FactoryComponent{name, productionRate});
 
         sf::Vector2f position = sf::Vector2f(
-            Config::FACTORY_SIZE + rand() % (Config::SCREEN_WIDTH - 2*Config::FACTORY_SIZE), 
-            Config::FACTORY_SIZE + rand() % (Config::SCREEN_HEIGHT - 2*Config::FACTORY_SIZE)
+            Config::FACTORY_SIZE + rand() % (Config::MAP_WIDTH - 2*Config::FACTORY_SIZE), 
+            Config::FACTORY_SIZE + rand() % (Config::MAP_HEIGHT - 2*Config::FACTORY_SIZE)
         );
         factory.addComponent(Components::TransformComponent{position, 0, sf::Vector2f(1, 1)});
         auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
@@ -56,7 +56,11 @@ namespace Builder {
     Entity createOutpost(std::string name = "", unsigned int factionID = 0, float shieldRegenRate = 1.f) {
         Entity outpost;
         outpost.addComponent(Components::OutpostComponent{name});
-        outpost.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - Config::OUTPOST_RADIUS, rand() % Config::SCREEN_HEIGHT-Config::OUTPOST_RADIUS), 0, sf::Vector2f(1, 1)});
+        sf::Vector2f position = sf::Vector2f(
+            Config::OUTPOST_RADIUS + rand() % (Config::MAP_WIDTH - 2*Config::OUTPOST_RADIUS), 
+            Config::OUTPOST_RADIUS + rand() % (Config::MAP_HEIGHT - 2*Config::OUTPOST_RADIUS)
+        );
+        outpost.addComponent(Components::TransformComponent{position, 0, sf::Vector2f(1, 1)});
         auto shape = sf::CircleShape(Config::OUTPOST_RADIUS);
         shape.setFillColor(sf::Color::Color(100, 100, 100));
         shape.setOrigin(Config::OUTPOST_RADIUS, Config::OUTPOST_RADIUS);

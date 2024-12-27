@@ -16,7 +16,6 @@
 namespace Systems {
     void InputSelectionSystem(const sf::Event& event, std::unordered_map<EntityID, Entity>& entities, const sf::RenderWindow& window) {
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-            log_info << "Click";
             // Get the click position in world coordinates
             sf::Vector2f worldPos = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
 
