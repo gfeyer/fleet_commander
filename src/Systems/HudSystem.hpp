@@ -44,7 +44,16 @@ namespace Systems {
                     std::stringstream ss;
                     ss << factoryComp->factoryName << "\n";
                     ss << "Drones stationed: " << garissonComp->getDroneCount() << " \n";
-                    ss << "Production rate: " << factoryComp->droneProductionRate << " s";
+
+                    float productionRate = factoryComp->droneProductionRate;
+                    float timeLeft = productionRate - factoryComp->productionTimer;
+
+                    ss << "Production rate: " << productionRate << " s\n";
+                    
+                    auto* factionComp = entity.getComponent<Components::FactionComponent>();
+                    if(factionComp && factionComp->factionID != 0){ 
+                        ss << "Next drone in: " << unsigned int(timeLeft) << " s";
+                    }
 
                     auto label = tgui::Label::create(ss.str());
                     label->setRenderer(theme->getRenderer("Label"));
