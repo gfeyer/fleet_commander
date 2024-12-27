@@ -59,7 +59,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     // entities.emplace(background.id, std::move(background));
 
     // player factory
-    int randomNumber = 5 + (std::rand() % 1);
+    int randomNumber = 1 + (std::rand() % 1);
     auto factory = Builder::createFactory("Factory #" + std::to_string(0), 1, randomNumber);
     entities.emplace(factory.id, std::move(factory));
 

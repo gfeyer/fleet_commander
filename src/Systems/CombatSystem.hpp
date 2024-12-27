@@ -42,7 +42,13 @@ namespace Systems {
                         auto drone = Builder::createDrone(std::to_string(i), originFaction->factionID);
                         drone.addComponent(Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
                         auto* transform = drone.getComponent<Components::TransformComponent>();
-                        transform->transform.setPosition(entities[attackOrder->origin].getComponent<Components::TransformComponent>()->transform.getPosition());
+                        sf::Vector2f startPosition = entities[attackOrder->origin].getComponent<Components::TransformComponent>()->transform.getPosition();
+                        int spread = 25 + (dronesUsedForAttack * 5);
+                        sf::Vector2f randomOffset = sf::Vector2f(
+                            rand() % (2 * spread) - spread,
+                            rand() % (2 * spread) - spread
+                        );
+                        transform->transform.setPosition(startPosition + randomOffset);
 
                         auto* move = drone.getComponent<Components::MoveComponent>();
                         move->targetPosition = entities[attackOrder->target].getComponent<Components::TransformComponent>()->transform.getPosition();
