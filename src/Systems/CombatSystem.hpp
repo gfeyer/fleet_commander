@@ -44,6 +44,7 @@ namespace Systems {
                         auto* transform = drone.getComponent<Components::TransformComponent>();
                         sf::Vector2f startPosition = entities[attackOrder->origin].getComponent<Components::TransformComponent>()->transform.getPosition();
                         int spread = 25 + (dronesUsedForAttack * 5);
+                        spread = std::min(spread, 75);
                         sf::Vector2f randomOffset = sf::Vector2f(
                             rand() % (2 * spread) - spread,
                             rand() % (2 * spread) - spread
