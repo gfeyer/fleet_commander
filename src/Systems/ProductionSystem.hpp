@@ -18,7 +18,6 @@ namespace Systems {
             auto* factory = entity.getComponent<Components::FactoryComponent>();
             auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* faction = entity.getComponent<Components::FactionComponent>();
-            auto* text = entity.getComponent<Components::LabelComponent>(); 
             auto* garisson = entity.getComponent<Components::GarissonComponent>(); 
 
             if (factory && transform && faction && faction->factionID && garisson) {
@@ -28,12 +27,6 @@ namespace Systems {
                     factory->productionTimer = 0.f;
                     garisson->incrementDroneCount();
                 }
-            }
-
-            if (factory &&text){
-                std::stringstream ss;
-                ss << factory->factoryName << "\nDrones: " << garisson->getDroneCount();
-                text->setText(ss.str());
             }
         }
     }

@@ -23,7 +23,7 @@
 
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
-#include "Systems/TextUpdateSystem.hpp"
+#include "Systems/LabelUpdateSystem.hpp"
 #include "Systems/InputSelectionSystem.hpp"
 #include "Systems/InputHoverSystem.hpp"
 #include "Systems/HudSystem.hpp"
@@ -82,12 +82,12 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
-    Systems::TextUpdateSystem(entities, dt);
     Systems::MovementSystem(entities, dt);
     Systems::InputHoverSystem(entities, windowRef);
     Systems::HudSystem(entities, *gui);
     Systems::ProductionSystem(entities, dt);
     Systems::CombatSystem(entities, dt);
+    Systems::LabelUpdateSystem(entities, dt);
 }
 
 void Scene::render()
