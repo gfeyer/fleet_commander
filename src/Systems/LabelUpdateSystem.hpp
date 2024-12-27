@@ -37,9 +37,7 @@ namespace Systems {
                 if(garisson){
                     ss << "\nDrones: " << garisson->getDroneCount();
                 }
-
                 labelComp->text.setString(ss.str());
-
             }
         }
     }

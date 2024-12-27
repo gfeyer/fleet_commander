@@ -43,20 +43,22 @@ namespace Systems {
                         if (originSelectionExists && originEntityID != targetID) {
                             log_info << "Attack entity " << targetID << " from " << originEntityID;
 
-                            auto* originFaction = entities.at(originEntityID).getComponent<Components::FactionComponent>();
-                            auto* originGarisson = entities.at(originEntityID).getComponent<Components::GarissonComponent>();
+                            entities[originEntityID].addComponent(Components::AttackOrderComponent{originEntityID, targetID});
 
-                            if(originFaction && originGarisson && originGarisson->getDroneCount() > 0){
-                                auto totalDrones = originGarisson->getDroneCount();
+                            // auto* originFaction = entities.at(originEntityID).getComponent<Components::FactionComponent>();
+                            // auto* originGarisson = entities.at(originEntityID).getComponent<Components::GarissonComponent>();
 
-                                for(auto i=0; i < totalDrones; i++){
-                                    auto drone = Builder::createDrone(std::to_string(i), originFaction->factionID);
-                                    drone.addComponent(Components::AttackOrderComponent{originEntityID, targetID});
-                                    entities.emplace(drone.id, std::move(drone));
-                                }
+                            // if(originFaction && originGarisson && originGarisson->getDroneCount() > 0){
+                            //     auto totalDrones = originGarisson->getDroneCount();
 
-                                originGarisson->setDroneCount(0);
-                            }
+                            //     for(auto i=0; i < totalDrones; i++){
+                            //         auto drone = Builder::createDrone(std::to_string(i), originFaction->factionID);
+                            //         drone.addComponent(Components::AttackOrderComponent{originEntityID, targetID});
+                            //         entities.emplace(drone.id, std::move(drone));
+                            //     }
+
+                            //     originGarisson->setDroneCount(0);
+                            // }
                         }else{
                             targetSelectableComp->isSelected = true;
                         }

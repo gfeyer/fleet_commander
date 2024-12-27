@@ -7,6 +7,8 @@
 #include "Core/Entity.hpp"
 
 #include "Components/MoveComponent.hpp"
+#include "Components/AttackOrderComponent.hpp"
+#include "Components/GarissonComponent.hpp"
 #include "Core/Entity.hpp"
 
 #include "Utils/Logger.hpp"
@@ -18,24 +20,33 @@ namespace Systems {
 
             for (auto& [id, entity] : entities) {
                 auto* attackOrder = entity.getComponent<Components::AttackOrderComponent>();
+                auto* garisson = entity.getComponent<Components::GarissonComponent>();
+                auto* drone = entity.getComponent<Components::DroneComponent>();
+                auto* move = entity.getComponent<Components::MoveComponent>();
 
-                if (attackOrder) {
-                    auto* droneTransform = entity.getComponent<Components::TransformComponent>();
-                    auto* droneMove = entity.getComponent<Components::MoveComponent>();
+                if (attackOrder && garisson) {
+                    // Attack order was just palced at a garison
+                    // Create drones and send them to the target
+                    auto* originFaction = entities[attackOrder->origin].getComponent<Components::FactionComponent>();
 
-                    auto* originTransform = entities[attackOrder->origin].getComponent<Components::TransformComponent>();
-                    auto* targetTransform = entities[attackOrder->target].getComponent<Components::TransformComponent>();
+                    // TODO: insert error msg if originFaction is missing
 
-                    if (!droneTransform || !droneMove || !originTransform || !targetTransform) {
-                        continue;
+                    for(auto i=0; i < garisson->getDroneCount(); i++){
+                        auto drone = Builder::createDrone(std::to_string(i), originFaction->factionID);
+                        drone.addComponent(Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
+                        auto* transform = drone.getComponent<Components::TransformComponent>();
+                        transform->transform.setPosition(entities[attackOrder->origin].getComponent<Components::TransformComponent>()->transform.getPosition());
+
+                        auto* move = drone.getComponent<Components::MoveComponent>();
+                        move->targetPosition = entities[attackOrder->target].getComponent<Components::TransformComponent>()->transform.getPosition();
+                        move->moveToTarget = true;
+                        entities.emplace(drone.id, std::move(drone));
                     }
-
-                    if(!attackOrder->isActivated){
-                        droneTransform->transform.setPosition(originTransform->transform.getPosition());
-                        droneMove->targetPosition = targetTransform->transform.getPosition();
-                        droneMove->moveToTarget = true;
-                        attackOrder->isActivated = true;
-                    }else if (!droneMove->moveToTarget) {
+                    garisson->setDroneCount(0);
+                    entity.removeComponent<Components::AttackOrderComponent>();
+                }
+                else if (attackOrder && drone && move) {
+                    if (!move->moveToTarget) {
                         log_info << "Drone " << id << " has reached target";
                         // Reached destination
                         auto* targetGarisson = entities[attackOrder->target].getComponent<Components::GarissonComponent>();
