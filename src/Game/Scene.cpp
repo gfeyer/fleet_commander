@@ -60,20 +60,23 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     // entities.emplace(background.id, std::move(background));
 
     // player factory
-    int randomNumber = 1 + (std::rand() % 1);
-    auto factory = Builder::createFactory("Factory #" + std::to_string(0), 1, randomNumber);
+    float productionRate = 1 + (std::rand() % 3);
+    float shieldRegenRate = 1 + (std::rand() % 5);
+    auto factory = Builder::createFactory("Factory #" + std::to_string(0), 1, productionRate, shieldRegenRate);
     entities.emplace(factory.id, std::move(factory));
 
     // Create Neutral Factories
     for(int i=1; i < 3; ++i){
-        randomNumber = 5 + (std::rand() % 1);
-        auto factory = Builder::createFactory("Factory #" + std::to_string(i), 0, randomNumber);
+        productionRate = 1 + (std::rand() % 5);
+        shieldRegenRate = 1 + (std::rand() % 5);
+        auto factory = Builder::createFactory("Factory #" + std::to_string(i), 0, productionRate, shieldRegenRate);
         entities.emplace(factory.id, std::move(factory));
     }
 
     // Create Outposts
     for(int i=0; i<3; ++i){
-        auto outpost = Builder::createOutpost("Outpost #" + std::to_string(i));
+        float regenRate = 1 + rand() % 5;
+        auto outpost = Builder::createOutpost("Outpost #" + std::to_string(i), 0, regenRate);
         entities.emplace(outpost.id, std::move(outpost));
     }
 }

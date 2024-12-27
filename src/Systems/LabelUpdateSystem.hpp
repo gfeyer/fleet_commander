@@ -39,10 +39,10 @@ namespace Systems {
                     ss << "\nDrones: " << garisson->getDroneCount();
                 }
 
-                auto* shield = entity.getComponent<Components::ShieldComponent>();
-                if(shield){
-                    ss << "\nShield: " << shield->getShield() << "/" << shield->maxShield;
-                }
+                // auto* shield = entity.getComponent<Components::ShieldComponent>();
+                // if(shield){
+                //     ss << "\nShield: " << shield->getShield() << "/" << shield->maxShield;
+                // }
                 labelComp->text.setString(ss.str());
             }
         }

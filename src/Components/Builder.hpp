@@ -23,13 +23,18 @@
 
 namespace Builder {
 
-    Entity createFactory(std::string name = "", unsigned int factionID = 0, float productionRate = 1.f) {
+    Entity createFactory(std::string name = "", unsigned int factionID = 0, float productionRate = 1.f, float shieldRegenRate = 1.f) {
         log_info << "Creating Factory, " << productionRate << " seconds for every drone";
         // Create Factories
         Entity factory; 
         int i = 1;
         factory.addComponent(Components::FactoryComponent{name, productionRate});
-        factory.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - 200, rand() % Config::SCREEN_HEIGHT - 50), 0, sf::Vector2f(1, 1)});
+
+        sf::Vector2f position = sf::Vector2f(
+            Config::FACTORY_SIZE + rand() % (Config::SCREEN_WIDTH - 2*Config::FACTORY_SIZE), 
+            Config::FACTORY_SIZE + rand() % (Config::SCREEN_HEIGHT - 2*Config::FACTORY_SIZE)
+        );
+        factory.addComponent(Components::TransformComponent{position, 0, sf::Vector2f(1, 1)});
         auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
         shape.setFillColor(sf::Color::Color(100, 100, 100));
         shape.setOrigin(shape.getSize().x / 2, shape.getSize().y / 2);
@@ -44,11 +49,11 @@ namespace Builder {
         factory.addComponent(Components::SelectableComponent{});
         factory.addComponent(Components::FactionComponent{factionID});
         factory.addComponent(Components::GarissonComponent{});
-        factory.addComponent(Components::ShieldComponent{0, 10, float(1+rand()%1)});
+        factory.addComponent(Components::ShieldComponent{0, 10, shieldRegenRate});
         return factory;
     }
 
-    Entity createOutpost(std::string name = "", unsigned int factionID = 0) {
+    Entity createOutpost(std::string name = "", unsigned int factionID = 0, float shieldRegenRate = 1.f) {
         Entity outpost;
         outpost.addComponent(Components::OutpostComponent{name});
         outpost.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - Config::OUTPOST_RADIUS, rand() % Config::SCREEN_HEIGHT-Config::OUTPOST_RADIUS), 0, sf::Vector2f(1, 1)});
@@ -66,7 +71,7 @@ namespace Builder {
         outpost.addComponent(Components::SelectableComponent{});
         outpost.addComponent(Components::FactionComponent{factionID});
         outpost.addComponent(Components::GarissonComponent{});
-        outpost.addComponent(Components::ShieldComponent{0, 10, float(1+rand()%1)});
+        outpost.addComponent(Components::ShieldComponent{0, 10, shieldRegenRate});
         return outpost;
     }
 
