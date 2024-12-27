@@ -19,7 +19,7 @@ namespace Systems {
         static tgui::Theme::Ptr theme = Resource::ResourceManager::getInstance().getTheme(Resource::Paths::DARK_THEME);
 
         if (!infoPanel) {
-            infoPanel = tgui::Panel::create({"230", "100"});
+            infoPanel = tgui::Panel::create({"230", "150"});
             infoPanel->setVisible(false);
             infoPanel->setRenderer(theme->getRenderer("Panel"));
             gui.add(infoPanel);
@@ -38,28 +38,41 @@ namespace Systems {
                 infoPanel->removeAllWidgets();
 
                 auto* factoryComp = entity.getComponent<Components::FactoryComponent>();
+                auto* outpostComp = entity.getComponent<Components::OutpostComponent>();
                 auto* garissonComp = entity.getComponent<Components::GarissonComponent>();
+                auto* shieldComp = entity.getComponent<Components::ShieldComponent>();
 
-                if (factoryComp && garissonComp) {
-                    std::stringstream ss;
-                    ss << factoryComp->factoryName << "\n";
-                    ss << "Drones stationed: " << garissonComp->getDroneCount() << " \n";
+                std::stringstream ss;
 
+                if (factoryComp) {
+                    ss << factoryComp->factoryName;
                     float productionRate = factoryComp->droneProductionRate;
                     float timeLeft = productionRate - factoryComp->productionTimer;
 
-                    ss << "Production rate: " << productionRate << " s\n";
+                    ss << "\nProduction rate: " << productionRate << " s\n";
                     
                     auto* factionComp = entity.getComponent<Components::FactionComponent>();
                     if(factionComp && factionComp->factionID != 0){ 
-                        ss << "Next drone in: " << unsigned int(timeLeft) << " s";
+                        ss << "\nNext drone in: " << unsigned int(timeLeft) << " s";
                     }
-
-                    auto label = tgui::Label::create(ss.str());
-                    label->setRenderer(theme->getRenderer("Label"));
-                    label->setTextSize(Config::GUI_TEXT_SIZE);
-                    infoPanel->add(label);
                 }
+
+                if (outpostComp) {
+                    ss << outpostComp->outpostName;
+                }
+
+                if(garissonComp){
+                    ss << "\nDrones stationed: " << garissonComp->getDroneCount();
+                }
+
+                if(shieldComp){
+                    ss << "\nShield: " << shieldComp->currentShield << "/" << shieldComp->maxShield;
+                }
+
+                auto label = tgui::Label::create(ss.str());
+                label->setRenderer(theme->getRenderer("Label"));
+                label->setTextSize(Config::GUI_TEXT_SIZE);
+                infoPanel->add(label);
 
                 infoPanel->setPosition({hoverComp->position.x, hoverComp->position.y});
                 break; // Show info for the first hovered entity only

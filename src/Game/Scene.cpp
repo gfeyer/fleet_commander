@@ -29,6 +29,7 @@
 #include "Systems/HudSystem.hpp"
 #include "Systems/ProductionSystem.hpp"
 #include "Systems/CombatSystem.hpp"
+#include "Systems/ShieldSystem.hpp"
 
 Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 {
@@ -84,10 +85,11 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
-    Systems::MovementSystem(entities, dt);
     Systems::InputHoverSystem(entities, windowRef);
     Systems::HudSystem(entities, *gui);
     Systems::ProductionSystem(entities, dt);
+    Systems::MovementSystem(entities, dt);
+    Systems::ShieldSystem(entities, dt);
     Systems::CombatSystem(entities, dt);
     Systems::LabelUpdateSystem(entities, dt);
 }

@@ -66,17 +66,30 @@ namespace Systems {
                         auto* targetGarisson = entities[attackOrder->target].getComponent<Components::GarissonComponent>();
                         auto* originFaction = entities[attackOrder->origin].getComponent<Components::FactionComponent>();
                         auto* targetFaction = entities[attackOrder->target].getComponent<Components::FactionComponent>();
+                        auto* targetShield = entities[attackOrder->target].getComponent<Components::ShieldComponent>();
+
+                        unsigned int targetShieldValue = 0;
+                        if(targetShield){
+                            targetShieldValue = targetShield->getShield();
+                        }
 
                         if (targetGarisson && originFaction && targetFaction) {
-                            if(targetGarisson->getDroneCount() == 0){
+
+                            if(originFaction->factionID == targetFaction->factionID){
+                                // Same faction, park drones
+                                targetGarisson->incrementDroneCount();
+                            }else if(targetShieldValue > 0){
+                                // Different faction, damage shield
+                                targetShield->decrementShield();
+                            }else if(targetGarisson->getDroneCount() > 0){
+                                // Different faction, shield down, kill parked drones
+                                targetGarisson->decrementDroneCount();
+                            }else{
+                                // Different Faction, no shield, no drones, switch factions
                                 targetFaction->factionID = originFaction->factionID;
+                                targetGarisson->incrementDroneCount();
                             }
 
-                            if(targetFaction->factionID == originFaction->factionID || targetFaction->factionID == 0){
-                                targetGarisson->incrementDroneCount();
-                            }else{
-                                targetGarisson->decrementDroneCount();
-                            }
                             toRemove.insert(id);
                         }
                     }

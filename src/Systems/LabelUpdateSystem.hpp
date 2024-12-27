@@ -7,6 +7,7 @@
 #include "Core/Entity.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/LabelComponent.hpp"
+#include "Components/ShieldComponent.hpp"
 
 namespace Systems {
     void LabelUpdateSystem(std::unordered_map<EntityID, Entity>& entities, float dt) {
@@ -36,6 +37,11 @@ namespace Systems {
                 }
                 if(garisson){
                     ss << "\nDrones: " << garisson->getDroneCount();
+                }
+
+                auto* shield = entity.getComponent<Components::ShieldComponent>();
+                if(shield){
+                    ss << "\nShield: " << shield->getShield() << "/" << shield->maxShield;
                 }
                 labelComp->text.setString(ss.str());
             }

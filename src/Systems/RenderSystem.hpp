@@ -29,6 +29,9 @@ namespace Systems {
                 window.draw(selectionShape);
             }
 
+            // Draw Shield
+            // TODO
+
             // Render SpriteComponent
             auto* sprite = entity.getComponent<Components::SpriteComponent>();
             if (sprite && transform) {

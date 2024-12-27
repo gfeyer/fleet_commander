@@ -7,6 +7,7 @@
 #include "Core/Entity.hpp"
 
 #include "Components/DroneComponent.hpp"
+#include "Components/ShieldComponent.hpp"
 #include "Components/FactoryComponent.hpp"
 #include "Components/OutpostComponent.hpp"
 #include "Components/TransformComponent.hpp"
@@ -18,7 +19,6 @@
 #include "Components/GarissonComponent.hpp"
 #include "Utils/Logger.hpp"
 #include "Resources/ResourceManager.hpp"
-
 #include "Config.hpp"
 
 namespace Builder {
@@ -43,6 +43,7 @@ namespace Builder {
         factory.addComponent(Components::SelectableComponent{});
         factory.addComponent(Components::FactionComponent{factionID});
         factory.addComponent(Components::GarissonComponent{});
+        factory.addComponent(Components::ShieldComponent{0, 10, float(5+rand()%5)});
         return factory;
     }
 
@@ -59,9 +60,11 @@ namespace Builder {
             sf::Color::White, 
             sf::Vector2f(Config::OUTPOST_RADIUS*2, 5)
         });
+        outpost.addComponent(Components::HoverComponent{});
         outpost.addComponent(Components::SelectableComponent{});
         outpost.addComponent(Components::FactionComponent{factionID});
         outpost.addComponent(Components::GarissonComponent{});
+        outpost.addComponent(Components::ShieldComponent{0, 10, float(5+rand()%5)});
         return outpost;
     }
 
