@@ -10,7 +10,6 @@
 #include "Core/Entity.hpp"
 
 #include "Components/FactionComponent.hpp"
-#include "Components/Builder.hpp"
 #include "Components/FactoryComponent.hpp"
 #include "Components/OutpostComponent.hpp"
 #include "Components/DroneComponent.hpp"
@@ -30,6 +29,9 @@
 #include "Systems/ProductionSystem.hpp"
 #include "Systems/CombatSystem.hpp"
 #include "Systems/ShieldSystem.hpp"
+
+#include "Game/Builder.hpp"
+
 
 Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 {
@@ -65,22 +67,19 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     // player factory
     float productionRate = 1 + (std::rand() % 1);
     float shieldRegenRate = 1 + (std::rand() % 5);
-    auto factory = Builder::createFactory("Factory #" + std::to_string(0), 1, productionRate, shieldRegenRate);
-    entities.emplace(factory.id, std::move(factory));
+    Game::createFactory(entityManager, "Factory #" + std::to_string(0), 1, productionRate, shieldRegenRate);
 
     // Create Neutral Factories
     for(int i=1; i < 10; ++i){
         productionRate = 1 + (std::rand() % 5);
         shieldRegenRate = 1 + (std::rand() % 5);
-        auto factory = Builder::createFactory("Factory #" + std::to_string(i), 0, productionRate, shieldRegenRate);
-        entities.emplace(factory.id, std::move(factory));
+        Game::createFactory(entityManager, "Factory #" + std::to_string(i), 0, productionRate, shieldRegenRate);
     }
 
     // Create Outposts
     for(int i=0; i<10; ++i){
         float regenRate = 1 + rand() % 5;
-        auto outpost = Builder::createOutpost("Outpost #" + std::to_string(i), 0, regenRate);
-        entities.emplace(outpost.id, std::move(outpost));
+        Game::createOutpost(entityManager, "Outpost #" + std::to_string(i), 0, regenRate);
     }
 }
 
@@ -91,13 +90,13 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
-    Systems::InputHoverSystem(entities, windowRef);
-    Systems::HudSystem(entities, *gui);
-    Systems::ProductionSystem(entities, dt);
-    Systems::MovementSystem(entities, dt);
-    Systems::ShieldSystem(entities, dt);
-    Systems::CombatSystem(entities, dt);
-    Systems::LabelUpdateSystem(entities, dt);
+    Systems::InputHoverSystem(entityManager, windowRef);
+    Systems::HudSystem(entityManager, *gui);
+    Systems::ProductionSystem(entityManager, dt);
+    Systems::MovementSystem(entityManager, dt);
+    Systems::ShieldSystem(entityManager, dt);
+    Systems::CombatSystem(entityManager, dt);
+    Systems::LabelUpdateSystem(entityManager, dt);
 
     // Wrap Camera Position
     cameraPosition.x = fmod(cameraPosition.x + Config::MAP_WIDTH, Config::MAP_WIDTH);
@@ -109,13 +108,13 @@ void Scene::update(float dt)
 
 void Scene::render()
 {
-    Systems::RenderSystem(entities, windowRef);
+    Systems::RenderSystem(entityManager, windowRef);
     gui->draw();
 }
 
 void Scene::handleInput(sf::Event &event)
 {
-    Systems::InputSelectionSystem(event, entities, windowRef);
+    Systems::InputSelectionSystem(event, entityManager, windowRef);
 
     log_info << "input";
     // Handle Camera Movement

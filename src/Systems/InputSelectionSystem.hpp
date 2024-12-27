@@ -8,13 +8,14 @@
 #include "Config.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Components/SelectableComponent.hpp"
-#include "Components/Builder.hpp"
 #include "Components/AttackOrderComponent.hpp"
+
+#include "Game/Builder.hpp"
 
 #include "Utils/Logger.hpp"
 
 namespace Systems {
-    void InputSelectionSystem(const sf::Event& event, std::unordered_map<EntityID, Entity>& entities, const sf::RenderWindow& window) {
+    void InputSelectionSystem(const sf::Event& event, Game::GameEntityManager& entityManager, const sf::RenderWindow& window) {
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             // Get the click position in world coordinates
             sf::Vector2f worldPos = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
@@ -22,7 +23,12 @@ namespace Systems {
             // determine if there is already a selection
             bool originSelectionExists = false;
             EntityID originEntityID = -1;
-            for (auto& [id, entity] : entities) {
+
+            // Get all entities by IDs
+            const auto& entityIDs = entityManager.getAllEntityIDs();
+
+            for (EntityID id : entityIDs) {
+                Entity& entity = entityManager.getEntity(id); // Access entity by ID
                 auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
                 if (selectableComp && selectableComp->isSelected) {
                     originSelectionExists = true;
@@ -32,33 +38,20 @@ namespace Systems {
             }
 
             // Determine if a new selection was made
-            for (auto& [targetID, targetEntity] : entities) {
+            for (EntityID targetID : entityIDs) {
+                Entity& targetEntity = entityManager.getEntity(targetID); // Access entity by ID
                 auto* targetTransform = targetEntity.getComponent<Components::TransformComponent>();
                 auto* targetShapeComp = targetEntity.getComponent<Components::ShapeComponent>();
                 auto* targetSelectableComp = targetEntity.getComponent<Components::SelectableComponent>();
 
                 if (targetTransform && targetShapeComp && targetSelectableComp) {
-                    // Check if mouse is within entity bounds
+                    // Check if mouse is within entity bounds (eg. click on entity)
                     if (targetShapeComp->shape->getGlobalBounds().contains(worldPos)) {
                         if (originSelectionExists && originEntityID != targetID) {
                             log_info << "Attack entity " << targetID << " from " << originEntityID;
-
-                            entities[originEntityID].addComponent(Components::AttackOrderComponent{originEntityID, targetID});
-
-                            // auto* originFaction = entities.at(originEntityID).getComponent<Components::FactionComponent>();
-                            // auto* originGarisson = entities.at(originEntityID).getComponent<Components::GarissonComponent>();
-
-                            // if(originFaction && originGarisson && originGarisson->getDroneCount() > 0){
-                            //     auto totalDrones = originGarisson->getDroneCount();
-
-                            //     for(auto i=0; i < totalDrones; i++){
-                            //         auto drone = Builder::createDrone(std::to_string(i), originFaction->factionID);
-                            //         drone.addComponent(Components::AttackOrderComponent{originEntityID, targetID});
-                            //         entities.emplace(drone.id, std::move(drone));
-                            //     }
-
-                            //     originGarisson->setDroneCount(0);
-                            // }
+                            entityManager.addComponent(originEntityID, Components::AttackOrderComponent{originEntityID, targetID});
+                            targetSelectableComp->isSelected = false;
+                            entityManager.getComponent<Components::SelectableComponent>(originEntityID)->isSelected = false;
                         }else{
                             targetSelectableComp->isSelected = true;
                         }

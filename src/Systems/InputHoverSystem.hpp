@@ -11,12 +11,19 @@
 
 #include "Utils/Logger.hpp"
 
+#include "Game/GameEntityManager.hpp"
+
 namespace Systems {
-    void InputHoverSystem(std::unordered_map<EntityID, Entity>& entities, const sf::RenderWindow& window) {
+    void InputHoverSystem(Game::GameEntityManager& entityManager, const sf::RenderWindow& window) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
-        for (auto& [id, entity] : entities) {
+        // Get all entities by IDs
+        const auto& entityIDs = entityManager.getAllEntityIDs();
+
+        for (EntityID id : entityIDs) {
+            Entity& entity = entityManager.getEntity(id); // Access entity by ID
+
             auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* shapeComp = entity.getComponent<Components::ShapeComponent>();
             auto* hoverComp = entity.getComponent<Components::HoverComponent>();

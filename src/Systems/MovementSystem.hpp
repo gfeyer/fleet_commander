@@ -11,8 +11,13 @@
 #include "Utils/Logger.hpp"
 
 namespace Systems {
-    void MovementSystem(std::unordered_map<EntityID, Entity>& entities, float dt) {
-        for (auto& [id, entity] : entities) {
+    void MovementSystem(Game::GameEntityManager& entityManager, float dt) {
+
+        // Get all entities by IDs
+        const auto& entityIDs = entityManager.getAllEntityIDs();
+
+        for (EntityID id : entityIDs) {
+            Entity& entity = entityManager.getEntity(id); // Access entity by ID
             auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* move = entity.getComponent<Components::MoveComponent>();
             auto* tag = entity.getComponent<Components::TagComponent>();

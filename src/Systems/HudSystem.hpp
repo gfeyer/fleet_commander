@@ -14,7 +14,7 @@
 #include <TGUI/Backend/SFML-Graphics.hpp>
 
 namespace Systems {
-    void HudSystem(std::unordered_map<EntityID, Entity>& entities, tgui::Gui& gui) {
+    void HudSystem(Game::GameEntityManager& entityManager, tgui::Gui& gui) {
         static tgui::Panel::Ptr infoPanel = nullptr;
         static tgui::Theme::Ptr theme = Resource::ResourceManager::getInstance().getTheme(Resource::Paths::DARK_THEME);
 
@@ -27,7 +27,12 @@ namespace Systems {
 
         bool entityHovered = false;
 
-        for (auto& [id, entity] : entities) {
+        // Get all entities by IDs
+        const auto& entityIDs = entityManager.getAllEntityIDs();
+
+        for (EntityID id : entityIDs) {
+            Entity& entity = entityManager.getEntity(id); // Access entity by ID
+
             auto* hoverComp = entity.getComponent<Components::HoverComponent>();
             auto* tagComponent = entity.getComponent<Components::TagComponent>();
 

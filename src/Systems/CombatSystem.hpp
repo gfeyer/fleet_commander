@@ -14,35 +14,46 @@
 #include "Utils/Logger.hpp"
 
 namespace Systems {
-        void CombatSystem(std::unordered_map<EntityID, Entity>& entities, float dt) {
+        void CombatSystem(Game::GameEntityManager& entityManager, float dt) {
 
             std::unordered_set<EntityID> toRemove;
 
-            for (auto& [id, entity] : entities) {
-                auto* attackOrder = entity.getComponent<Components::AttackOrderComponent>();
+            // Get all entities by IDs
+            const auto& entityIDs = entityManager.getAllEntityIDs();
+
+            for (EntityID id : entityIDs) {
+                Entity& entity = entityManager.getEntity(id); // Access entity by ID
+                auto* attackOrder = entityManager.getComponent<Components::AttackOrderComponent>(id);
                 auto* garisson = entity.getComponent<Components::GarissonComponent>();
                 auto* drone = entity.getComponent<Components::DroneComponent>();
                 auto* move = entity.getComponent<Components::MoveComponent>();
 
                 if (attackOrder && garisson) {
+                    // log_info << "Garisson has attack order";
                     // Attack order was just palced at a garison
                     // Create drones and send them to the target
                     if (garisson->getDroneCount() < 2) {
-                        log_info << "Cannnot attack, not enough drones";
+                        log_info << "EntityID: " << id << " has no drones, Removing attack order from garisson";
                         entity.removeComponent<Components::AttackOrderComponent>();
+                        entityManager.removeComponent<Components::AttackOrderComponent>(id);
+
+                        auto* test = entityManager.getComponent<Components::AttackOrderComponent>(id);
+                        if(test){
+                            log_info << "AttackOrderComponent is still there";
+                        }
                         continue;
                     }
 
-                    auto* originFaction = entities[attackOrder->origin].getComponent<Components::FactionComponent>();
+                    auto* originFaction = entityManager.getEntity(attackOrder->origin).getComponent<Components::FactionComponent>();
 
                     // TODO: insert error msg if originFaction is missing
                     auto dronesUsedForAttack = garisson->getDroneCount()-1;
 
                     for(auto i=0; i < dronesUsedForAttack; i++){
-                        auto drone = Builder::createDrone(std::to_string(i), originFaction->factionID);
-                        drone.addComponent(Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
-                        auto* transform = drone.getComponent<Components::TransformComponent>();
-                        sf::Vector2f startPosition = entities[attackOrder->origin].getComponent<Components::TransformComponent>()->transform.getPosition();
+                        EntityID droneID = Game::createDrone(entityManager, std::to_string(i), originFaction->factionID);
+                        entityManager.addComponent(droneID, Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
+                        auto* transform = entityManager.getComponent<Components::TransformComponent>(droneID);
+                        sf::Vector2f startPosition = entityManager.getComponent<Components::TransformComponent>(attackOrder->origin)->transform.getPosition();
                         int spread = 25 + (dronesUsedForAttack * 5);
                         spread = std::min(spread, 75);
                         sf::Vector2f randomOffset = sf::Vector2f(
@@ -51,10 +62,9 @@ namespace Systems {
                         );
                         transform->transform.setPosition(startPosition + randomOffset);
 
-                        auto* move = drone.getComponent<Components::MoveComponent>();
-                        move->targetPosition = entities[attackOrder->target].getComponent<Components::TransformComponent>()->transform.getPosition();
+                        auto* move = entityManager.getComponent<Components::MoveComponent>(droneID);
+                        move->targetPosition = entityManager.getComponent<Components::TransformComponent>(attackOrder->target)->transform.getPosition();
                         move->moveToTarget = true;
-                        entities.emplace(drone.id, std::move(drone));
                     }
                     garisson->setDroneCount(1);
                     entity.removeComponent<Components::AttackOrderComponent>();
@@ -63,10 +73,10 @@ namespace Systems {
                     if (!move->moveToTarget) {
                         log_info << "Drone " << id << " has reached target";
                         // Reached destination
-                        auto* targetGarisson = entities[attackOrder->target].getComponent<Components::GarissonComponent>();
-                        auto* originFaction = entities[attackOrder->origin].getComponent<Components::FactionComponent>();
-                        auto* targetFaction = entities[attackOrder->target].getComponent<Components::FactionComponent>();
-                        auto* targetShield = entities[attackOrder->target].getComponent<Components::ShieldComponent>();
+                        auto* targetGarisson = entityManager.getComponent<Components::GarissonComponent>(attackOrder->target);
+                        auto* originFaction = entityManager.getComponent<Components::FactionComponent>(attackOrder->origin);
+                        auto* targetFaction = entityManager.getComponent<Components::FactionComponent>(attackOrder->target);
+                        auto* targetShield = entityManager.getComponent<Components::ShieldComponent>(attackOrder->target);
 
                         unsigned int targetShieldValue = 0;
                         if(targetShield){
@@ -97,7 +107,7 @@ namespace Systems {
             }
 
             for (const auto& id : toRemove) {
-                entities.erase(id);
+                entityManager.removeEntity(id);
             }
         }
 

@@ -7,11 +7,11 @@
 
 #include "TGUI/TGUI.hpp"
 #include "TGUI/Backend/SFML-Graphics.hpp"
-#include "Core/Entity.hpp"
+#include "Game/GameEntityManager.hpp"
 
 class Scene{
 private:
-    std::unordered_map<EntityID, Entity> entities;
+    Game::GameEntityManager entityManager;
     std::unique_ptr<tgui::Gui> gui;
     sf::RenderWindow& windowRef;
     

@@ -12,13 +12,16 @@
 #include "Components/SelectableComponent.hpp"
 #include "Components/FactionComponent.hpp"
 #include "Components/ShieldComponent.hpp"
+#include "Components/GarissonComponent.hpp"
 
 #include "Utils/Circle.hpp"
 
 namespace Systems {
 
-    void RenderSystem(std::unordered_map<EntityID, Entity>& entities, sf::RenderWindow& window) {
-        for (auto& [id, entity] : entities) {
+    void RenderSystem(Game::GameEntityManager& entityManager, sf::RenderWindow& window) {
+        const auto& entityIDs = entityManager.getAllEntityIDs();
+        for (EntityID id : entityIDs) {
+            Entity& entity = entityManager.getEntity(id); // Access entity by ID
             auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* faction = entity.getComponent<Components::FactionComponent>();
 

@@ -7,8 +7,13 @@
 #include "Components/ShieldComponent.hpp"
 #include "Core/Entity.hpp"
 namespace Systems {
-    void ShieldSystem(std::unordered_map<EntityID, Entity>& entities, float dt) {
-        for (auto& [id, entity] : entities) {
+    void ShieldSystem(Game::GameEntityManager& entityManager, float dt) {
+
+        // Get all entities by IDs
+        const auto& entityIDs = entityManager.getAllEntityIDs();
+
+        for (EntityID id : entityIDs) {
+            Entity& entity = entityManager.getEntity(id); // Access entity by ID
             auto* shield = entity.getComponent<Components::ShieldComponent>();
             if (shield) {
                 if(shield->maxShield == shield->currentShield){
@@ -23,7 +28,6 @@ namespace Systems {
             }
         }
     }
-
 }
 
 
