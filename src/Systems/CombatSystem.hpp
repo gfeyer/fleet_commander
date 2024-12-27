@@ -27,11 +27,18 @@ namespace Systems {
                 if (attackOrder && garisson) {
                     // Attack order was just palced at a garison
                     // Create drones and send them to the target
+                    if (garisson->getDroneCount() < 2) {
+                        log_info << "Cannnot attack, not enough drones";
+                        entity.removeComponent<Components::AttackOrderComponent>();
+                        continue;
+                    }
+
                     auto* originFaction = entities[attackOrder->origin].getComponent<Components::FactionComponent>();
 
                     // TODO: insert error msg if originFaction is missing
+                    auto dronesUsedForAttack = garisson->getDroneCount()-1;
 
-                    for(auto i=0; i < garisson->getDroneCount(); i++){
+                    for(auto i=0; i < dronesUsedForAttack; i++){
                         auto drone = Builder::createDrone(std::to_string(i), originFaction->factionID);
                         drone.addComponent(Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
                         auto* transform = drone.getComponent<Components::TransformComponent>();
@@ -42,7 +49,7 @@ namespace Systems {
                         move->moveToTarget = true;
                         entities.emplace(drone.id, std::move(drone));
                     }
-                    garisson->setDroneCount(0);
+                    garisson->setDroneCount(1);
                     entity.removeComponent<Components::AttackOrderComponent>();
                 }
                 else if (attackOrder && drone && move) {

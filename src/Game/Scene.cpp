@@ -59,13 +59,13 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     // entities.emplace(background.id, std::move(background));
 
     // player factory
-    int randomNumber = 10 + (std::rand() % 21);
+    int randomNumber = 5 + (std::rand() % 1);
     auto factory = Builder::createFactory("Factory #" + std::to_string(0), 1, randomNumber);
     entities.emplace(factory.id, std::move(factory));
 
     // Create Neutral Factories
     for(int i=1; i < 3; ++i){
-        randomNumber = 10 + (std::rand() % 21);
+        randomNumber = 5 + (std::rand() % 1);
         auto factory = Builder::createFactory("Factory #" + std::to_string(i), 0, randomNumber);
         entities.emplace(factory.id, std::move(factory));
     }
