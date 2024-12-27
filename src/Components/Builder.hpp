@@ -23,12 +23,13 @@
 
 namespace Builder {
 
-    Entity createFactory(std::string name = "", unsigned int factionID = 0) {
+    Entity createFactory(std::string name = "", unsigned int factionID = 0, float productionRate = 1.f) {
+        log_info << "Creating Factory, " << productionRate << " seconds for every drone";
         // Create Factories
         Entity factory; 
         int i = 1;
-        factory.addComponent(Components::FactoryComponent{name});
-        factory.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), 0, sf::Vector2f(1, 1)});
+        factory.addComponent(Components::FactoryComponent{name, productionRate});
+        factory.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - 300, rand() % Config::SCREEN_HEIGHT - 300), 0, sf::Vector2f(1, 1)});
         auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
         shape.setFillColor(sf::Color::Color(100, 100, 100));
         factory.addComponent(Components::ShapeComponent{std::make_shared<sf::RectangleShape>(shape)});

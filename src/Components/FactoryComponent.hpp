@@ -11,6 +11,7 @@ namespace Components {
         float productionTimer = 0.f;
 
         FactoryComponent(const std::string& factoryName) : factoryName(factoryName) {}
+        FactoryComponent(const std::string& factoryName, float droneProductionRate) : factoryName(factoryName), droneProductionRate(droneProductionRate) {}
     };
 }
 
