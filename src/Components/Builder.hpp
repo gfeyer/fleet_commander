@@ -32,6 +32,7 @@ namespace Builder {
         factory.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - 200, rand() % Config::SCREEN_HEIGHT - 50), 0, sf::Vector2f(1, 1)});
         auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
         shape.setFillColor(sf::Color::Color(100, 100, 100));
+        shape.setOrigin(shape.getSize().x / 2, shape.getSize().y / 2);
         factory.addComponent(Components::ShapeComponent{std::make_shared<sf::RectangleShape>(shape)});
         factory.addComponent(Components::LabelComponent{name, 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
@@ -43,7 +44,7 @@ namespace Builder {
         factory.addComponent(Components::SelectableComponent{});
         factory.addComponent(Components::FactionComponent{factionID});
         factory.addComponent(Components::GarissonComponent{});
-        factory.addComponent(Components::ShieldComponent{0, 10, float(5+rand()%5)});
+        factory.addComponent(Components::ShieldComponent{0, 10, float(1+rand()%1)});
         return factory;
     }
 
@@ -53,6 +54,7 @@ namespace Builder {
         outpost.addComponent(Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH - Config::OUTPOST_RADIUS, rand() % Config::SCREEN_HEIGHT-Config::OUTPOST_RADIUS), 0, sf::Vector2f(1, 1)});
         auto shape = sf::CircleShape(Config::OUTPOST_RADIUS);
         shape.setFillColor(sf::Color::Color(100, 100, 100));
+        shape.setOrigin(Config::OUTPOST_RADIUS, Config::OUTPOST_RADIUS);
         outpost.addComponent(Components::ShapeComponent{std::make_shared<sf::CircleShape>(shape)});
         outpost.addComponent(Components::LabelComponent{name, 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
@@ -64,7 +66,7 @@ namespace Builder {
         outpost.addComponent(Components::SelectableComponent{});
         outpost.addComponent(Components::FactionComponent{factionID});
         outpost.addComponent(Components::GarissonComponent{});
-        outpost.addComponent(Components::ShieldComponent{0, 10, float(5+rand()%5)});
+        outpost.addComponent(Components::ShieldComponent{0, 10, float(1+rand()%1)});
         return outpost;
     }
 

@@ -11,6 +11,10 @@ namespace Systems {
         for (auto& [id, entity] : entities) {
             auto* shield = entity.getComponent<Components::ShieldComponent>();
             if (shield) {
+                if(shield->maxShield == shield->currentShield){
+                    continue;
+                }
+
                 shield->regenTimer += dt;
                 if (shield->regenTimer >= shield->regenRate) {
                     shield->regenTimer = 0.f;

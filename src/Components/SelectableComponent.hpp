@@ -3,9 +3,9 @@
 
 namespace Components {
 
-struct SelectableComponent {
-    bool isSelected = false;
-};
+    struct SelectableComponent {
+        bool isSelected = false;
+    };
 }
 
 

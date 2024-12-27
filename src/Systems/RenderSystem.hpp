@@ -11,6 +11,9 @@
 #include "Components/LabelComponent.hpp"
 #include "Components/SelectableComponent.hpp"
 #include "Components/FactionComponent.hpp"
+#include "Components/ShieldComponent.hpp"
+
+#include "Utils/Circle.hpp"
 
 namespace Systems {
 
@@ -23,14 +26,24 @@ namespace Systems {
             auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
             if (selectableComp && selectableComp->isSelected && transform) {
                 sf::CircleShape selectionShape(Config::FACTORY_SIZE);
-                selectionShape.setOrigin(Config::FACTORY_SIZE/2, Config::FACTORY_SIZE/2);
-                selectionShape.setFillColor(sf::Color::Yellow);
+                selectionShape.setOrigin(Config::FACTORY_SIZE, Config::FACTORY_SIZE);
+                selectionShape.setFillColor(sf::Color(255, 255, 255, 75));
                 selectionShape.setPosition(transform->getPosition());
                 window.draw(selectionShape);
             }
 
             // Draw Shield
-            // TODO
+            auto* shield = entity.getComponent<Components::ShieldComponent>();
+            if (shield && transform) {
+                sf::Vector2f center(transform->getPosition().x, transform->getPosition().y);
+                float radius = 50.f;
+                float thickness = 10.f;
+                float percentage = float(shield->currentShield) / float(shield->maxShield); 
+                int pointCount = 50; // Smoothness
+
+                sf::VertexArray arc = Utils::CreateArc(center, radius, thickness, percentage, pointCount, sf::Color(0, 255, 255, 200));
+                window.draw(arc);
+            }
 
             // Render SpriteComponent
             auto* sprite = entity.getComponent<Components::SpriteComponent>();
