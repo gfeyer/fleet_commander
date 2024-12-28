@@ -72,7 +72,6 @@ namespace Systems {
                 else if (attackOrder && drone && move) {
                     if (!move->moveToTarget) {
                         // Reached destination
-                        log_info << "Drone " << id << " has reached target";
 
                         Entity& originEntity = entityManager.getEntity(attackOrder->origin);
                         Entity& targetEntity = entityManager.getEntity(attackOrder->target);

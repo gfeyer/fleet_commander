@@ -74,8 +74,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     entityManager.addComponent(gameStateID, Components::GameStateComponent{2});
 
     // Generate Map
-    Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 24, 100.f);
-    
+    Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 25, 100);
 }
 
 Scene::~Scene()
@@ -111,7 +110,6 @@ void Scene::handleInput(sf::Event &event)
 {
     Systems::InputSelectionSystem(event, entityManager, windowRef);
 
-    log_info << "input";
     // Handle Camera Movement
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) cameraPosition.y -= cameraSpeed * 0.16f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) cameraPosition.y += cameraSpeed * 0.16f;

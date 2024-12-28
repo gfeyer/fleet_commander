@@ -52,33 +52,68 @@ namespace Game {
         }
     };
 
-    void GenerateRandomMap(Game::GameEntityManager& entityManager, float mapWidth, float mapHeight, unsigned int unitCount, float minDistance) {
-        auto positionGenerator = Game::RandomPositionGenerator(mapWidth, mapHeight, minDistance);
-        auto positions = positionGenerator.generateNonOverlappingPositions(unitCount);
+    float calculateDistance(const sf::Vector2f& a, const sf::Vector2f& b) {
+        float dx = a.x - b.x;
+        float dy = a.y - b.y;
+        return std::sqrt(dx * dx + dy * dy);
+    }
 
-        // player factory
+    void GenerateRandomMap(Game::GameEntityManager& entityManager, float mapWidth, float mapHeight, int unitCount, float minDistance) {
+        float minPlayerDistance = 300.0f; // Minimum distance between players
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<float> distX(0.0f, mapWidth);
+        std::uniform_real_distribution<float> distY(0.0f, mapHeight);
+
+        // Generate starting positions for Player 1 and Player 2
+        sf::Vector2f player1Start, player2Start;
+        bool validPlacement = false;
+
+        while (!validPlacement) {
+            player1Start = {distX(gen), distY(gen)};
+            player2Start = {distX(gen), distY(gen)};
+
+            // Ensure players are sufficiently far apart
+            if (calculateDistance(player1Start, player2Start) >= minPlayerDistance) {
+                validPlacement = true;
+            }
+        }
+
+        // Place Player 1 Structures (Factory + Power Plant)
+        sf::Vector2f player1FactoryPos = player1Start;
+        sf::Vector2f player1PowerPlantPos = {player1Start.x + Utils::getRandomFloat(50.f, 150.f), player1Start.y + Utils::getRandomFloat(50.f, 150.f)};
+
         auto player1Faction = Components::Faction::PLAYER_1;
         float productionRate = 1.f;
         float shieldRegenRate = Utils::getRandomFloat(0.75f, 1.f);
         unsigned int capacity = Utils::getRandomFloat(8.f, 12.f);
-        Game::createFactory(entityManager, "Factory #" + std::to_string(0), positions[0],player1Faction, productionRate, shieldRegenRate);
-        Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(0), positions[1],player1Faction, shieldRegenRate, capacity);
 
-        // Create Enemy Factories
-        auto enemyFaction = Components::Faction::PLAYER_2;
-        Game::createFactory(entityManager, "Factory #" + std::to_string(0), positions[2], enemyFaction, productionRate, shieldRegenRate);
-        Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(0), positions[3], enemyFaction, shieldRegenRate, capacity);
+        Game::createFactory(entityManager, "Factory #0", player1FactoryPos, player1Faction, productionRate, shieldRegenRate);
+        Game::createPowerPlant(entityManager, "Power Plant #0", player1PowerPlantPos, player1Faction, shieldRegenRate, capacity);
 
+        // Place Player 2 Structures (Factory + Power Plant)
+        sf::Vector2f player2FactoryPos = player2Start;
+        sf::Vector2f player2PowerPlantPos = {player2Start.x + Utils::getRandomFloat(50.f, 150.f), player2Start.y + Utils::getRandomFloat(50.f, 150.f)};
 
-        for(int i = 4; i < positions.size(); ++i){
-        float coinFlip = Utils::getRandomFloat(0.f, 1.f);
-        float shieldRegenRate = Utils::getRandomFloat(0.1f, 1.f);
+        auto player2Faction = Components::Faction::PLAYER_2;
 
-            if(coinFlip < 0.5f){
+        Game::createFactory(entityManager, "Factory #0", player2FactoryPos, player2Faction, productionRate, shieldRegenRate);
+        Game::createPowerPlant(entityManager, "Power Plant #0", player2PowerPlantPos, player2Faction, shieldRegenRate, capacity);
+
+        // Generate Remaining Units Randomly
+        Game::RandomPositionGenerator generator(mapWidth, mapHeight, minDistance);
+        auto positions = generator.generateNonOverlappingPositions(unitCount); // Adjust count as needed
+
+        for (size_t i = 0; i < positions.size(); ++i) {
+            float coinFlip = Utils::getRandomFloat(0.f, 1.f);
+            float shieldRegenRate = Utils::getRandomFloat(0.1f, 1.f);
+
+            if (coinFlip > 0.5f) {
                 // Generate Factory
                 auto productionRate = Utils::getRandomFloat(0.1f, 0.9f);
                 Game::createFactory(entityManager, "Factory #" + std::to_string(i), positions[i], Components::Faction::NEUTRAL, productionRate, shieldRegenRate);
-            } else{
+            } else {
                 // Generate Power plant
                 unsigned int capacity = Utils::getRandomFloat(5.f, 25.f);
                 Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(i), positions[i], Components::Faction::NEUTRAL, shieldRegenRate, capacity);
@@ -89,3 +124,4 @@ namespace Game {
 }
 
 #endif // MAP_GENERATOR_HPP
+
