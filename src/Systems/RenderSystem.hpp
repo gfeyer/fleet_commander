@@ -20,8 +20,10 @@ namespace Systems {
 
     void RenderSystem(Game::GameEntityManager& entityManager, sf::RenderWindow& window) {
         auto& entities = entityManager.getAllEntities();
-        for (auto& [id, entity] : entities) {
-
+        
+        // 1. Draw selection, shield, sprite, shapes
+        for(auto& [id, entity] : entities) {
+            // Draw shapes/sprites/shields
             // Draw selectable component first (and draw sprite over it)
             auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
             auto* transform = entity.getComponent<Components::TransformComponent>();
@@ -109,9 +111,12 @@ namespace Systems {
                         // shape->shape->setFillColor(sf::Color::White);
                     }
                 }
-
                 window.draw(*shape->shape);
             }
+        }
+
+        // 2. Draw non gui text last
+        for (auto& [id, entity] : entities) {
 
             // Draw non-gui text
             auto* textComp = entity.getComponent<Components::LabelComponent>();
