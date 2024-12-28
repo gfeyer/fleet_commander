@@ -19,14 +19,12 @@
 namespace Systems {
 
     void RenderSystem(Game::GameEntityManager& entityManager, sf::RenderWindow& window) {
-        const auto& entityIDs = entityManager.getAllEntityIDs();
-        for (EntityID id : entityIDs) {
-            Entity& entity = entityManager.getEntity(id); // Access entity by ID
-            auto* transform = entity.getComponent<Components::TransformComponent>();
-            auto* faction = entity.getComponent<Components::FactionComponent>();
+        auto& entities = entityManager.getAllEntities();
+        for (auto& [id, entity] : entities) {
 
             // Draw selectable component first (and draw sprite over it)
             auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
+            auto* transform = entity.getComponent<Components::TransformComponent>();
             if (selectableComp && selectableComp->isSelected && transform) {
                 sf::CircleShape selectionShape(Config::FACTORY_SIZE);
                 selectionShape.setOrigin(Config::FACTORY_SIZE, Config::FACTORY_SIZE);
@@ -66,6 +64,7 @@ namespace Systems {
                 shape->shape->setRotation(transform->getRotation());
                 shape->shape->setScale(transform->getScale());
 
+                auto* faction = entity.getComponent<Components::FactionComponent>();
                 if (faction) {
                     if (faction->factionID == 1) {
                         shape->shape->setFillColor(sf::Color::Red);

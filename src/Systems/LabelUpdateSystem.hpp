@@ -14,11 +14,8 @@
 
 namespace Systems {
     void LabelUpdateSystem(Game::GameEntityManager& entityManager, float dt) {
-        // Get all entities by IDs
-        const auto& entityIDs = entityManager.getAllEntityIDs();
-
-        for (EntityID id : entityIDs) {
-            Entity& entity = entityManager.getEntity(id); // Access entity by ID
+        auto& entities = entityManager.getAllEntities();
+        for (auto& [id, entity] : entities) {
             auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* labelComp = entity.getComponent<Components::LabelComponent>();
 

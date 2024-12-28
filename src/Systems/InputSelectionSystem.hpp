@@ -24,7 +24,6 @@ namespace Systems {
             bool originSelectionExists = false;
             EntityID originEntityID = -1;
 
-            // Get all entities by IDs
             auto& entities = entityManager.getAllEntities();
             for (auto& [id, entity] : entities) {
                 auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
@@ -46,9 +45,11 @@ namespace Systems {
                     if (targetShapeComp->shape->getGlobalBounds().contains(worldPos)) {
                         if (originSelectionExists && originEntityID != targetID) {
                             log_info << "Attack entity " << targetID << " from " << originEntityID;
-                            entityManager.addComponent(originEntityID, Components::AttackOrderComponent{originEntityID, targetID});
                             targetSelectableComp->isSelected = false;
-                            entityManager.getComponent<Components::SelectableComponent>(originEntityID)->isSelected = false;
+
+                            Entity& originEntity = entityManager.getEntity(originEntityID);
+                            originEntity.addComponent(Components::AttackOrderComponent{originEntityID, targetID});
+                            originEntity.getComponent<Components::SelectableComponent>()->isSelected = false;
                         }else{
                             targetSelectableComp->isSelected = true;
                         }

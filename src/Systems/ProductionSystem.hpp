@@ -15,12 +15,10 @@ namespace Systems {
 
     void ProductionSystem(Game::GameEntityManager& entityManager, float dt) {
 
-        // Get all entities by IDs
-        const auto& entityIDs = entityManager.getAllEntityIDs();
+        auto& entities = entityManager.getAllEntities();
+        for (auto& [id, entity] : entities) {
 
-        for (EntityID id : entityIDs) {
-            Entity& entity = entityManager.getEntity(id); // Access entity by ID
-            
+            // Get components            
             auto* factory = entity.getComponent<Components::FactoryComponent>();
             auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* faction = entity.getComponent<Components::FactionComponent>();
