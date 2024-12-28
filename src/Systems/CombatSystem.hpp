@@ -71,7 +71,7 @@ namespace Systems {
                 }
                 else if (attackOrder && drone && move) {
                     if (!move->moveToTarget) {
-                        // Reached destination
+                        // Drone Reached destination
 
                         Entity& originEntity = entityManager.getEntity(attackOrder->origin);
                         Entity& targetEntity = entityManager.getEntity(attackOrder->target);
@@ -80,28 +80,39 @@ namespace Systems {
                         auto* targetFaction = targetEntity.getComponent<Components::FactionComponent>();
                         auto* targetGarisson = targetEntity.getComponent<Components::GarissonComponent>();
                         auto* targetShield = targetEntity.getComponent<Components::ShieldComponent>();
-
-                        unsigned int targetShieldValue = 0;
-                        if(targetShield){
-                            targetShieldValue = targetShield->getShield();
+        
+                        if(!targetShield){
+                            log_err << "EntityID: " << id << " has no shield, but has an attack order";
                         }
 
                         if (targetGarisson && originFaction && targetFaction) {
+                            
+                            // No matter what, drone entity needs to be removed
+                            toRemove.insert(id);
 
                             auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
 
                             if(originFaction->faction == targetFaction->faction){
                                 // Same faction, park drones
                                 targetGarisson->incrementDroneCount();
-                            }else if(targetShieldValue > 0){
-                                // Different faction, damage shield
+                                continue; 
+                            }
+                            
+                            // If shield is positive, hit shield and update its value
+                            if(targetShield->getShield() > 1.f){
                                 targetShield->decrementShield();
-
-                                // attacking player loses drones
+                            }else{
+                                targetShield->setShield(0.f); 
+                            }
+                            
+                            if(targetShield->getShield() > 0.f){
+                                // Shield was hit but still up, attacking player loses drones
                                 gameState->playerDrones[originFaction->faction]--;
 
                             }else if(targetGarisson->getDroneCount() > 0){
-                                // Different faction, shield down, kill parked drones
+                                // Shield is down
+                                // Different faction has drones parked
+                                // Kill drones
                                 targetGarisson->decrementDroneCount();
 
                                 // both players lose drones
@@ -112,7 +123,7 @@ namespace Systems {
                                 targetFaction->faction = originFaction->faction;
                                 targetGarisson->incrementDroneCount();
                             }
-                            toRemove.insert(id);
+                            
                         }
                     }
                 }
