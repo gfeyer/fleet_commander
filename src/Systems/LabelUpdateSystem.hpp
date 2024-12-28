@@ -25,7 +25,7 @@ namespace Systems {
 
                 // Update the text on the label:
                 auto* factory = entity.getComponent<Components::FactoryComponent>();
-                auto* outpost = entity.getComponent<Components::OutpostComponent>();
+                auto* powerPlant = entity.getComponent<Components::PowerPlantComponent>();
                 auto* drone = entity.getComponent<Components::DroneComponent>();
                 auto* garisson = entity.getComponent<Components::GarissonComponent>();
 
@@ -33,8 +33,8 @@ namespace Systems {
                 if(factory){
                     ss << factory->factoryName;
                 }
-                if(outpost){
-                    ss << outpost->outpostName;
+                if(powerPlant){
+                    ss << powerPlant->powerPlantName;
                 }
                 if(drone){
                     ss << drone->droneName;

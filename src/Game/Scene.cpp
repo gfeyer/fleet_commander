@@ -11,7 +11,7 @@
 
 #include "Components/FactionComponent.hpp"
 #include "Components/FactoryComponent.hpp"
-#include "Components/OutpostComponent.hpp"
+#include "Components/PowerPlantComponent.hpp"
 #include "Components/DroneComponent.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/SpriteComponent.hpp"
@@ -83,10 +83,10 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
         Game::createFactory(entityManager, "Factory #" + std::to_string(i), 0, productionRate, shieldRegenRate);
     }
 
-    // Create Outposts
+    // Create Power Plants
     for(int i=0; i<10; ++i){
         float regenRate = 1 + rand() % 5;
-        Game::createOutpost(entityManager, "Outpost #" + std::to_string(i), 0, regenRate);
+        Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(i), 0, regenRate);
     }
 }
 

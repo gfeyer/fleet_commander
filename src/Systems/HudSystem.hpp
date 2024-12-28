@@ -40,7 +40,7 @@ namespace Systems {
                 infoPanel->removeAllWidgets();
 
                 auto* factoryComp = entity.getComponent<Components::FactoryComponent>();
-                auto* outpostComp = entity.getComponent<Components::OutpostComponent>();
+                auto* powerPlantComp = entity.getComponent<Components::PowerPlantComponent>();
                 auto* garissonComp = entity.getComponent<Components::GarissonComponent>();
                 auto* shieldComp = entity.getComponent<Components::ShieldComponent>();
 
@@ -59,8 +59,8 @@ namespace Systems {
                     }
                 }
 
-                if (outpostComp) {
-                    ss << outpostComp->outpostName;
+                if (powerPlantComp) {
+                    ss << powerPlantComp->powerPlantName;
                 }
 
                 if(garissonComp){

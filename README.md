@@ -2,13 +2,14 @@
 Colonization simulator 2D
 
 ## TODO
-- Add game state struct
-    -- Add resource system (outposts collect energy)
+- Game state
+    -- Add resource system (power plants, collect energy)
     -- Keep track of total drones and energy
+    -- Display state on GUI
 - Add AI system to run against player
     -- Add player system
 - Combat system
-    -- Menu to attack another factory or outpost (select number of drones)
+    -- Menu to attack another factory or power plant (select number of drones)
 
 ## Screenshot
 

@@ -9,7 +9,7 @@
 #include "Components/DroneComponent.hpp"
 #include "Components/ShieldComponent.hpp"
 #include "Components/FactoryComponent.hpp"
-#include "Components/OutpostComponent.hpp"
+#include "Components/PowerPlantComponent.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/ShapeComponent.hpp"
 #include "Components/LabelComponent.hpp"
@@ -56,31 +56,31 @@ namespace Game {
         return factoryID;
     }
 
-    EntityID createOutpost(GameEntityManager& entityManager, std::string name = "", unsigned int factionID = 0, float shieldRegenRate = 1.f) {
+    EntityID createPowerPlant(GameEntityManager& entityManager, std::string name = "", unsigned int factionID = 0, float shieldRegenRate = 1.f) {
         
-        EntityID outpostID = entityManager.createEntity();
-        entityManager.addComponent(outpostID, Components::OutpostComponent{name});
+        EntityID powerPlantID = entityManager.createEntity();
+        entityManager.addComponent(powerPlantID, Components::PowerPlantComponent{name});
         sf::Vector2f position = sf::Vector2f(
-            Config::OUTPOST_RADIUS + rand() % (Config::MAP_WIDTH - 2*Config::OUTPOST_RADIUS), 
-            Config::OUTPOST_RADIUS + rand() % (Config::MAP_HEIGHT - 2*Config::OUTPOST_RADIUS)
+            Config::POWER_PLANT_RADIUS + rand() % (Config::MAP_WIDTH - 2*Config::POWER_PLANT_RADIUS), 
+            Config::POWER_PLANT_RADIUS + rand() % (Config::MAP_HEIGHT - 2*Config::POWER_PLANT_RADIUS)
         );
-        entityManager.addComponent(outpostID, Components::TransformComponent{position, 0, sf::Vector2f(1, 1)});
-        auto shape = sf::CircleShape(Config::OUTPOST_RADIUS);
+        entityManager.addComponent(powerPlantID, Components::TransformComponent{position, 0, sf::Vector2f(1, 1)});
+        auto shape = sf::CircleShape(Config::POWER_PLANT_RADIUS);
         shape.setFillColor(sf::Color::Color(100, 100, 100));
-        shape.setOrigin(Config::OUTPOST_RADIUS, Config::OUTPOST_RADIUS);
-        entityManager.addComponent(outpostID, Components::ShapeComponent{std::make_shared<sf::CircleShape>(shape)});
-        entityManager.addComponent(outpostID, Components::LabelComponent{name, 
+        shape.setOrigin(Config::POWER_PLANT_RADIUS, Config::POWER_PLANT_RADIUS);
+        entityManager.addComponent(powerPlantID, Components::ShapeComponent{std::make_shared<sf::CircleShape>(shape)});
+        entityManager.addComponent(powerPlantID, Components::LabelComponent{name, 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
-            sf::Vector2f(Config::OUTPOST_RADIUS*2, 5)
+            sf::Vector2f(Config::POWER_PLANT_RADIUS*2, 5)
         });
-        entityManager.addComponent(outpostID, Components::HoverComponent{});
-        entityManager.addComponent(outpostID, Components::SelectableComponent{});
-        entityManager.addComponent(outpostID, Components::FactionComponent{factionID});
-        entityManager.addComponent(outpostID, Components::GarissonComponent{});
-        entityManager.addComponent(outpostID, Components::ShieldComponent{0, 10, shieldRegenRate});
-        return outpostID;
+        entityManager.addComponent(powerPlantID, Components::HoverComponent{});
+        entityManager.addComponent(powerPlantID, Components::SelectableComponent{});
+        entityManager.addComponent(powerPlantID, Components::FactionComponent{factionID});
+        entityManager.addComponent(powerPlantID, Components::GarissonComponent{});
+        entityManager.addComponent(powerPlantID, Components::ShieldComponent{0, 10, shieldRegenRate});
+        return powerPlantID;
     }
 
     EntityID createDrone(GameEntityManager& entityManager, std::string name = "", unsigned int factionID = 0) {
