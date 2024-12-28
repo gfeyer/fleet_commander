@@ -9,6 +9,7 @@
 #include "Components/DroneComponent.hpp"
 #include "Components/ShieldComponent.hpp"
 #include "Components/GameStateComponent.hpp"
+#include "Components/EnemyAIComponent.hpp"
 
 namespace Game {
 
@@ -21,8 +22,9 @@ namespace Game {
         std::vector<EntityID> shieldEntities;
         std::vector<EntityID> droneEntities;
 
-        // Game specific special entities
+        // Game special entities
         EntityID gameStateEntityID;
+        EntityID enemyAIEntityID;
 
     public:
         // Create a new entity
@@ -91,6 +93,9 @@ namespace Game {
                 if (entity.hasComponent<Components::GameStateComponent>()) {
                     gameStateEntityID = 0;
                 }
+                if (entity.hasComponent<Components::EnemyAIComponent>()) {
+                    enemyAIEntityID = 0;
+                }
 
                 coreManager.removeEntity(id);
             }
@@ -113,6 +118,9 @@ namespace Game {
             if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
                 gameStateEntityID = id;
             }
+            if constexpr (std::is_same<T, Components::EnemyAIComponent>::value) {
+                enemyAIEntityID = id;
+            }
         }
 
         // Remove a component and update lists
@@ -132,6 +140,9 @@ namespace Game {
             if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
                 gameStateEntityID = 0;
             }
+            if constexpr (std::is_same<T, Components::EnemyAIComponent>::value) {
+                enemyAIEntityID = 0;
+            }
         }
 
         // Get game-specific entity lists
@@ -150,8 +161,9 @@ namespace Game {
         Entity& getGameStateEntity() {
             return coreManager.getEntity(gameStateEntityID);
         }
-
-        
+        Entity& getEnemyAIEntity() {
+            return coreManager.getEntity(enemyAIEntityID);
+        }
     };
 }
 

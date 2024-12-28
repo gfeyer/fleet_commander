@@ -20,6 +20,7 @@
 #include "Components/TagComponent.hpp"
 #include "Components/HoverComponent.hpp"
 #include "Components/GameStateComponent.hpp"
+#include "Components/EnemyAIComponent.hpp"
 
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
@@ -30,7 +31,7 @@
 #include "Systems/ProductionSystem.hpp"
 #include "Systems/CombatSystem.hpp"
 #include "Systems/ShieldSystem.hpp"
-
+#include "Systems/EnemyAISystem.hpp"
 #include "Game/Builder.hpp"
 #include "Game/MapGenerator.hpp"
 
@@ -73,6 +74,9 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     EntityID gameStateID = entityManager.createEntity();
     entityManager.addComponent(gameStateID, Components::GameStateComponent{2});
 
+    EntityID enemyAI = entityManager.createEntity();
+    entityManager.addComponent(enemyAI, Components::EnemyAIComponent{});
+
     // Generate Map
     Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 25, 100);
 }
@@ -91,6 +95,7 @@ void Scene::update(float dt)
     Systems::ShieldSystem(entityManager, dt);
     Systems::CombatSystem(entityManager, dt);
     Systems::LabelUpdateSystem(entityManager, dt);
+    Systems::EnemyAISystem(entityManager, dt);
 
     // Wrap Camera Position
     cameraPosition.x = fmod(cameraPosition.x + Config::MAP_WIDTH, Config::MAP_WIDTH);
