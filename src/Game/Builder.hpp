@@ -43,7 +43,7 @@ namespace Game {
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
-            sf::Vector2f(Config::FACTORY_SIZE+5, 5)
+            sf::Vector2f(Config::FACTORY_SIZE+5, - float(Config::FACTORY_SIZE))
         });
         entityManager.addComponent(factoryID, Components::HoverComponent{});
         entityManager.addComponent(factoryID, Components::SelectableComponent{});
@@ -65,7 +65,7 @@ namespace Game {
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
             18, 
             sf::Color::White, 
-            sf::Vector2f(Config::POWER_PLANT_RADIUS*2, 5)
+            sf::Vector2f(Config::POWER_PLANT_RADIUS*2, -2*float(Config::POWER_PLANT_RADIUS))
         });
         entityManager.addComponent(powerPlantID, Components::HoverComponent{});
         entityManager.addComponent(powerPlantID, Components::SelectableComponent{});
