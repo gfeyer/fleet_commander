@@ -79,6 +79,11 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     Game::createFactory(entityManager, "Factory #" + std::to_string(0), player1Faction, productionRate, shieldRegenRate);
     Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(0), player1Faction, shieldRegenRate, capacity);
 
+    // Create Enemy Factories
+    auto enemyFaction = Components::Faction::PLAYER_2;
+    Game::createFactory(entityManager, "Factory #" + std::to_string(0), enemyFaction, productionRate, shieldRegenRate);
+    Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(0), enemyFaction, shieldRegenRate, capacity);
+
     // Create Neutral Factories
     for(int i=1; i < 10; ++i){
         productionRate = 1 + (std::rand() % 5);

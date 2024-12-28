@@ -28,7 +28,7 @@ namespace Systems {
             if (selectableComp && selectableComp->isSelected && transform) {
                 sf::CircleShape selectionShape(Config::FACTORY_SIZE);
                 selectionShape.setOrigin(Config::FACTORY_SIZE, Config::FACTORY_SIZE);
-                selectionShape.setFillColor(sf::Color(255, 255, 255, 75));
+                selectionShape.setFillColor(sf::Color(255,255,0,200));
                 selectionShape.setPosition(transform->getPosition());
                 window.draw(selectionShape);
             }
@@ -36,6 +36,7 @@ namespace Systems {
             // Draw Shield
             auto* shield = entity.getComponent<Components::ShieldComponent>();
             if (shield && transform) {
+                // TODO: draw multiple circles depending on size
                 sf::Vector2f center(transform->getPosition().x, transform->getPosition().y);
                 float radius = 50.f;
                 float thickness = 10.f;
@@ -68,6 +69,10 @@ namespace Systems {
                 if (faction) {
                     if (faction->faction == Components::Faction::PLAYER_1) {
                         shape->shape->setFillColor(sf::Color::Red);
+                    }else if(faction->faction == Components::Faction::PLAYER_2) {
+                        shape->shape->setFillColor(sf::Color::Blue);
+                    }else{
+                        // shape->shape->setFillColor(sf::Color::White);
                     }
                 }
 
