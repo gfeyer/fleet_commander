@@ -24,7 +24,8 @@ public:
     // Create a new entity and return its unique ID
     EntityID createEntity() {
         EntityID id = nextID++;
-        entities[id] = Entity();
+        // entities[id] = Entity();
+        entities.emplace(id, Entity());
         return id;
     }
 

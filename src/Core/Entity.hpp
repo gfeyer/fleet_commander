@@ -11,7 +11,15 @@ private:
 
 public:
 
-    Entity() {}
+    Entity() = default;
+    ~Entity() {}
+
+    // Move constructor
+    Entity(Entity&& other) noexcept = default;
+
+    // Prevent copying
+    Entity(const Entity& other) = delete;
+    Entity& operator=(const Entity& other) = delete;
 
     template<typename T>
     void addComponent(T component) {
