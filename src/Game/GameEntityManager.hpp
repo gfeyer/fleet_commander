@@ -96,8 +96,13 @@ namespace Game {
             return droneEntities;
         }
 
-        // Access all entities
+        // Access all entities read-only
         const std::unordered_map<EntityID, Entity>& getAllEntities() const {
+            return coreManager.getAllEntities();
+        }
+
+        // Read-Write Access
+        std::unordered_map<EntityID, Entity>& getAllEntities() {
             return coreManager.getAllEntities();
         }
 

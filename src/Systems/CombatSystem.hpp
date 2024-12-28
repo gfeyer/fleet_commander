@@ -18,60 +18,70 @@ namespace Systems {
 
             std::unordered_set<EntityID> toRemove;
 
-            // Get all entities by IDs
-            const auto& entityIDs = entityManager.getAllEntityIDs();
-
-            for (EntityID id : entityIDs) {
-                Entity& entity = entityManager.getEntity(id); // Access entity by ID
-                auto* attackOrder = entityManager.getComponent<Components::AttackOrderComponent>(id);
-                auto* garisson = entity.getComponent<Components::GarissonComponent>();
+            auto& entities = entityManager.getAllEntities();
+        
+            for (auto& [id, entity] : entities) {
+                auto* attackOrder = entity.getComponent<Components::AttackOrderComponent>();
+                auto* originGarisson = entity.getComponent<Components::GarissonComponent>();
                 auto* drone = entity.getComponent<Components::DroneComponent>();
                 auto* move = entity.getComponent<Components::MoveComponent>();
 
-                if (attackOrder && garisson) {
+                if (attackOrder && originGarisson) {
                     // log_info << "Garisson has attack order";
                     // Attack order was just palced at a garison
                     // Create drones and send them to the target
-                    if (garisson->getDroneCount() < 2) {
+                    if (originGarisson->getDroneCount() < 2) {
                         log_info << "EntityID: " << id << " has no drones, removing attack order";
                         entity.removeComponent<Components::AttackOrderComponent>();
-                        entityManager.removeComponent<Components::AttackOrderComponent>(id);
                         continue;
                     }
 
-                    auto* originFaction = entityManager.getEntity(attackOrder->origin).getComponent<Components::FactionComponent>();
+                    Entity& originEntity = entityManager.getEntity(attackOrder->origin);
+                    Entity& targetEntity = entityManager.getEntity(attackOrder->target);
+
+                    auto* originFaction = originEntity.getComponent<Components::FactionComponent>();
+                    auto* targetFaction = targetEntity.getComponent<Components::FactionComponent>();
 
                     // TODO: insert error msg if originFaction is missing
-                    auto dronesUsedForAttack = garisson->getDroneCount()-1;
+                    auto dronesUsedForAttack = originGarisson->getDroneCount()-1;
 
                     for(auto i=0; i < dronesUsedForAttack; i++){
                         EntityID droneID = Game::createDrone(entityManager, std::to_string(i), originFaction->factionID);
-                        entityManager.addComponent(droneID, Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
-                        auto* transform = entityManager.getComponent<Components::TransformComponent>(droneID);
-                        sf::Vector2f startPosition = entityManager.getComponent<Components::TransformComponent>(attackOrder->origin)->transform.getPosition();
+                        Entity& droneEntity = entityManager.getEntity(droneID);
+
+                        droneEntity.addComponent(Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
+
+                        sf::Vector2f originPosition = originEntity.getComponent<Components::TransformComponent>()->transform.getPosition();
                         int spread = 25 + (dronesUsedForAttack * 5);
                         spread = std::min(spread, 75);
                         sf::Vector2f randomOffset = sf::Vector2f(
                             rand() % (2 * spread) - spread,
                             rand() % (2 * spread) - spread
                         );
-                        transform->transform.setPosition(startPosition + randomOffset);
 
-                        auto* move = entityManager.getComponent<Components::MoveComponent>(droneID);
-                        move->targetPosition = entityManager.getComponent<Components::TransformComponent>(attackOrder->target)->transform.getPosition();
-                        move->moveToTarget = true;
+                        auto* droneTransform = droneEntity.getComponent<Components::TransformComponent>();
+                        droneTransform->transform.setPosition(originPosition + randomOffset);
+
+                        auto* droneMove = droneEntity.getComponent<Components::MoveComponent>();
+                        droneMove->targetPosition = targetEntity.getComponent<Components::TransformComponent>()->transform.getPosition();
+                        droneMove->moveToTarget = true;
                     }
-                    garisson->setDroneCount(1);
+                    originGarisson->setDroneCount(1);
                     entity.removeComponent<Components::AttackOrderComponent>();
                 }
                 else if (attackOrder && drone && move) {
                     if (!move->moveToTarget) {
-                        log_info << "Drone " << id << " has reached target";
                         // Reached destination
-                        auto* targetGarisson = entityManager.getComponent<Components::GarissonComponent>(attackOrder->target);
-                        auto* originFaction = entityManager.getComponent<Components::FactionComponent>(attackOrder->origin);
-                        auto* targetFaction = entityManager.getComponent<Components::FactionComponent>(attackOrder->target);
-                        auto* targetShield = entityManager.getComponent<Components::ShieldComponent>(attackOrder->target);
+                        log_info << "Drone " << id << " has reached target";
+
+                        Entity& originEntity = entityManager.getEntity(attackOrder->origin);
+                        Entity& targetEntity = entityManager.getEntity(attackOrder->target);
+
+                        auto* originFaction = originEntity.getComponent<Components::FactionComponent>();
+
+                        auto* targetGarisson = targetEntity.getComponent<Components::GarissonComponent>();
+                        auto* targetFaction = targetEntity.getComponent<Components::FactionComponent>();
+                        auto* targetShield = targetEntity.getComponent<Components::ShieldComponent>();
 
                         unsigned int targetShieldValue = 0;
                         if(targetShield){
@@ -94,7 +104,6 @@ namespace Systems {
                                 targetFaction->factionID = originFaction->factionID;
                                 targetGarisson->incrementDroneCount();
                             }
-
                             toRemove.insert(id);
                         }
                     }

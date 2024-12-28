@@ -60,6 +60,11 @@ public:
     const std::unordered_map<EntityID, Entity>& getAllEntities() const {
         return entities;
     }
+
+    // Return all entities (if systems need direct access)
+    std::unordered_map<EntityID, Entity>& getAllEntities() {
+        return entities;
+    }
 };
 
 #endif // ENTITY_MANAGER_HPP
