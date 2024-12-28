@@ -49,7 +49,9 @@ namespace Systems {
             player2Label->setRenderer(theme->getRenderer("Label"));
             player2Label->setTextSize(Config::GUI_TEXT_SIZE);
             player2Label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Right);
-            player2Label->setPosition({"100% - 200", "10"}); // Offset from top-right
+            player2Label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+            player2Label->setSize({"50%", "100%"}); // Occupy 50% of the panel width
+            player2Label->setPosition({"50%", "0"}); // Start at the middle of the panel
             topPanel->add(player2Label);
         }
 
@@ -65,19 +67,35 @@ namespace Systems {
 
             if (totalPlayers > 0)
             {
-                std::stringstream ss1;
-                ss1 << "Player 1";
-                ss1 << "\nDrones: " << gameState->playerDrones[Components::Faction::PLAYER_1];
-                ss1 << "\nEnergy: " << gameState->playerEnergy[Components::Faction::PLAYER_1];
-                player1Label->setText(ss1.str());
+                std::stringstream ss;
+                ss << "Player 1";
+                ss << "\nDrones: " << gameState->playerDrones[Components::Faction::PLAYER_1];
+                auto playerDrones = gameState->playerDrones[Components::Faction::PLAYER_1];
+                auto playerEnergy = gameState->playerEnergy[Components::Faction::PLAYER_1];
+
+                if(playerEnergy <= playerDrones){
+                    ss << " [production blocked]";
+                }
+
+                ss << "\nEnergy: " << gameState->playerEnergy[Components::Faction::PLAYER_1];
+                player1Label->setText(ss.str());
             }
 
             if(totalPlayers > 1){
-                std::stringstream ss2;
-                ss2 << "Player 2";
-                ss2 << "\nDrones: " << gameState->playerDrones[Components::Faction::PLAYER_2];
-                ss2 << "\nEnergy: " << gameState->playerEnergy[Components::Faction::PLAYER_2];
-                player2Label->setText(ss2.str());
+                std::stringstream ss;
+                ss << "Player 2";
+                auto playerDrones = gameState->playerDrones[Components::Faction::PLAYER_2];
+                auto playerEnergy = gameState->playerEnergy[Components::Faction::PLAYER_2];
+
+                ss << "\n";
+                if(playerEnergy <= playerDrones){
+                    ss << " [production blocked] ";
+                }
+                ss << "Drones: " << gameState->playerDrones[Components::Faction::PLAYER_2];
+
+
+                ss << "\nEnergy: " << gameState->playerEnergy[Components::Faction::PLAYER_2];
+                player2Label->setText(ss.str());
             }
         }
         
