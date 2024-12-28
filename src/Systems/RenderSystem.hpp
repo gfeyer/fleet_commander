@@ -39,7 +39,7 @@ namespace Systems {
                 sf::Vector2f center(transform->getPosition().x, transform->getPosition().y);
                 float baseRadius = 50.f;       // Base radius for the first circle
                 float radiusStep = 5.f;        // Space between concentric circles
-                float thickness = 2.f;         // Circle thickness
+                float thickness = 5.f;         // Circle thickness
                 int pointCount = 50;           // Smoothness of the arc
 
                 int fullCircles = shield->currentShield / 5; // Number of full circles
