@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <TGUI/TGUI.hpp>
+#include <cstdio>
 
 #include "Core/Entity.hpp"
 #include "Components/HoverComponent.hpp"
@@ -26,7 +27,7 @@ namespace Systems {
         
         // Panels Init
         if (!infoPanel) {
-            infoPanel = tgui::Panel::create({"230", "150"});
+            infoPanel = tgui::Panel::create({"230", "180"});
             infoPanel->setVisible(false);
             infoPanel->setRenderer(theme->getRenderer("Panel"));
             gui.add(infoPanel);
@@ -125,7 +126,7 @@ namespace Systems {
                     float productionRate = factoryComp->droneProductionRate;
                     float timeLeft = productionRate - factoryComp->productionTimer;
 
-                    ss << "\nProduction rate: " << productionRate << " s\n";
+                    ss << "\nProduction rate: " << productionRate << "/s\n";
                     
                     auto* factionComp = entity.getComponent<Components::FactionComponent>();
                     if(factionComp && factionComp->faction != Components::Faction::NEUTRAL){ 
@@ -142,7 +143,17 @@ namespace Systems {
                 }
 
                 if(shieldComp){
-                    ss << "\nShield: " << shieldComp->currentShield << "/" << shieldComp->maxShield;
+                    // Format Shield values
+                    char buffer[100];
+                    std::snprintf(
+                        buffer, 
+                        sizeof(buffer), 
+                        "\nShield: %.1f/%.1f\nShield Regen: %.1f/s", 
+                        shieldComp->currentShield, 
+                        shieldComp->maxShield, 
+                        shieldComp->regenRate
+                    );
+                    ss << buffer;
                 }
 
                 auto label = tgui::Label::create(ss.str());
