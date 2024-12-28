@@ -15,9 +15,15 @@
 
 namespace Systems {
     void HudSystem(Game::GameEntityManager& entityManager, tgui::Gui& gui) {
-        static tgui::Panel::Ptr infoPanel = nullptr;
         static tgui::Theme::Ptr theme = Resource::ResourceManager::getInstance().getTheme(Resource::Paths::DARK_THEME);
 
+        // GUI widgets declarations
+        static tgui::Panel::Ptr infoPanel = nullptr;
+        static tgui::Panel::Ptr topPanel = nullptr;
+        static tgui::Label::Ptr player1Label = nullptr;
+        static tgui::Label::Ptr player2Label = nullptr;
+        
+        // Panels Init
         if (!infoPanel) {
             infoPanel = tgui::Panel::create({"230", "150"});
             infoPanel->setVisible(false);
@@ -25,8 +31,58 @@ namespace Systems {
             gui.add(infoPanel);
         }
 
-        bool entityHovered = false;
+        if(!topPanel) {
+            topPanel = tgui::Panel::create({"100%", "100"}); // Full width, fixed height
+            topPanel->setRenderer(theme->getRenderer("Panel"));
+            gui.add(topPanel);
 
+            // Add Player 1 Label (Left-Aligned)
+            player1Label = tgui::Label::create();
+            player1Label->setRenderer(theme->getRenderer("Label"));
+            player1Label->setTextSize(Config::GUI_TEXT_SIZE);
+            player1Label->setPosition({"10", "10"}); // Small offset from top-left
+            topPanel->add(player1Label);
+
+            // Add Player 2 Label (Right-Aligned)
+            player2Label = tgui::Label::create();
+            player2Label->setRenderer(theme->getRenderer("Label"));
+            player2Label->setTextSize(Config::GUI_TEXT_SIZE);
+            player2Label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Right);
+            player2Label->setPosition({"100% - 200", "10"}); // Offset from top-right
+            topPanel->add(player2Label);
+        }
+
+        // Top Panel display logic
+        auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+        if (gameState)
+        {
+            auto totalPlayers = gameState->playerDrones.size();
+
+            if(totalPlayers == 0){
+                throw std::runtime_error("No players found");
+            }
+
+            if (totalPlayers > 0)
+            {
+                std::stringstream ss1;
+                ss1 << "Player 1";
+                ss1 << "\nDrones: " << gameState->playerDrones[0];
+                ss1 << "\nEnergy: " << gameState->playerEnergy[0];
+                player1Label->setText(ss1.str());
+            }
+
+            if(totalPlayers > 1){
+                std::stringstream ss2;
+                ss2 << "Player 2";
+                ss2 << "\nDrones: " << gameState->playerDrones[1];
+                ss2 << "\nEnergy: " << gameState->playerEnergy[1];
+                player2Label->setText(ss2.str());
+            }
+        }
+        
+
+        // Hover Panel display logic
+        bool entityHovered = false;
         auto& entities = entityManager.getAllEntities();
         for (auto& [id, entity] : entities) {
 
@@ -84,6 +140,7 @@ namespace Systems {
         if (!entityHovered) {
             infoPanel->setVisible(false);
         }
+        
     }
 }
 

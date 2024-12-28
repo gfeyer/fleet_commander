@@ -18,26 +18,31 @@ namespace Systems {
         auto& entities = entityManager.getAllEntities();
         for (auto& [id, entity] : entities) {
 
-            // Get components            
             auto* factory = entity.getComponent<Components::FactoryComponent>();
             auto* faction = entity.getComponent<Components::FactionComponent>();
             auto* garisson = entity.getComponent<Components::GarissonComponent>(); 
 
+            // Generate drones in factories
             if (factory && faction && faction->factionID && garisson) {
                 factory->productionTimer += dt;
 
-                if (factory->productionTimer >= factory->droneProductionRate) {
-                    factory->productionTimer = 0.f;
-                    garisson->incrementDroneCount();
-
-                    // Update game state
-                    auto* gameStateComp = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
-                    if (gameStateComp) {
-                        gameStateComp->playerDrones[faction->factionID]++;
-
-                        log_info << "Player " << faction->factionID << " has " << gameStateComp->playerDrones[faction->factionID] << " drones";
-                    }
+                // Timer still ongoing, skip
+                if(factory->productionTimer < factory->droneProductionRate){
+                    continue;
                 }
+
+                // Reset timer after full cycle
+                factory->productionTimer = 0.f;
+
+                // If no energy, do not generate new drones
+                auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+                if(gameState->playerEnergy[faction->factionID] >= gameState->playerDrones[faction->factionID]){
+                    continue;
+                }
+                
+                // Add one drone to player
+                garisson->incrementDroneCount();
+                gameState->playerDrones[faction->factionID]++;
             }
         }
     }
