@@ -19,6 +19,7 @@
 #include "Components/LabelComponent.hpp"
 #include "Components/TagComponent.hpp"
 #include "Components/HoverComponent.hpp"
+#include "Components/GameStateComponent.hpp"
 
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
@@ -65,6 +66,10 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     //     }
     // );
     // entities.emplace(background.id, std::move(background));
+
+    // Create Game State Entity
+    EntityID gameStateID = entityManager.createEntity();
+    entityManager.addComponent(gameStateID, Components::GameStateComponent{2});
 
     // player factory
     float productionRate = 1 + (std::rand() % 1);

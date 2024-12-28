@@ -20,16 +20,23 @@ namespace Systems {
 
             // Get components            
             auto* factory = entity.getComponent<Components::FactoryComponent>();
-            auto* transform = entity.getComponent<Components::TransformComponent>();
             auto* faction = entity.getComponent<Components::FactionComponent>();
             auto* garisson = entity.getComponent<Components::GarissonComponent>(); 
 
-            if (factory && transform && faction && faction->factionID && garisson) {
+            if (factory && faction && faction->factionID && garisson) {
                 factory->productionTimer += dt;
 
                 if (factory->productionTimer >= factory->droneProductionRate) {
                     factory->productionTimer = 0.f;
                     garisson->incrementDroneCount();
+
+                    // Update game state
+                    auto* gameStateComp = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+                    if (gameStateComp) {
+                        gameStateComp->playerDrones[faction->factionID]++;
+
+                        log_info << "Player " << faction->factionID << " has " << gameStateComp->playerDrones[faction->factionID] << " drones";
+                    }
                 }
             }
         }

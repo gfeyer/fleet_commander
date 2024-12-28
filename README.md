@@ -2,11 +2,13 @@
 Colonization simulator 2D
 
 ## TODO
-- Migrate to lists instead of iterating over all IDs
-- Add combat system
-    -- Menu to select factory/outpost where drones are located
+- Add game state struct
+    -- Add resource system (outposts collect energy)
+    -- Keep track of total drones and energy
+- Add AI system to run against player
+    -- Add player system
+- Combat system
     -- Menu to attack another factory or outpost (select number of drones)
-- Add resource system (outposts collect energy)
 
 ## Screenshot
 

@@ -78,9 +78,8 @@ namespace Systems {
                         Entity& targetEntity = entityManager.getEntity(attackOrder->target);
 
                         auto* originFaction = originEntity.getComponent<Components::FactionComponent>();
-
-                        auto* targetGarisson = targetEntity.getComponent<Components::GarissonComponent>();
                         auto* targetFaction = targetEntity.getComponent<Components::FactionComponent>();
+                        auto* targetGarisson = targetEntity.getComponent<Components::GarissonComponent>();
                         auto* targetShield = targetEntity.getComponent<Components::ShieldComponent>();
 
                         unsigned int targetShieldValue = 0;
@@ -90,15 +89,25 @@ namespace Systems {
 
                         if (targetGarisson && originFaction && targetFaction) {
 
+                            auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+
                             if(originFaction->factionID == targetFaction->factionID){
                                 // Same faction, park drones
                                 targetGarisson->incrementDroneCount();
                             }else if(targetShieldValue > 0){
                                 // Different faction, damage shield
                                 targetShield->decrementShield();
+
+                                // attacking player loses drones
+                                gameState->playerDrones[originFaction->factionID]--;
+
                             }else if(targetGarisson->getDroneCount() > 0){
                                 // Different faction, shield down, kill parked drones
                                 targetGarisson->decrementDroneCount();
+
+                                // both players lose drones
+                                gameState->playerDrones[originFaction->factionID]--;
+                                gameState->playerDrones[targetFaction->factionID]--;
                             }else{
                                 // Different Faction, no shield, no drones, switch factions
                                 targetFaction->factionID = originFaction->factionID;

@@ -8,6 +8,7 @@
 #include "Components/FactoryComponent.hpp"
 #include "Components/DroneComponent.hpp"
 #include "Components/ShieldComponent.hpp"
+#include "Components/GameStateComponent.hpp"
 
 namespace Game {
 
@@ -19,6 +20,9 @@ namespace Game {
         std::vector<EntityID> factoryEntities;
         std::vector<EntityID> shieldEntities;
         std::vector<EntityID> droneEntities;
+
+        // Game specific special entities
+        EntityID gameStateEntityID;
 
     public:
         // Create a new entity
@@ -32,68 +36,6 @@ namespace Game {
         // Prevent copy
         GameEntityManager(const GameEntityManager&) = delete;
         GameEntityManager& operator=(const GameEntityManager&) = delete;
-
-        // Remove an entity
-        void removeEntity(EntityID id) {
-            if (coreManager.hasEntity(id)) {
-                auto& entity = coreManager.getEntity(id);
-
-                if (entity.hasComponent<Components::FactoryComponent>()) {
-                    factoryEntities.erase(std::remove(factoryEntities.begin(), factoryEntities.end(), id), factoryEntities.end());
-                }
-                if (entity.hasComponent<Components::ShieldComponent>()) {
-                    shieldEntities.erase(std::remove(shieldEntities.begin(), shieldEntities.end(), id), shieldEntities.end());
-                }
-                if (entity.hasComponent<Components::DroneComponent>()) {
-                    droneEntities.erase(std::remove(droneEntities.begin(), droneEntities.end(), id), droneEntities.end());
-                }
-
-                coreManager.removeEntity(id);
-            }
-        }
-
-        // Add a component and update lists
-        template<typename T>
-        void addComponent(EntityID id, T component) {
-            coreManager.addComponent<T>(id, component);
-
-            if constexpr (std::is_same<T, Components::FactoryComponent>::value) {
-                factoryEntities.push_back(id);
-            }
-            if constexpr (std::is_same<T, Components::ShieldComponent>::value) {
-                shieldEntities.push_back(id);
-            }
-            if constexpr (std::is_same<T, Components::DroneComponent>::value) {
-                droneEntities.push_back(id);
-            }
-        }
-
-        // Get game-specific entity lists
-        const std::vector<EntityID>& getFactories() const {
-            return factoryEntities;
-        }
-        const std::vector<EntityID>& getShields() const {
-            return shieldEntities;
-        }
-        const std::vector<EntityID>& getDrones() const {
-            return droneEntities;
-        }
-
-        // Remove a component and update lists
-        template<typename T>
-        void removeComponent(EntityID id) {
-            coreManager.removeComponent<T>(id);
-
-            if constexpr (std::is_same<T, Components::FactoryComponent>::value) {
-                factoryEntities.erase(std::remove(factoryEntities.begin(), factoryEntities.end(), id), factoryEntities.end());
-            }
-            if constexpr (std::is_same<T, Components::ShieldComponent>::value) {
-                shieldEntities.erase(std::remove(shieldEntities.begin(), shieldEntities.end(), id), shieldEntities.end());
-            }
-            if constexpr (std::is_same<T, Components::DroneComponent>::value) {
-                droneEntities.erase(std::remove(droneEntities.begin(), droneEntities.end(), id), droneEntities.end());
-            }
-        }
 
         template<typename T>
         T* getComponent(EntityID id) {
@@ -131,6 +73,85 @@ namespace Game {
 
             return entityIDs;
         }
+
+        // Remove an entity
+        void removeEntity(EntityID id) {
+            if (coreManager.hasEntity(id)) {
+                auto& entity = coreManager.getEntity(id);
+
+                if (entity.hasComponent<Components::FactoryComponent>()) {
+                    factoryEntities.erase(std::remove(factoryEntities.begin(), factoryEntities.end(), id), factoryEntities.end());
+                }
+                if (entity.hasComponent<Components::ShieldComponent>()) {
+                    shieldEntities.erase(std::remove(shieldEntities.begin(), shieldEntities.end(), id), shieldEntities.end());
+                }
+                if (entity.hasComponent<Components::DroneComponent>()) {
+                    droneEntities.erase(std::remove(droneEntities.begin(), droneEntities.end(), id), droneEntities.end());
+                }
+                if (entity.hasComponent<Components::GameStateComponent>()) {
+                    gameStateEntityID = 0;
+                }
+
+                coreManager.removeEntity(id);
+            }
+        }
+
+        // Add a component and update lists
+        template<typename T>
+        void addComponent(EntityID id, T component) {
+            coreManager.addComponent<T>(id, component);
+
+            if constexpr (std::is_same<T, Components::FactoryComponent>::value) {
+                factoryEntities.push_back(id);
+            }
+            if constexpr (std::is_same<T, Components::ShieldComponent>::value) {
+                shieldEntities.push_back(id);
+            }
+            if constexpr (std::is_same<T, Components::DroneComponent>::value) {
+                droneEntities.push_back(id);
+            }
+            if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
+                gameStateEntityID = id;
+            }
+        }
+
+        // Remove a component and update lists
+        template<typename T>
+        void removeComponent(EntityID id) {
+            coreManager.removeComponent<T>(id);
+
+            if constexpr (std::is_same<T, Components::FactoryComponent>::value) {
+                factoryEntities.erase(std::remove(factoryEntities.begin(), factoryEntities.end(), id), factoryEntities.end());
+            }
+            if constexpr (std::is_same<T, Components::ShieldComponent>::value) {
+                shieldEntities.erase(std::remove(shieldEntities.begin(), shieldEntities.end(), id), shieldEntities.end());
+            }
+            if constexpr (std::is_same<T, Components::DroneComponent>::value) {
+                droneEntities.erase(std::remove(droneEntities.begin(), droneEntities.end(), id), droneEntities.end());
+            }
+            if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
+                gameStateEntityID = 0;
+            }
+        }
+
+        // Get game-specific entity lists
+        const std::vector<EntityID>& getFactories() const {
+            return factoryEntities;
+        }
+        const std::vector<EntityID>& getShields() const {
+            return shieldEntities;
+        }
+        const std::vector<EntityID>& getDrones() const {
+            return droneEntities;
+        }
+        const EntityID& getGameStateEntityID() const {
+            return gameStateEntityID;
+        }
+        Entity& getGameStateEntity() {
+            return coreManager.getEntity(gameStateEntityID);
+        }
+
+        
     };
 }
 
