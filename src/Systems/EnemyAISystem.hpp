@@ -61,9 +61,9 @@ namespace Systems {
             }
 
             // Debug log the scores
-            log_info << "Wait Score: " << actionScores["Wait"];
-            log_info << "Attack Power Station Score: " << actionScores["AttackPowerStation"];
-            log_info << "Attack Factory Score: " << actionScores["AttackFactory"];
+            // log_info << "Wait Score: " << actionScores["Wait"];
+            // log_info << "Attack Power Station Score: " << actionScores["AttackPowerStation"];
+            // log_info << "Attack Factory Score: " << actionScores["AttackFactory"];
 
              // Choose the best action
             auto bestAction = std::max_element(
@@ -75,15 +75,15 @@ namespace Systems {
             );
 
             if (bestAction != actionScores.end()) {
-                log_info << "AI Decision: " << bestAction->first << std::endl;
+                log_info << "AI Decision: " << bestAction->first << " score: " << bestAction->second << std::endl;
             }
 
             // Execute Action
             if (bestAction->first == "Wait") {
             }else if(bestAction->first == "AttackPowerStation"){
-                
+                // TODO
             }else if(bestAction->first == "AttackFactory"){
-                
+                // TODO
             }else{
                 // do nothing
             }
