@@ -79,15 +79,6 @@ namespace Game {
             return droneEntities;
         }
 
-
-        template<typename T>
-        T* getComponent(EntityID id) {
-            if (coreManager.hasEntity(id)) {
-                return coreManager.getEntity(id).getComponent<T>();
-            }
-            return nullptr;
-        }
-
         // Remove a component and update lists
         template<typename T>
         void removeComponent(EntityID id) {
@@ -96,9 +87,20 @@ namespace Game {
             if constexpr (std::is_same<T, Components::FactoryComponent>::value) {
                 factoryEntities.erase(std::remove(factoryEntities.begin(), factoryEntities.end(), id), factoryEntities.end());
             }
+            if constexpr (std::is_same<T, Components::ShieldComponent>::value) {
+                shieldEntities.erase(std::remove(shieldEntities.begin(), shieldEntities.end(), id), shieldEntities.end());
+            }
             if constexpr (std::is_same<T, Components::DroneComponent>::value) {
                 droneEntities.erase(std::remove(droneEntities.begin(), droneEntities.end(), id), droneEntities.end());
             }
+        }
+
+        template<typename T>
+        T* getComponent(EntityID id) {
+            if (coreManager.hasEntity(id)) {
+                return coreManager.getEntity(id).getComponent<T>();
+            }
+            return nullptr;
         }
 
         // Access a specific entity
