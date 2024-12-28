@@ -31,18 +31,23 @@ namespace Systems {
 
                 std::stringstream ss;
                 if(factory){
-                    ss << factory->factoryName;
+                    char buffer[50];
+                    std::snprintf(buffer, sizeof(buffer), "Factory\n%.1f/s", factory->droneProductionRate);
+                    ss << buffer;
                 }
                 if(powerPlant){
-                    // ss << powerPlant->powerPlantName;
-                    ss << "FusionReactor\nCapacity: " << powerPlant->capacity;
+                    char buffer[50];
+                    std::snprintf(buffer, sizeof(buffer), "FusionReactor\nCapacity: %d", powerPlant->capacity);
+                    ss << buffer;
                 }
                 if(drone){
                     ss << drone->droneName;
                 }
                 if(garisson){
                     if (garisson->getDroneCount() > 0){
-                        ss << "\nDrones: " << garisson->getDroneCount();
+                        char buffer[50];
+                        std::snprintf(buffer, sizeof(buffer), "\nDrones: %d", garisson->getDroneCount());
+                        ss << buffer;
                     }
                 }
 
