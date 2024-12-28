@@ -34,13 +34,16 @@ namespace Systems {
                     ss << factory->factoryName;
                 }
                 if(powerPlant){
-                    ss << powerPlant->powerPlantName;
+                    // ss << powerPlant->powerPlantName;
+                    ss << "FusionReactor\nCapacity: " << powerPlant->capacity;
                 }
                 if(drone){
                     ss << drone->droneName;
                 }
                 if(garisson){
-                    ss << "\nDrones: " << garisson->getDroneCount();
+                    if (garisson->getDroneCount() > 0){
+                        ss << "\nDrones: " << garisson->getDroneCount();
+                    }
                 }
 
                 // auto* shield = entity.getComponent<Components::ShieldComponent>();

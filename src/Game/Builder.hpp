@@ -56,10 +56,10 @@ namespace Game {
         return factoryID;
     }
 
-    EntityID createPowerPlant(GameEntityManager& entityManager, std::string name = "", unsigned int factionID = 0, float shieldRegenRate = 1.f) {
+    EntityID createPowerPlant(GameEntityManager& entityManager, std::string name = "", unsigned int factionID = 0, float shieldRegenRate = 1.f, unsigned int energyCapacity=10) {
         
         EntityID powerPlantID = entityManager.createEntity();
-        entityManager.addComponent(powerPlantID, Components::PowerPlantComponent{name});
+        entityManager.addComponent(powerPlantID, Components::PowerPlantComponent{name,energyCapacity});
         sf::Vector2f position = sf::Vector2f(
             Config::POWER_PLANT_RADIUS + rand() % (Config::MAP_WIDTH - 2*Config::POWER_PLANT_RADIUS), 
             Config::POWER_PLANT_RADIUS + rand() % (Config::MAP_HEIGHT - 2*Config::POWER_PLANT_RADIUS)
@@ -79,7 +79,7 @@ namespace Game {
         entityManager.addComponent(powerPlantID, Components::SelectableComponent{});
         entityManager.addComponent(powerPlantID, Components::FactionComponent{factionID});
         entityManager.addComponent(powerPlantID, Components::GarissonComponent{});
-        entityManager.addComponent(powerPlantID, Components::ShieldComponent{0, 10, shieldRegenRate});
+        entityManager.addComponent(powerPlantID, Components::ShieldComponent{0, energyCapacity, shieldRegenRate});
         return powerPlantID;
     }
 

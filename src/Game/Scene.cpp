@@ -85,8 +85,9 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 
     // Create Power Plants
     for(int i=0; i<10; ++i){
-        float regenRate = 1 + rand() % 5;
-        Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(i), 0, regenRate);
+        float shieldRegenRate = 1 + rand() % 5;
+        unsigned int capacity = 5 + rand() % 10;
+        Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(i), 0, shieldRegenRate, capacity);
     }
 }
 
