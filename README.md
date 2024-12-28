@@ -2,11 +2,7 @@
 Colonization simulator 2D
 
 ## TODO
-- Better map genration
-- Add AI system to run against player
-    -- Add player system
-- Combat system
-    -- Menu to attack another factory or power plant (select number of drones)
+- Add AI system 
 
 ## Screenshot
 
