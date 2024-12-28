@@ -38,15 +38,16 @@ namespace Systems {
 
             // Generate drones in factories
             if (factory && garisson && faction && faction->faction != Components::Faction::NEUTRAL) {
-                factory->productionTimer += dt;
+                // Accumulate production based on productionRate and dt
+                factory->productionTimer += factory->droneProductionRate * dt;
 
                 // Timer still ongoing, skip
-                if(factory->productionTimer < factory->droneProductionRate){
+                if(factory->productionTimer < 1.f){
                     continue;
                 }
 
                 // Reset timer after full cycle
-                factory->productionTimer = 0.f;
+                factory->productionTimer -= 1.f;
 
                 // If less energy than drones, do not generate new drones
                 auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();

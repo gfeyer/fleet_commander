@@ -125,7 +125,6 @@ namespace Systems {
                     ss << factoryComp->factoryName;
 
                     float productionRate = factoryComp->droneProductionRate;
-                    float timeLeft = productionRate - factoryComp->productionTimer;
 
                     // Format Production Rate and Time Left
                     char buffer[100];
@@ -133,24 +132,13 @@ namespace Systems {
                         buffer, 
                         sizeof(buffer), 
                         "\nProduction rate: %.1f /s", 
-                        1.f/productionRate
+                        productionRate
                     );
                     ss << buffer;
-
-                    auto* factionComp = entity.getComponent<Components::FactionComponent>();
-                    // if (factionComp && factionComp->faction != Components::Faction::NEUTRAL) { 
-                    //     std::snprintf(
-                    //         buffer, 
-                    //         sizeof(buffer), 
-                    //         "\nNext drone in: %.1f s", 
-                    //         timeLeft
-                    //     );
-                    //     ss << buffer;
-                    // }
                 }
 
                 if (powerPlantComp) {
-                    ss << powerPlantComp->powerPlantName;
+                    ss << "FusionReactor\nCapacity: " << powerPlantComp->capacity;
                 }
 
                 if(garissonComp){

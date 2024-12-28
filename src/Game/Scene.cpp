@@ -33,6 +33,7 @@
 
 #include "Game/Builder.hpp"
 
+#include "Utils/Random.hpp"
 
 Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 {
@@ -73,9 +74,9 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 
     // player factory
     auto player1Faction = Components::Faction::PLAYER_1;
-    float productionRate = 1 + (std::rand() % 1);
-    float shieldRegenRate = 1.f / float(2 + (std::rand() % 4));
-    unsigned int capacity = 7 + (std::rand() % 5);
+    float productionRate = 1.f;
+    float shieldRegenRate = getRandomFloat(0.75f, 1.f);
+    unsigned int capacity = getRandomFloat(8.f, 12.f);
     Game::createFactory(entityManager, "Factory #" + std::to_string(0), player1Faction, productionRate, shieldRegenRate);
     Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(0), player1Faction, shieldRegenRate, capacity);
 
@@ -86,15 +87,16 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 
     // Create Neutral Factories
     for(int i=1; i < 10; ++i){
-        productionRate = 1 + (std::rand() % 5);
-        float shieldRegenRate = 1.f / float(2 + (std::rand() % 5));
+        auto productionRate = getRandomFloat(0.1f, 0.9f);
+        log_info << "Factory #" << i << " production rate: " << productionRate;
+        float shieldRegenRate = getRandomFloat(0.1f, 1.f);
         Game::createFactory(entityManager, "Factory #" + std::to_string(i), Components::Faction::NEUTRAL, productionRate, shieldRegenRate);
     }
 
     // Create Power Plants
     for(int i=0; i<10; ++i){
-        float shieldRegenRate = 1.f / float(2 + (std::rand() % 5));
-        unsigned int capacity = 5 + rand() % 10;
+        float shieldRegenRate = getRandomFloat(0.1f, 1.f);
+        unsigned int capacity = getRandomFloat(5.f, 25.f);
         Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(i), Components::Faction::NEUTRAL, shieldRegenRate, capacity);
     }
 }
