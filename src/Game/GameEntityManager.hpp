@@ -24,6 +24,13 @@ namespace Game {
             return coreManager.createEntity();
         }
 
+        // Default constructor
+        GameEntityManager() = default;
+
+        // Prevent copy
+        GameEntityManager(const GameEntityManager&) = delete;
+        GameEntityManager& operator=(const GameEntityManager&) = delete;
+
         // Remove an entity
         void removeEntity(EntityID id) {
             if (coreManager.hasEntity(id)) {

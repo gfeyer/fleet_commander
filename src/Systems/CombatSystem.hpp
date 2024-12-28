@@ -33,14 +33,9 @@ namespace Systems {
                     // Attack order was just palced at a garison
                     // Create drones and send them to the target
                     if (garisson->getDroneCount() < 2) {
-                        log_info << "EntityID: " << id << " has no drones, Removing attack order from garisson";
+                        log_info << "EntityID: " << id << " has no drones, removing attack order";
                         entity.removeComponent<Components::AttackOrderComponent>();
                         entityManager.removeComponent<Components::AttackOrderComponent>(id);
-
-                        auto* test = entityManager.getComponent<Components::AttackOrderComponent>(id);
-                        if(test){
-                            log_info << "AttackOrderComponent is still there";
-                        }
                         continue;
                     }
 
