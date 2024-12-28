@@ -36,15 +36,47 @@ namespace Systems {
             // Draw Shield
             auto* shield = entity.getComponent<Components::ShieldComponent>();
             if (shield && transform) {
-                // TODO: draw multiple circles depending on size
                 sf::Vector2f center(transform->getPosition().x, transform->getPosition().y);
-                float radius = 50.f;
-                float thickness = 10.f;
-                float percentage = float(shield->currentShield) / float(shield->maxShield); 
-                int pointCount = 50; // Smoothness
+                float baseRadius = 50.f;       // Base radius for the first circle
+                float radiusStep = 5.f;        // Space between concentric circles
+                float thickness = 2.f;         // Circle thickness
+                int pointCount = 50;           // Smoothness of the arc
 
-                sf::VertexArray arc = Utils::CreateArc(center, radius, thickness, percentage, pointCount, sf::Color(0, 255, 255, 200));
-                window.draw(arc);
+                int fullCircles = shield->currentShield / 5; // Number of full circles
+                int remainder = shield->currentShield % 5;   // Remaining units for a partial circle
+
+                // Draw Full Circles
+                for (int i = 0; i < fullCircles; ++i) {
+                    float currentRadius = baseRadius + (i * radiusStep);
+
+                    sf::VertexArray arc = Utils::CreateArc(
+                        center,
+                        currentRadius,
+                        thickness,
+                        1.0f, // 100% circle
+                        pointCount,
+                        sf::Color(0, 255, 255, 200)
+                    );
+
+                    window.draw(arc);
+                }
+
+                // Draw Partial Circle for Remainder
+                if (remainder > 0) {
+                    float currentRadius = baseRadius + (fullCircles * radiusStep);
+                    float percentage = float(remainder) / 5.0f; // Remainder as percentage of a full circle
+
+                    sf::VertexArray arc = Utils::CreateArc(
+                        center,
+                        currentRadius,
+                        thickness,
+                        percentage,
+                        pointCount,
+                        sf::Color(0, 255, 255, 200) // Yellow for the partial arc
+                    );
+
+                    window.draw(arc);
+                }
             }
 
             // Render SpriteComponent
