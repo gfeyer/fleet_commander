@@ -29,7 +29,9 @@ namespace Systems {
                 // Check if mouse is within entity bounds
                 if (shapeComp->shape->getGlobalBounds().contains(worldPos)) {
                     hoverComp->isHovered = true;
-                    hoverComp->position = worldPos;
+                    // hoverComp->position = worldPos;
+                    hoverComp->position = static_cast<sf::Vector2f>(mousePos);
+
                 } else {
                     hoverComp->isHovered = false;
                 }
