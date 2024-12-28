@@ -32,7 +32,7 @@ namespace Systems {
                     // Create drones and send them to the target
                     if (originGarisson->getDroneCount() < 2) {
                         log_info << "EntityID: " << id << " has no drones, removing attack order";
-                        entity.removeComponent<Components::AttackOrderComponent>();
+                        entityManager.removeComponent<Components::AttackOrderComponent>(id);
                         continue;
                     }
 
@@ -49,7 +49,7 @@ namespace Systems {
                         EntityID droneID = Game::createDrone(entityManager, std::to_string(i), originFaction->factionID);
                         Entity& droneEntity = entityManager.getEntity(droneID);
 
-                        droneEntity.addComponent(Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
+                        entityManager.addComponent(droneID,Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
 
                         sf::Vector2f originPosition = originEntity.getComponent<Components::TransformComponent>()->transform.getPosition();
                         int spread = 25 + (dronesUsedForAttack * 5);
@@ -67,7 +67,7 @@ namespace Systems {
                         droneMove->moveToTarget = true;
                     }
                     originGarisson->setDroneCount(1);
-                    entity.removeComponent<Components::AttackOrderComponent>();
+                    entityManager.removeComponent<Components::AttackOrderComponent>(id);
                 }
                 else if (attackOrder && drone && move) {
                     if (!move->moveToTarget) {

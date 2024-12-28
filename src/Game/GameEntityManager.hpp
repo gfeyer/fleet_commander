@@ -7,6 +7,7 @@
 #include "Core/EntityManager.hpp"
 #include "Components/FactoryComponent.hpp"
 #include "Components/DroneComponent.hpp"
+#include "Components/ShieldComponent.hpp"
 
 namespace Game {
 
@@ -16,6 +17,7 @@ namespace Game {
 
         // Game-specific filtered lists
         std::vector<EntityID> factoryEntities;
+        std::vector<EntityID> shieldEntities;
         std::vector<EntityID> droneEntities;
 
     public:
@@ -39,6 +41,9 @@ namespace Game {
                 if (entity.hasComponent<Components::FactoryComponent>()) {
                     factoryEntities.erase(std::remove(factoryEntities.begin(), factoryEntities.end(), id), factoryEntities.end());
                 }
+                if (entity.hasComponent<Components::ShieldComponent>()) {
+                    shieldEntities.erase(std::remove(shieldEntities.begin(), shieldEntities.end(), id), shieldEntities.end());
+                }
                 if (entity.hasComponent<Components::DroneComponent>()) {
                     droneEntities.erase(std::remove(droneEntities.begin(), droneEntities.end(), id), droneEntities.end());
                 }
@@ -55,9 +60,23 @@ namespace Game {
             if constexpr (std::is_same<T, Components::FactoryComponent>::value) {
                 factoryEntities.push_back(id);
             }
+            if constexpr (std::is_same<T, Components::ShieldComponent>::value) {
+                shieldEntities.push_back(id);
+            }
             if constexpr (std::is_same<T, Components::DroneComponent>::value) {
                 droneEntities.push_back(id);
             }
+        }
+
+        // Get game-specific entity lists
+        const std::vector<EntityID>& getFactories() const {
+            return factoryEntities;
+        }
+        const std::vector<EntityID>& getShields() const {
+            return shieldEntities;
+        }
+        const std::vector<EntityID>& getDrones() const {
+            return droneEntities;
         }
 
 
@@ -85,15 +104,6 @@ namespace Game {
         // Access a specific entity
         Entity& getEntity(EntityID id) {
             return coreManager.getEntity(id);
-        }
-
-        // Get game-specific entity lists
-        const std::vector<EntityID>& getFactories() const {
-            return factoryEntities;
-        }
-
-        const std::vector<EntityID>& getDrones() const {
-            return droneEntities;
         }
 
         // Access all entities read-only

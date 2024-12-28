@@ -5,10 +5,27 @@
 #include <typeindex>
 #include <memory>
 
+// Forward declaration to avoid circular dependency
+class EntityManager;
+
 class Entity {
 private:
     std::unordered_map<std::type_index, std::shared_ptr<void>> components;
 
+protected:
+    // These functions are protected so they can only be called by the manager class which holds the lists
+    template<typename T>
+    void addComponent(T component) {
+        components[std::type_index(typeid(T))] = std::make_shared<T>(component);
+    }
+    template<typename T>
+    void removeComponent() {
+        auto it = components.find(std::type_index(typeid(T)));
+        if (it != components.end()) {
+            components.erase(it);
+        }
+    }
+    friend class EntityManager;
 public:
 
     Entity() = default;
@@ -21,25 +38,11 @@ public:
     Entity(const Entity& other) = delete;
     Entity& operator=(const Entity& other) = delete;
 
-    template<typename T>
-    void addComponent(T component) {
-        components[std::type_index(typeid(T))] = std::make_shared<T>(component);
-    }
-
     // Get a component
     template<typename T>
     T* getComponent() {
         auto it = components.find(std::type_index(typeid(T)));
         return it != components.end() ? std::static_pointer_cast<T>(it->second).get() : nullptr;
-    }
-
-    // Remove a component
-    template<typename T>
-    void removeComponent() {
-        auto it = components.find(std::type_index(typeid(T)));
-        if (it != components.end()) {
-            components.erase(it);
-        }
     }
 
     // Check if a component exists

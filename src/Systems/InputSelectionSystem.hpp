@@ -48,7 +48,7 @@ namespace Systems {
                             targetSelectableComp->isSelected = false;
 
                             Entity& originEntity = entityManager.getEntity(originEntityID);
-                            originEntity.addComponent(Components::AttackOrderComponent{originEntityID, targetID});
+                            entityManager.addComponent(originEntityID, Components::AttackOrderComponent{originEntityID, targetID});
                             originEntity.getComponent<Components::SelectableComponent>()->isSelected = false;
                         }else{
                             targetSelectableComp->isSelected = true;

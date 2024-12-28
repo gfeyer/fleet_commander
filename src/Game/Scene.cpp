@@ -46,22 +46,24 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     gui->setOpacity(0.9f);
 
     // Create Background Entity
-    Entity background;
+    // Entity background;
+    // auto backgroundEntityID = entityManager.createEntity();
 
-    auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
-    background.addComponent(Components::SpriteComponent{texture});
-    sf::Vector2u windowSize = sf::Vector2u(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT);
-    sf::Vector2u textureSize = texture.getSize();
-    background.addComponent(
-        Components::TransformComponent{
-            sf::Vector2f(0, 0),
-            0.f,
-            sf::Vector2f(
-                static_cast<float>(windowSize.x) / textureSize.x,
-                static_cast<float>(windowSize.y) / textureSize.y
-            )
-        }
-    );
+    // auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::BACKGROUND_4);
+    // entityManager.addComponent(backgroundEntityID,Components::SpriteComponent{texture});
+    // sf::Vector2u windowSize = sf::Vector2u(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT);
+    // sf::Vector2u textureSize = texture.getSize();
+    // entityManager.addComponent(
+    //     backgroundEntityID,
+    //     Components::TransformComponent{
+    //         sf::Vector2f(0, 0),
+    //         0.f,
+    //         sf::Vector2f(
+    //             static_cast<float>(windowSize.x) / textureSize.x,
+    //             static_cast<float>(windowSize.y) / textureSize.y
+    //         )
+    //     }
+    // );
     // entities.emplace(background.id, std::move(background));
 
     // player factory
