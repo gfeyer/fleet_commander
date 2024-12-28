@@ -23,6 +23,8 @@
 
 #include "Game/GameEntityManager.hpp"
 
+#include "Utils/Random.hpp"
+
 namespace Game {
 
     EntityID createFactory(GameEntityManager& entityManager, std::string name = "", Components::Faction faction = Components::Faction::NEUTRAL, float productionRate = 1.f, float shieldRegenRate = 1.f) {
@@ -33,10 +35,7 @@ namespace Game {
 
         entityManager.addComponent(factoryID, Components::FactoryComponent{name, productionRate});
 
-        sf::Vector2f position = sf::Vector2f(
-            Config::FACTORY_SIZE + rand() % (Config::MAP_WIDTH - 2*Config::FACTORY_SIZE), 
-            Config::FACTORY_SIZE + rand() % (Config::MAP_HEIGHT - 2*Config::FACTORY_SIZE)
-        );
+        sf::Vector2f position = sf::Vector2f(getRandomFloat(0.f, Config::SCREEN_WIDTH), getRandomFloat(0.f, Config::SCREEN_HEIGHT));
         entityManager.addComponent(factoryID, Components::TransformComponent{position, 0, sf::Vector2f(1, 1)});
         auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
         shape.setFillColor(sf::Color::Color(100, 100, 100));
@@ -57,13 +56,9 @@ namespace Game {
     }
 
     EntityID createPowerPlant(GameEntityManager& entityManager, std::string name = "", Components::Faction faction = Components::Faction::NEUTRAL, float shieldRegenRate = 1.f, unsigned int energyCapacity=10) {
-        
         EntityID powerPlantID = entityManager.createEntity();
         entityManager.addComponent(powerPlantID, Components::PowerPlantComponent{name,energyCapacity});
-        sf::Vector2f position = sf::Vector2f(
-            Config::POWER_PLANT_RADIUS + rand() % (Config::MAP_WIDTH - 2*Config::POWER_PLANT_RADIUS), 
-            Config::POWER_PLANT_RADIUS + rand() % (Config::MAP_HEIGHT - 2*Config::POWER_PLANT_RADIUS)
-        );
+        sf::Vector2f position = sf::Vector2f(getRandomFloat(0.f, Config::SCREEN_WIDTH), getRandomFloat(0.f, Config::SCREEN_HEIGHT));
         entityManager.addComponent(powerPlantID, Components::TransformComponent{position, 0, sf::Vector2f(1, 1)});
         auto shape = sf::CircleShape(Config::POWER_PLANT_RADIUS);
         shape.setFillColor(sf::Color::Color(100, 100, 100));
@@ -89,7 +84,7 @@ namespace Game {
         EntityID droneID = entityManager.createEntity();
         
         entityManager.addComponent(droneID, Components::DroneComponent{name});
-        entityManager.addComponent(droneID, Components::TransformComponent{sf::Vector2f(rand() % Config::SCREEN_WIDTH, rand() % Config::SCREEN_HEIGHT), float(rand() % 360), sf::Vector2f(1, 1)});
+        entityManager.addComponent(droneID, Components::TransformComponent{sf::Vector2f(0.f,0.f), float(rand() % 360), sf::Vector2f(1, 1)});
         auto shape = std::make_shared<sf::ConvexShape>();
         shape->setPointCount(3);
         shape->setOrigin(sf::Vector2f(0.f, 0.f));
