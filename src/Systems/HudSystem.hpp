@@ -123,14 +123,29 @@ namespace Systems {
 
                 if (factoryComp) {
                     ss << factoryComp->factoryName;
+
                     float productionRate = factoryComp->droneProductionRate;
                     float timeLeft = productionRate - factoryComp->productionTimer;
 
-                    ss << "\nProduction rate: " << productionRate << "/s\n";
-                    
+                    // Format Production Rate and Time Left
+                    char buffer[100];
+                    std::snprintf(
+                        buffer, 
+                        sizeof(buffer), 
+                        "\nProduction rate: %.1f /s", 
+                        1.f/productionRate
+                    );
+                    ss << buffer;
+
                     auto* factionComp = entity.getComponent<Components::FactionComponent>();
-                    if(factionComp && factionComp->faction != Components::Faction::NEUTRAL){ 
-                        ss << "\nNext drone in: " << unsigned int(timeLeft) << " s";
+                    if (factionComp && factionComp->faction != Components::Faction::NEUTRAL) { 
+                        std::snprintf(
+                            buffer, 
+                            sizeof(buffer), 
+                            "\nNext drone in: %.1f s", 
+                            timeLeft
+                        );
+                        ss << buffer;
                     }
                 }
 
