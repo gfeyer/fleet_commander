@@ -38,12 +38,14 @@ namespace Systems {
             if (shield && transform) {
                 sf::Vector2f center(transform->getPosition().x, transform->getPosition().y);
                 float baseRadius = 50.f;       // Base radius for the first circle
-                float radiusStep = 10.f;       // Space between concentric circles
-                float thickness = 10.f;        // Circle thickness
+                float radiusStep = 7.f;       // Space between concentric circles
+                float thickness = 7.f;         // Circle thickness
                 int pointCount = 50;           // Smoothness of the arc
 
-                int fullCircles = shield->currentShield / 10; // Number of full circles
-                int remainder = shield->currentShield % 10;   // Remaining units for a partial circle
+                // Calculate full circles and remainder (using float logic for smooth rendering)
+                float shieldValue = shield->currentShield;
+                int fullCircles = static_cast<int>(shieldValue / 10.f); // Number of full circles
+                float remainder = std::fmod(shieldValue, 10.f);         // Remaining fractional shield value
 
                 // Draw Full Circles
                 for (int i = 0; i < fullCircles; ++i) {
@@ -53,7 +55,7 @@ namespace Systems {
                         center,
                         currentRadius,
                         thickness,
-                        1.0f, // 100% circle
+                        1.0f, // 100% full circle
                         pointCount,
                         sf::Color(0, 255, 255, 200)
                     );
@@ -62,9 +64,9 @@ namespace Systems {
                 }
 
                 // Draw Partial Circle for Remainder
-                if (remainder > 0) {
+                if (remainder > 0.f) {
                     float currentRadius = baseRadius + (fullCircles * radiusStep);
-                    float percentage = float(remainder) / 10.0f; // Remainder as percentage of a full circle
+                    float percentage = remainder / 10.0f; // Partial fill percentage (0.0 to 1.0)
 
                     sf::VertexArray arc = Utils::CreateArc(
                         center,

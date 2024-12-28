@@ -13,14 +13,17 @@ namespace Systems {
         for (auto& [id, entity] : entities) {
             auto* shield = entity.getComponent<Components::ShieldComponent>();
             if (shield) {
+                // Skip if shield is already full
                 if(shield->maxShield == shield->currentShield){
                     continue;
                 }
 
-                shield->regenTimer += dt;
-                if (shield->regenTimer >= shield->regenRate) {
-                    shield->regenTimer = 0.f;
-                    shield->incrementShield();
+                // Regenerate shield smoothly based on regenRate and delta time (dt)
+                shield->currentShield += shield->regenRate * dt;
+
+                // Clamp shield to maxShield to avoid overshooting
+                if (shield->currentShield > shield->maxShield) {
+                    shield->currentShield = shield->maxShield;
                 }
             }
         }

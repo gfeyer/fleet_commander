@@ -79,7 +79,9 @@ namespace Game {
         entityManager.addComponent(powerPlantID, Components::SelectableComponent{});
         entityManager.addComponent(powerPlantID, Components::FactionComponent{faction});
         entityManager.addComponent(powerPlantID, Components::GarissonComponent{});
-        entityManager.addComponent(powerPlantID, Components::ShieldComponent{0, energyCapacity, shieldRegenRate});
+
+        float maxShield = energyCapacity;
+        entityManager.addComponent(powerPlantID, Components::ShieldComponent{0, maxShield, shieldRegenRate});
         return powerPlantID;
     }
 
