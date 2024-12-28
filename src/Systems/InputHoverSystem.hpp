@@ -19,7 +19,6 @@ namespace Systems {
         sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
         auto& entities = entityManager.getAllEntities();
-        
         for (auto& [id, entity] : entities) {
 
             auto* transform = entity.getComponent<Components::TransformComponent>();

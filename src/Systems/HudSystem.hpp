@@ -27,11 +27,8 @@ namespace Systems {
 
         bool entityHovered = false;
 
-        // Get all entities by IDs
-        const auto& entityIDs = entityManager.getAllEntityIDs();
-
-        for (EntityID id : entityIDs) {
-            Entity& entity = entityManager.getEntity(id); // Access entity by ID
+        auto& entities = entityManager.getAllEntities();
+        for (auto& [id, entity] : entities) {
 
             auto* hoverComp = entity.getComponent<Components::HoverComponent>();
             auto* tagComponent = entity.getComponent<Components::TagComponent>();

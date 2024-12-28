@@ -25,10 +25,8 @@ namespace Systems {
             EntityID originEntityID = -1;
 
             // Get all entities by IDs
-            const auto& entityIDs = entityManager.getAllEntityIDs();
-
-            for (EntityID id : entityIDs) {
-                Entity& entity = entityManager.getEntity(id); // Access entity by ID
+            auto& entities = entityManager.getAllEntities();
+            for (auto& [id, entity] : entities) {
                 auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
                 if (selectableComp && selectableComp->isSelected) {
                     originSelectionExists = true;
@@ -38,8 +36,7 @@ namespace Systems {
             }
 
             // Determine if a new selection was made
-            for (EntityID targetID : entityIDs) {
-                Entity& targetEntity = entityManager.getEntity(targetID); // Access entity by ID
+            for (auto& [targetID, targetEntity] : entities) {
                 auto* targetTransform = targetEntity.getComponent<Components::TransformComponent>();
                 auto* targetShapeComp = targetEntity.getComponent<Components::ShapeComponent>();
                 auto* targetSelectableComp = targetEntity.getComponent<Components::SelectableComponent>();
