@@ -32,6 +32,7 @@
 #include "Systems/ShieldSystem.hpp"
 
 #include "Game/Builder.hpp"
+#include "Game/MapGenerator.hpp"
 
 #include "Utils/Random.hpp"
 
@@ -72,32 +73,36 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     EntityID gameStateID = entityManager.createEntity();
     entityManager.addComponent(gameStateID, Components::GameStateComponent{2});
 
+    auto positionGenerator = Game::RandomPositionGenerator(Config::MAP_WIDTH, Config::MAP_HEIGHT, 40.f);
+    auto positions = positionGenerator.generateNonOverlappingPositions(30);
+
     // player factory
     auto player1Faction = Components::Faction::PLAYER_1;
     float productionRate = 1.f;
-    float shieldRegenRate = getRandomFloat(0.75f, 1.f);
-    unsigned int capacity = getRandomFloat(8.f, 12.f);
-    Game::createFactory(entityManager, "Factory #" + std::to_string(0), player1Faction, productionRate, shieldRegenRate);
-    Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(0), player1Faction, shieldRegenRate, capacity);
+    float shieldRegenRate = Utils::getRandomFloat(0.75f, 1.f);
+    unsigned int capacity = Utils::getRandomFloat(8.f, 12.f);
+    Game::createFactory(entityManager, "Factory #" + std::to_string(0), positions[0],player1Faction, productionRate, shieldRegenRate);
+    Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(0), positions[1],player1Faction, shieldRegenRate, capacity);
 
     // Create Enemy Factories
     auto enemyFaction = Components::Faction::PLAYER_2;
-    Game::createFactory(entityManager, "Factory #" + std::to_string(0), enemyFaction, productionRate, shieldRegenRate);
-    Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(0), enemyFaction, shieldRegenRate, capacity);
+    Game::createFactory(entityManager, "Factory #" + std::to_string(0), positions[2], enemyFaction, productionRate, shieldRegenRate);
+    Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(0), positions[3], enemyFaction, shieldRegenRate, capacity);
 
-    // Create Neutral Factories
-    for(int i=1; i < 10; ++i){
-        auto productionRate = getRandomFloat(0.1f, 0.9f);
-        log_info << "Factory #" << i << " production rate: " << productionRate;
-        float shieldRegenRate = getRandomFloat(0.1f, 1.f);
-        Game::createFactory(entityManager, "Factory #" + std::to_string(i), Components::Faction::NEUTRAL, productionRate, shieldRegenRate);
-    }
 
-    // Create Power Plants
-    for(int i=0; i<10; ++i){
-        float shieldRegenRate = getRandomFloat(0.1f, 1.f);
-        unsigned int capacity = getRandomFloat(5.f, 25.f);
-        Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(i), Components::Faction::NEUTRAL, shieldRegenRate, capacity);
+    for(int i = 4; i < positions.size(); ++i){
+       float coinFlip = Utils::getRandomFloat(0.f, 1.f);
+       float shieldRegenRate = Utils::getRandomFloat(0.1f, 1.f);
+
+        if(coinFlip < 0.5f){
+            // Generate Factory
+            auto productionRate = Utils::getRandomFloat(0.1f, 0.9f);
+            Game::createFactory(entityManager, "Factory #" + std::to_string(i), positions[i], Components::Faction::NEUTRAL, productionRate, shieldRegenRate);
+        } else{
+            // Generate Power plant
+            unsigned int capacity = Utils::getRandomFloat(5.f, 25.f);
+            Game::createPowerPlant(entityManager, "Power Plant #" + std::to_string(i), positions[i], Components::Faction::NEUTRAL, shieldRegenRate, capacity);
+        }
     }
 }
 
