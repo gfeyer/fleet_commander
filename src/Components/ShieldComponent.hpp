@@ -17,6 +17,8 @@ struct ShieldComponent {
     void decrementShield(unsigned int amount = 1) { currentShield -= amount; }
     unsigned int getShield() const { return currentShield; }
     };
+
+    // TODO: shield as float for smooth rendering
 };
 
 #endif // SHIELD_COMPONENT_HPP

@@ -38,12 +38,12 @@ namespace Systems {
             if (shield && transform) {
                 sf::Vector2f center(transform->getPosition().x, transform->getPosition().y);
                 float baseRadius = 50.f;       // Base radius for the first circle
-                float radiusStep = 5.f;        // Space between concentric circles
-                float thickness = 5.f;         // Circle thickness
+                float radiusStep = 10.f;       // Space between concentric circles
+                float thickness = 10.f;        // Circle thickness
                 int pointCount = 50;           // Smoothness of the arc
 
-                int fullCircles = shield->currentShield / 5; // Number of full circles
-                int remainder = shield->currentShield % 5;   // Remaining units for a partial circle
+                int fullCircles = shield->currentShield / 10; // Number of full circles
+                int remainder = shield->currentShield % 10;   // Remaining units for a partial circle
 
                 // Draw Full Circles
                 for (int i = 0; i < fullCircles; ++i) {
@@ -64,7 +64,7 @@ namespace Systems {
                 // Draw Partial Circle for Remainder
                 if (remainder > 0) {
                     float currentRadius = baseRadius + (fullCircles * radiusStep);
-                    float percentage = float(remainder) / 5.0f; // Remainder as percentage of a full circle
+                    float percentage = float(remainder) / 10.0f; // Remainder as percentage of a full circle
 
                     sf::VertexArray arc = Utils::CreateArc(
                         center,
