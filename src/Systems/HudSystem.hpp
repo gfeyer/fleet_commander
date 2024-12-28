@@ -138,15 +138,15 @@ namespace Systems {
                     ss << buffer;
 
                     auto* factionComp = entity.getComponent<Components::FactionComponent>();
-                    if (factionComp && factionComp->faction != Components::Faction::NEUTRAL) { 
-                        std::snprintf(
-                            buffer, 
-                            sizeof(buffer), 
-                            "\nNext drone in: %.1f s", 
-                            timeLeft
-                        );
-                        ss << buffer;
-                    }
+                    // if (factionComp && factionComp->faction != Components::Faction::NEUTRAL) { 
+                    //     std::snprintf(
+                    //         buffer, 
+                    //         sizeof(buffer), 
+                    //         "\nNext drone in: %.1f s", 
+                    //         timeLeft
+                    //     );
+                    //     ss << buffer;
+                    // }
                 }
 
                 if (powerPlantComp) {
