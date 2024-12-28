@@ -13,6 +13,14 @@ private:
     EntityID nextID = 1; // Unique ID generator
 
 public:
+
+    EntityManager() = default;
+    ~EntityManager(){}
+
+    // Prevent copying
+    EntityManager(const EntityManager& other) = delete;
+    EntityManager& operator=(const EntityManager& other) = delete;
+
     // Create a new entity and return its unique ID
     EntityID createEntity() {
         EntityID id = nextID++;
