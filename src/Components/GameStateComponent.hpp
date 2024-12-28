@@ -1,16 +1,31 @@
 #ifndef GAME_STATE_COMPONENT_HPP
 #define GAME_STATE_COMPONENT_HPP
 
-#include <vector>
+#include <unordered_map>
+#include "Components/FactionComponent.hpp"
 
 namespace Components {
     struct GameStateComponent {
-        std::vector<unsigned int> playerDrones;
-        std::vector<unsigned int> playerEnergy;
+        std::unordered_map<Faction, unsigned int> playerDrones;
+        std::unordered_map<Faction, unsigned int> playerEnergy;
 
         GameStateComponent(unsigned int playerCount) {
-            playerDrones.resize(playerCount);
-            playerEnergy.resize(playerCount);
+            if(playerCount == 1){
+                playerDrones[Faction::PLAYER_1] = 0;
+                playerEnergy[Faction::PLAYER_1] = 0;
+            }
+            else if(playerCount == 2){
+                playerDrones[Faction::PLAYER_1] = 0;
+                playerDrones[Faction::PLAYER_2] = 0;
+                playerEnergy[Faction::PLAYER_1] = 0;
+                playerEnergy[Faction::PLAYER_2] = 0;
+            }
+        }
+
+        void ClearAllEnergy(){
+            for(auto& [id, energy] : playerEnergy){
+                energy = 0;
+            }
         }
     };
 }

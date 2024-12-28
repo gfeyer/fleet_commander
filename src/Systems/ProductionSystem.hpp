@@ -16,6 +16,20 @@ namespace Systems {
     void ProductionSystem(Game::GameEntityManager& entityManager, float dt) {
 
         auto& entities = entityManager.getAllEntities();
+        auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+
+        // Update all energy totals
+        gameState->ClearAllEnergy();
+        for(auto& [id, entity] : entities){
+            auto* powerPlant = entity.getComponent<Components::PowerPlantComponent>();
+            auto* faction = entity.getComponent<Components::FactionComponent>();
+            
+            if(powerPlant && faction){
+                gameState->playerEnergy[faction->faction] += powerPlant->capacity; 
+            }
+        }
+
+        // Update all drone production
         for (auto& [id, entity] : entities) {
 
             auto* factory = entity.getComponent<Components::FactoryComponent>();
@@ -23,7 +37,7 @@ namespace Systems {
             auto* garisson = entity.getComponent<Components::GarissonComponent>(); 
 
             // Generate drones in factories
-            if (factory && faction && faction->factionID && garisson) {
+            if (factory && garisson && faction && faction->faction != Components::Faction::NEUTRAL) {
                 factory->productionTimer += dt;
 
                 // Timer still ongoing, skip
@@ -34,15 +48,15 @@ namespace Systems {
                 // Reset timer after full cycle
                 factory->productionTimer = 0.f;
 
-                // If no energy, do not generate new drones
+                // If less energy than drones, do not generate new drones
                 auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
-                if(gameState->playerEnergy[faction->factionID] >= gameState->playerDrones[faction->factionID]){
+                if(gameState->playerEnergy[faction->faction] <= gameState->playerDrones[faction->faction]){
                     continue;
                 }
                 
                 // Add one drone to player
                 garisson->incrementDroneCount();
-                gameState->playerDrones[faction->factionID]++;
+                gameState->playerDrones[faction->faction]++;
             }
         }
     }

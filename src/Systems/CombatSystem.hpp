@@ -46,7 +46,7 @@ namespace Systems {
                     auto dronesUsedForAttack = originGarisson->getDroneCount()-1;
 
                     for(auto i=0; i < dronesUsedForAttack; i++){
-                        EntityID droneID = Game::createDrone(entityManager, std::to_string(i), originFaction->factionID);
+                        EntityID droneID = Game::createDrone(entityManager, std::to_string(i), originFaction->faction);
                         Entity& droneEntity = entityManager.getEntity(droneID);
 
                         entityManager.addComponent(droneID,Components::AttackOrderComponent{attackOrder->origin, attackOrder->target});
@@ -91,7 +91,7 @@ namespace Systems {
 
                             auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
 
-                            if(originFaction->factionID == targetFaction->factionID){
+                            if(originFaction->faction == targetFaction->faction){
                                 // Same faction, park drones
                                 targetGarisson->incrementDroneCount();
                             }else if(targetShieldValue > 0){
@@ -99,18 +99,18 @@ namespace Systems {
                                 targetShield->decrementShield();
 
                                 // attacking player loses drones
-                                gameState->playerDrones[originFaction->factionID]--;
+                                gameState->playerDrones[originFaction->faction]--;
 
                             }else if(targetGarisson->getDroneCount() > 0){
                                 // Different faction, shield down, kill parked drones
                                 targetGarisson->decrementDroneCount();
 
                                 // both players lose drones
-                                gameState->playerDrones[originFaction->factionID]--;
-                                gameState->playerDrones[targetFaction->factionID]--;
+                                gameState->playerDrones[originFaction->faction]--;
+                                gameState->playerDrones[targetFaction->faction]--;
                             }else{
                                 // Different Faction, no shield, no drones, switch factions
-                                targetFaction->factionID = originFaction->factionID;
+                                targetFaction->faction = originFaction->faction;
                                 targetGarisson->incrementDroneCount();
                             }
                             toRemove.insert(id);

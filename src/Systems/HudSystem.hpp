@@ -8,6 +8,7 @@
 #include "Components/HoverComponent.hpp"
 #include "Components/TagComponent.hpp"
 #include "Components/GarissonComponent.hpp"
+#include "Components/FactionComponent.hpp"
 
 #include "Config.hpp"
 #include <TGUI/TGUI.hpp>
@@ -66,21 +67,20 @@ namespace Systems {
             {
                 std::stringstream ss1;
                 ss1 << "Player 1";
-                ss1 << "\nDrones: " << gameState->playerDrones[0];
-                ss1 << "\nEnergy: " << gameState->playerEnergy[0];
+                ss1 << "\nDrones: " << gameState->playerDrones[Components::Faction::PLAYER_1];
+                ss1 << "\nEnergy: " << gameState->playerEnergy[Components::Faction::PLAYER_1];
                 player1Label->setText(ss1.str());
             }
 
             if(totalPlayers > 1){
                 std::stringstream ss2;
                 ss2 << "Player 2";
-                ss2 << "\nDrones: " << gameState->playerDrones[1];
-                ss2 << "\nEnergy: " << gameState->playerEnergy[1];
+                ss2 << "\nDrones: " << gameState->playerDrones[Components::Faction::PLAYER_2];
+                ss2 << "\nEnergy: " << gameState->playerEnergy[Components::Faction::PLAYER_2];
                 player2Label->setText(ss2.str());
             }
         }
         
-
         // Hover Panel display logic
         bool entityHovered = false;
         auto& entities = entityManager.getAllEntities();
@@ -110,7 +110,7 @@ namespace Systems {
                     ss << "\nProduction rate: " << productionRate << " s\n";
                     
                     auto* factionComp = entity.getComponent<Components::FactionComponent>();
-                    if(factionComp && factionComp->factionID != 0){ 
+                    if(factionComp && factionComp->faction != Components::Faction::NEUTRAL){ 
                         ss << "\nNext drone in: " << unsigned int(timeLeft) << " s";
                     }
                 }

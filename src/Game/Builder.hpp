@@ -25,7 +25,7 @@
 
 namespace Game {
 
-    EntityID createFactory(GameEntityManager& entityManager, std::string name = "", unsigned int factionID = 0, float productionRate = 1.f, float shieldRegenRate = 1.f) {
+    EntityID createFactory(GameEntityManager& entityManager, std::string name = "", Components::Faction faction = Components::Faction::NEUTRAL, float productionRate = 1.f, float shieldRegenRate = 1.f) {
         log_info << "Creating Factory, " << productionRate << " seconds for every drone";
         // Create Factory
 
@@ -50,13 +50,13 @@ namespace Game {
         });
         entityManager.addComponent(factoryID, Components::HoverComponent{});
         entityManager.addComponent(factoryID, Components::SelectableComponent{});
-        entityManager.addComponent(factoryID, Components::FactionComponent{factionID});
+        entityManager.addComponent(factoryID, Components::FactionComponent{faction});
         entityManager.addComponent(factoryID, Components::GarissonComponent{});
         entityManager.addComponent(factoryID, Components::ShieldComponent{0, 10, shieldRegenRate});
         return factoryID;
     }
 
-    EntityID createPowerPlant(GameEntityManager& entityManager, std::string name = "", unsigned int factionID = 0, float shieldRegenRate = 1.f, unsigned int energyCapacity=10) {
+    EntityID createPowerPlant(GameEntityManager& entityManager, std::string name = "", Components::Faction faction = Components::Faction::NEUTRAL, float shieldRegenRate = 1.f, unsigned int energyCapacity=10) {
         
         EntityID powerPlantID = entityManager.createEntity();
         entityManager.addComponent(powerPlantID, Components::PowerPlantComponent{name,energyCapacity});
@@ -77,13 +77,13 @@ namespace Game {
         });
         entityManager.addComponent(powerPlantID, Components::HoverComponent{});
         entityManager.addComponent(powerPlantID, Components::SelectableComponent{});
-        entityManager.addComponent(powerPlantID, Components::FactionComponent{factionID});
+        entityManager.addComponent(powerPlantID, Components::FactionComponent{faction});
         entityManager.addComponent(powerPlantID, Components::GarissonComponent{});
         entityManager.addComponent(powerPlantID, Components::ShieldComponent{0, energyCapacity, shieldRegenRate});
         return powerPlantID;
     }
 
-    EntityID createDrone(GameEntityManager& entityManager, std::string name = "", unsigned int factionID = 0) {
+    EntityID createDrone(GameEntityManager& entityManager, std::string name = "", Components::Faction faction = Components::Faction::NEUTRAL) {
         EntityID droneID = entityManager.createEntity();
         
         entityManager.addComponent(droneID, Components::DroneComponent{name});
@@ -105,7 +105,7 @@ namespace Game {
         });
 
         entityManager.addComponent(droneID, Components::MoveComponent{100.f, 0.f});
-        entityManager.addComponent(droneID, Components::FactionComponent{factionID});
+        entityManager.addComponent(droneID, Components::FactionComponent{faction});
 
         return droneID;
     }

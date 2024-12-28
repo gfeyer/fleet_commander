@@ -66,7 +66,7 @@ namespace Systems {
 
                 auto* faction = entity.getComponent<Components::FactionComponent>();
                 if (faction) {
-                    if (faction->factionID == 1) {
+                    if (faction->faction == Components::Faction::PLAYER_1) {
                         shape->shape->setFillColor(sf::Color::Red);
                     }
                 }
