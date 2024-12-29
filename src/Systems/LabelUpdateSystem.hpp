@@ -32,12 +32,12 @@ namespace Systems {
                 std::stringstream ss;
                 if(factory){
                     char buffer[50];
-                    std::snprintf(buffer, sizeof(buffer), "Factory\n%.1f/s", factory->droneProductionRate);
+                    std::snprintf(buffer, sizeof(buffer), "Factory (id:%d)\n%.1f/s",id, factory->droneProductionRate);
                     ss << buffer;
                 }
                 if(powerPlant){
                     char buffer[50];
-                    std::snprintf(buffer, sizeof(buffer), "FusionReactor\nCapacity: %d", powerPlant->capacity);
+                    std::snprintf(buffer, sizeof(buffer), "FusionReactor (id:%d)\nCapacity: %d", id, powerPlant->capacity);
                     ss << buffer;
                 }
                 if(drone){

@@ -78,7 +78,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     entityManager.addComponent(enemyAI, Components::EnemyAIComponent{});
 
     // Generate Map
-    Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 25, 100);
+    Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 10, 100);
 }
 
 Scene::~Scene()

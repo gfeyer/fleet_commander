@@ -45,9 +45,20 @@ public:
         return it != components.end() ? std::static_pointer_cast<T>(it->second).get() : nullptr;
     }
 
+    template<typename T>
+    const T* getComponent() const{
+        auto it = components.find(std::type_index(typeid(T)));
+        return it != components.end() ? std::static_pointer_cast<T>(it->second).get() : nullptr;
+    }
+
     // Check if a component exists
     template<typename T>
     bool hasComponent() {
+        return components.find(std::type_index(typeid(T))) != components.end();
+    }
+
+    template<typename T>
+    const bool hasComponent() const{
         return components.find(std::type_index(typeid(T))) != components.end();
     }
 };
