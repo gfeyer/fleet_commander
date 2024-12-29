@@ -28,7 +28,6 @@
 namespace Game {
 
     EntityID createFactory(GameEntityManager& entityManager, std::string name = "", sf::Vector2f position = sf::Vector2f(0.f, 0.f), Components::Faction faction = Components::Faction::NEUTRAL, float productionRate = 1.f, float shieldRegenRate = 1.f) {
-        log_info << "Creating Factory, " << productionRate << " drones/sec";
         // Create Factory
 
         EntityID factoryID = entityManager.createEntity();

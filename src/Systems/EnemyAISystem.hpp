@@ -147,7 +147,7 @@ namespace Systems {
                 availableFactoriesByDefense.emplace(defense, id);
             }
 
-            log_info << "AI: total drones available: " << totalDrones;
+            // log_info << "AI: total drones available: " << totalDrones;
 
             // Execute Action
             if (bestAction->first == "Wait") {
@@ -178,7 +178,7 @@ namespace Systems {
                     }
                     
                     EntityID selectedTargetID = selectedPowerStationsByDistance.begin()->second;
-                    log_info << "Attacking Power Station " << selectedTargetID;
+                    // log_info << "Attacking Power Station " << selectedTargetID;
                     aiComponent->highlightedEntityID = selectedTargetID;
 
                     // Add attack orders
@@ -187,7 +187,7 @@ namespace Systems {
                     }
 
                 }else{
-                    log_info << "Not enoug drones for attack";
+                    // log_info << "Not enoug drones for attack";
                 }
 
             }else if(bestAction->first == "AttackFactory"){
@@ -216,7 +216,7 @@ namespace Systems {
                     }
                     
                     EntityID selectedTargetID = selectedFactoriesByDistance.begin()->second;
-                    log_info << "Attacking Factory " << selectedTargetID;
+                    // log_info << "Attacking Factory " << selectedTargetID;
                     aiComponent->highlightedEntityID = selectedTargetID;
 
                     // Add attack orders
@@ -225,7 +225,7 @@ namespace Systems {
                     }
 
                 }else{
-                    log_info << "Not enough drones for attack";
+                    // log_info << "Not enough drones for attack";
                 }
             }else{
                 // do nothing

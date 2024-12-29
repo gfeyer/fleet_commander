@@ -126,18 +126,18 @@ namespace Systems {
         }
 
         // 3. Draw Debug Symbols
-        Entity& aiEntity = entityManager.getEnemyAIEntity();
-        auto* aiComp = aiEntity.getComponent<Components::EnemyAIComponent>();
-        if (aiComp && aiComp->highlightedEntityID != 0) {
-            auto* transform = entityManager.getEntity(aiComp->highlightedEntityID).getComponent<Components::TransformComponent>();
-            if (transform) {
-                sf::CircleShape selectionShape(20.f);
-                selectionShape.setOrigin(10.f, 10.f);
-                selectionShape.setFillColor(sf::Color::Magenta);
-                selectionShape.setPosition(transform->getPosition());
-                window.draw(selectionShape);
-            }
-        }
+        // Entity& aiEntity = entityManager.getEnemyAIEntity();
+        // auto* aiComp = aiEntity.getComponent<Components::EnemyAIComponent>();
+        // if (aiComp && aiComp->highlightedEntityID != 0) {
+        //     auto* transform = entityManager.getEntity(aiComp->highlightedEntityID).getComponent<Components::TransformComponent>();
+        //     if (transform) {
+        //         sf::CircleShape selectionShape(20.f);
+        //         selectionShape.setOrigin(10.f, 10.f);
+        //         selectionShape.setFillColor(sf::Color::Magenta);
+        //         selectionShape.setPosition(transform->getPosition());
+        //         window.draw(selectionShape);
+        //     }
+        // }
 
     }
 }
