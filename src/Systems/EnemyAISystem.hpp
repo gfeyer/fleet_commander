@@ -158,7 +158,7 @@ namespace Systems {
                 // Get eligible IDs where we have enough drones to attack
                 std::unordered_set<EntityID> selectedPowerStations;
                 for(auto& [defense, id] : availablePowerStationsByDefense){
-                    if(totalDrones > defense){
+                    if(totalDrones > defense+2){
                         selectedPowerStations.insert(id);
                     }else{
                         break;
@@ -196,7 +196,7 @@ namespace Systems {
                 // Get eligible IDs where we have enough drones to attack
                 std::unordered_set<EntityID> selectedFactories;
                 for(auto& [defense, id] : availableFactoriesByDefense){
-                    if(totalDrones > defense){
+                    if(totalDrones > defense+2){
                         selectedFactories.insert(id);
                     }else{
                         break;
