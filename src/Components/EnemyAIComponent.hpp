@@ -4,7 +4,7 @@
 namespace Components {
     struct EnemyAIComponent {
         float decisionTimer = 0.f;
-        float decisionTimerMax = 3.f; // decide every second
+        float decisionTimerMax = 1.f; // decide every second
         EntityID highlightedEntityID = 0;
     };
 }
