@@ -6,6 +6,7 @@ Colonization simulator 2D
 
 ## Screenshot
 
-![Screenshot1](docs/images/screenshot_005.png)
+![Screenshot1](docs/images/screenshot_007.png)
 
-![Screenshot2](docs/images/screenshot_003.png)
+
+![Screenshot2](docs/images/screenshot_010.png)
