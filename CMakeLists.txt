@@ -32,7 +32,7 @@ target_link_libraries(FleetDominion PRIVATE
 )
 
 # Set the C++ standard
-target_compile_features(FleetDominion PRIVATE cxx_std_17)
+target_compile_features(FleetDominion PRIVATE cxx_std_20)
 
 add_custom_command(
     TARGET FleetDominion POST_BUILD
