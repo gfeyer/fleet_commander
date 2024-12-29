@@ -22,6 +22,9 @@ namespace Systems {
         // GUI widgets declarations
         static tgui::Panel::Ptr infoPanel = nullptr;
         static tgui::Panel::Ptr topPanel = nullptr;
+        static tgui::Panel::Ptr gameOverPanel = nullptr;
+
+        // Top screen labels
         static tgui::Label::Ptr player1Label = nullptr;
         static tgui::Label::Ptr player2Label = nullptr;
         
@@ -172,6 +175,48 @@ namespace Systems {
         if (!entityHovered) {
             infoPanel->setVisible(false);
         }
+
+
+        // Game Over Panel - initialization
+        if (!gameOverPanel) {
+            gameOverPanel = tgui::Panel::create({"400", "200"}); // Larger panel for game over text
+            gameOverPanel->setVisible(false); // Hidden by default
+            gameOverPanel->setRenderer(theme->getRenderer("Panel"));
+            gameOverPanel->setPosition({"50%", "40%"}); // Centered on screen
+            gameOverPanel->setOrigin(0.5f, 0.5f);
+
+            auto gameOverLabel = tgui::Label::create();
+            gameOverLabel->setTextSize(24);
+            gameOverLabel->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Center);
+            gameOverLabel->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+            gameOverLabel->setRenderer(theme->getRenderer("Label"));
+            gameOverLabel->setPosition({"50%", "50%"});
+            gameOverLabel->setOrigin(0.5f, 0.5f);
+
+            gameOverPanel->add(gameOverLabel, "GameOverLabel");
+
+            gui.add(gameOverPanel);
+        }
+
+        if(gameState && gameState->isGameOver){
+            auto gameOverLabel = gameOverPanel->get<tgui::Label>("GameOverLabel");
+    
+            if (gameState->winner == Components::Faction::PLAYER_1) {
+                gameOverLabel->setText("🎉 YOU WIN! 🎉");
+                gameOverLabel->getRenderer()->setTextColor(tgui::Color::Green);
+            } else if (gameState->winner == Components::Faction::PLAYER_2) {
+                gameOverLabel->setText("💀 YOU LOSE! 💀");
+                gameOverLabel->getRenderer()->setTextColor(tgui::Color::Red);
+            } else {
+                gameOverLabel->setText("🏁 GAME OVER 🏁");
+                gameOverLabel->getRenderer()->setTextColor(tgui::Color::White);
+            }
+
+            gameOverPanel->setVisible(true);
+        }else{
+            gameOverPanel->setVisible(false);
+        }
+
         
     }
 }
