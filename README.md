@@ -1,10 +1,11 @@
-# colony_simulator
-Colonization simulator 2D
+# Fleet Dominion
 
-## TODO
-- Add AI system 
+### Space strategy game
 
-## Screenshot
+### TODO
+
+
+### Screenshots
 
 ![Screenshot1](docs/images/screenshot_007.png)
 
