@@ -13,7 +13,7 @@ int main() {
     srand(time(NULL));
 
     // Create Window
-    sf::RenderWindow window(sf::VideoMode(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT), "Colony Simulator");
+    sf::RenderWindow window(sf::VideoMode(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT), "Fleet Dominion");
     window.setFramerateLimit(60);
 
     Scene scene(window);

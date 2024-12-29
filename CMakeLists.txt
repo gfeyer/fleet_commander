@@ -20,10 +20,10 @@ find_package(TGUI CONFIG REQUIRED)
 
 # Define the executable
 file(GLOB_RECURSE SOURCES src/*.cpp)
-add_executable(main ${SOURCES})
+add_executable(FleetDominion ${SOURCES})
 
 # Link libraries to the executable
-target_link_libraries(main PRIVATE 
+target_link_libraries(FleetDominion PRIVATE 
     sfml-system 
     sfml-window 
     sfml-graphics 
@@ -32,10 +32,10 @@ target_link_libraries(main PRIVATE
 )
 
 # Set the C++ standard
-target_compile_features(main PRIVATE cxx_std_17)
+target_compile_features(FleetDominion PRIVATE cxx_std_17)
 
 add_custom_command(
-    TARGET main POST_BUILD
+    TARGET FleetDominion POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:main>/assets
+    ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:FleetDominion>/assets
 )
