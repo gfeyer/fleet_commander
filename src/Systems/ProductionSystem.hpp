@@ -6,7 +6,7 @@
 #include "Core/Entity.hpp"
 
 #include "Components/FactoryComponent.hpp"
-#include "Game/Builder.hpp"
+#include "Game/GameBuilder.hpp"
 
 #include "Utils/Logger.hpp"
 #include "Config.hpp"

@@ -1,5 +1,5 @@
-#ifndef BUILDER_HPP
-#define BUILDER_HPP
+#ifndef GAME_BUILDER_HPP
+#define GAME_BUILDER_HPP
 
 #include <unordered_map>
 #include <string>
@@ -105,4 +105,4 @@ namespace Game {
 }
 
 
-#endif // BUILDER_HPP
+#endif // GAME_BUILDER_HPP

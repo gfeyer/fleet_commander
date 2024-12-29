@@ -34,7 +34,7 @@
 #include "Systems/EnemyAISystem.hpp"
 #include "Systems/GameStateSystem.hpp"
 
-#include "Game/Builder.hpp"
+#include "Game/GameBuilder.hpp"
 #include "Game/MapGenerator.hpp"
 
 #include "Utils/Random.hpp"
@@ -75,8 +75,8 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     EntityID gameStateID = entityManager.createEntity();
     entityManager.addComponent(gameStateID, Components::GameStateComponent{2});
 
-    EntityID enemyAI = entityManager.createEntity();
-    entityManager.addComponent(enemyAI, Components::AIComponent{});
+    EntityID gameAI = entityManager.createEntity();
+    entityManager.addComponent(gameAI, Components::AIComponent{});
 
     // Generate Map
     Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 30, 100);
