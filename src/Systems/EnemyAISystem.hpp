@@ -14,7 +14,7 @@
 namespace Systems {
         void EnemyAISystem(Game::GameEntityManager& entityManager, float dt) {
             Entity& aiEntity = entityManager.getEnemyAIEntity();
-            auto* aiComponent = aiEntity.getComponent<Components::EnemyAIComponent>();
+            auto* aiComponent = aiEntity.getComponent<Components::AIComponent>();
 
             if(!aiComponent){
                 log_err << "Failed to get aiComponent" << std::endl;

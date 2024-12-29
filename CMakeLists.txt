@@ -15,9 +15,6 @@ find_package(SFML COMPONENTS system window graphics audio CONFIG REQUIRED)
 # Find TGUI
 find_package(TGUI CONFIG REQUIRED)
 
-# message(STATUS "TGUI Found: ${TGUI_FOUND}")
-# message(STATUS "TGUI Include Dir: ${TGUI_INCLUDE_DIR}")
-
 # Define the executable
 file(GLOB_RECURSE SOURCES src/*.cpp)
 add_executable(FleetDominion ${SOURCES})
@@ -30,6 +27,10 @@ target_link_libraries(FleetDominion PRIVATE
     sfml-audio 
     TGUI::TGUI
 )
+
+# Find behaviortree_cpp
+find_package(behaviortree_cpp CONFIG REQUIRED)
+target_link_libraries(FleetDominion PRIVATE BT::behaviortree_cpp)
 
 # Set the C++ standard
 target_compile_features(FleetDominion PRIVATE cxx_std_20)

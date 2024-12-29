@@ -9,7 +9,7 @@
 #include "Components/DroneComponent.hpp"
 #include "Components/ShieldComponent.hpp"
 #include "Components/GameStateComponent.hpp"
-#include "Components/EnemyAIComponent.hpp"
+#include "Components/AIComponent.hpp"
 
 namespace Game {
 
@@ -93,7 +93,7 @@ namespace Game {
                 if (entity.hasComponent<Components::GameStateComponent>()) {
                     gameStateEntityID = 0;
                 }
-                if (entity.hasComponent<Components::EnemyAIComponent>()) {
+                if (entity.hasComponent<Components::AIComponent>()) {
                     enemyAIEntityID = 0;
                 }
 
@@ -118,7 +118,7 @@ namespace Game {
             if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
                 gameStateEntityID = id;
             }
-            if constexpr (std::is_same<T, Components::EnemyAIComponent>::value) {
+            if constexpr (std::is_same<T, Components::AIComponent>::value) {
                 enemyAIEntityID = id;
             }
         }
@@ -140,7 +140,7 @@ namespace Game {
             if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
                 gameStateEntityID = 0;
             }
-            if constexpr (std::is_same<T, Components::EnemyAIComponent>::value) {
+            if constexpr (std::is_same<T, Components::AIComponent>::value) {
                 enemyAIEntityID = 0;
             }
         }

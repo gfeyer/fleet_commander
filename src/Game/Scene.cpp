@@ -20,7 +20,7 @@
 #include "Components/TagComponent.hpp"
 #include "Components/HoverComponent.hpp"
 #include "Components/GameStateComponent.hpp"
-#include "Components/EnemyAIComponent.hpp"
+#include "Components/AIComponent.hpp"
 
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
@@ -76,7 +76,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     entityManager.addComponent(gameStateID, Components::GameStateComponent{2});
 
     EntityID enemyAI = entityManager.createEntity();
-    entityManager.addComponent(enemyAI, Components::EnemyAIComponent{});
+    entityManager.addComponent(enemyAI, Components::AIComponent{});
 
     // Generate Map
     Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 30, 100);

@@ -1,12 +1,14 @@
-#ifndef ENEMY_AI_COMPONENT_HPP
-#define ENEMY_AI_COMPONENT_HPP
+#ifndef AI_COMPONENT_HPP
+#define AI_COMPONENT_HPP
+
+#include "Game/GameEntityManager.hpp"
 
 namespace Components {
-    struct EnemyAIComponent {
+    struct AIComponent {
         float decisionTimer = 0.f;
         float decisionTimerMax = 1.f; // decide every second
         EntityID highlightedEntityID = 0;
     };
 }
 
-#endif // ENEMY_AI_COMPONENT_HPP
+#endif // AI_COMPONENT_HPP
