@@ -44,7 +44,7 @@ namespace Systems {
                     // Check if mouse is within entity bounds (eg. click on entity)
                     if (targetShapeComp->shape->getGlobalBounds().contains(worldPos)) {
                         if (originSelectionExists && originEntityID != targetID) {
-                            log_info << "Attack entity " << targetID << " from " << originEntityID;
+                            // log_info << "Attack entity " << targetID << " from " << originEntityID;
                             targetSelectableComp->isSelected = false;
 
                             Entity& originEntity = entityManager.getEntity(originEntityID);

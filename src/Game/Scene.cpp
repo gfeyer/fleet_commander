@@ -70,7 +70,6 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     //         )
     //     }
     // );
-    // entities.emplace(background.id, std::move(background));
 
     // Create Game State Entity
     EntityID gameStateID = entityManager.createEntity();

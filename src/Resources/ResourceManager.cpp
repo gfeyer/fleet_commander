@@ -7,7 +7,7 @@ namespace Resource{
 
 ResourceManager::ResourceManager() {
     log_info << "Loading assets";
-    loadTexture(Paths::BACKGROUND_4);
+    // loadTexture(Paths::BACKGROUND_4);
     loadTheme(Paths::DARK_THEME);
     loadFont(Paths::FONT_TOXIGENESIS);
 }
