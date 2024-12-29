@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <map>
+#include <unordered_set>
 #include <string>
 #include <cmath>
 #include <algorithm>
@@ -86,6 +87,8 @@ namespace Systems {
             std::map<EntityID, unsigned int> availableDrones;
             std::map<EntityID, defense> availablePowerStations;
             std::map<EntityID, defense> availableFactories; 
+            sf::Vector2f aiCentralPosition = {0.f, 0.f};
+            std::unordered_set<EntityID> entitiesWhereDronesAreStationed;
 
             for (const auto& [id, entity] : entityManager.getAllEntities()) {
                 auto* shieldComp = entity.getComponent<Components::ShieldComponent>();
@@ -95,11 +98,30 @@ namespace Systems {
                 auto* factionComp = entity.getComponent<Components::FactionComponent>();
                 auto* garissonComp = entity.getComponent<Components::GarissonComponent>();
 
-                // compute available drones
+                std::vector<sf::Vector2f> aiBuildingPositions;
+                
+                // compute available drones & central AI position on map
                 if(factionComp && factionComp->faction == Components::Faction::PLAYER_2 && garissonComp){
-                    availableDrones[id] += garissonComp->getDroneCount();
-                    totalDrones += garissonComp->getDroneCount();
+
+                    unsigned int droneCount = garissonComp->getDroneCount();
+                    availableDrones[id] += droneCount;
+                    totalDrones += droneCount;
+                    auto* transform = entity.getComponent<Components::TransformComponent>();
+                    if(transform){
+                        aiBuildingPositions.push_back(transform->getPosition());
+                    }
+
+                    if (droneCount > 0) {
+                        entitiesWhereDronesAreStationed.insert(id);
+                    }
                 }
+
+                for(auto& pos : aiBuildingPositions){
+                    aiCentralPosition.x += pos.x;
+                    aiCentralPosition.y += pos.y;
+                }
+                aiCentralPosition.x /= aiBuildingPositions.size();
+                aiCentralPosition.y /= aiBuildingPositions.size();
 
                 // compute defenses for all remaining units
                 if(shieldComp && garissonComp && factionComp && factionComp->faction != Components::Faction::PLAYER_2){
@@ -115,7 +137,7 @@ namespace Systems {
                 }
             }
 
-            // Reversed Maps
+            // Reversed Maps so we have defense -> id
             std::multimap<defense, EntityID> availablePowerStationsByDefense;
             for(auto& [id, defense] : availablePowerStations){
                 availablePowerStationsByDefense.emplace(defense, id);
@@ -132,18 +154,78 @@ namespace Systems {
                 // TODO: nothing
             }else if(bestAction->first == "AttackPowerStation"){
                 // Get the best power station
+                
+                // Get eligible IDs where we have enough drones to attack
+                std::unordered_set<EntityID> selectedPowerStations;
                 for(auto& [defense, id] : availablePowerStationsByDefense){
-                    log_info << "Attacking Power Station " << id << " with " << defense << " defense" << std::endl;
-                    aiComponent->highlightedEntityID = id;
-                    break;
+                    if(totalDrones > defense){
+                        selectedPowerStations.insert(id);
+                    }else{
+                        break;
+                    }
+                }
+
+                // select closest target
+                if(selectedPowerStations.size() > 0){
+                    
+                    std::map<float, EntityID> selectedPowerStationsByDistance;
+                    for(auto& id : selectedPowerStations){
+                        auto* transform = entityManager.getEntity(id).getComponent<Components::TransformComponent>();
+                        if(transform){
+                            float distance = sqrt(pow(transform->getPosition().x - aiCentralPosition.x, 2) + pow(transform->getPosition().y - aiCentralPosition.y, 2));
+                            selectedPowerStationsByDistance.emplace(distance, id);
+                        }
+                    }
+                    
+                    EntityID selectedTargetID = selectedPowerStationsByDistance.begin()->second;
+                    log_info << "Attacking Power Station " << selectedTargetID;
+                    aiComponent->highlightedEntityID = selectedTargetID;
+
+                    // Add attack orders
+                    for(auto id : entitiesWhereDronesAreStationed){
+                        entityManager.addComponent(id, Components::AttackOrderComponent{id, selectedTargetID});
+                    }
+
+                }else{
+                    log_info << "Not enoug drones for attack";
                 }
 
             }else if(bestAction->first == "AttackFactory"){
                 // Get the best factory
+                
+                // Get eligible IDs where we have enough drones to attack
+                std::unordered_set<EntityID> selectedFactories;
                 for(auto& [defense, id] : availableFactoriesByDefense){
-                    log_info << "Attacking Factory " << id << " with " << defense << " defense" << std::endl;
-                    aiComponent->highlightedEntityID = id;
-                    break;
+                    if(totalDrones > defense){
+                        selectedFactories.insert(id);
+                    }else{
+                        break;
+                    }
+                }
+
+                // select closest target
+                if(selectedFactories.size() > 0){
+                    
+                    std::map<float, EntityID> selectedFactoriesByDistance;
+                    for(auto& id : selectedFactories){
+                        auto* transform = entityManager.getEntity(id).getComponent<Components::TransformComponent>();
+                        if(transform){
+                            float distance = sqrt(pow(transform->getPosition().x - aiCentralPosition.x, 2) + pow(transform->getPosition().y - aiCentralPosition.y, 2));
+                            selectedFactoriesByDistance.emplace(distance, id);
+                        }
+                    }
+                    
+                    EntityID selectedTargetID = selectedFactoriesByDistance.begin()->second;
+                    log_info << "Attacking Factory " << selectedTargetID;
+                    aiComponent->highlightedEntityID = selectedTargetID;
+
+                    // Add attack orders
+                    for(auto id : entitiesWhereDronesAreStationed){
+                        entityManager.addComponent(id, Components::AttackOrderComponent{id, selectedTargetID});
+                    }
+
+                }else{
+                    log_info << "Not enough drones for attack";
                 }
             }else{
                 // do nothing

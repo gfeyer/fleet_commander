@@ -87,7 +87,7 @@ namespace Game {
         auto player1Faction = Components::Faction::PLAYER_1;
         float productionRate = 1.f;
         float shieldRegenRate = Utils::getRandomFloat(0.75f, 1.f);
-        unsigned int capacity = Utils::getRandomFloat(8.f, 12.f);
+        unsigned int capacity = Utils::getRandomFloat(13.f, 20.f);
 
         Game::createFactory(entityManager, "Factory #0", player1FactoryPos, player1Faction, productionRate, shieldRegenRate);
         Game::createPowerPlant(entityManager, "Power Plant #0", player1PowerPlantPos, player1Faction, shieldRegenRate, capacity);
