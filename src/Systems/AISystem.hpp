@@ -1,5 +1,5 @@
-#ifndef ENEMY_AI_SYSTEM_HPP
-#define ENEMY_AI_SYSTEM_HPP
+#ifndef AI_SYSTEM_HPP
+#define AI_SYSTEM_HPP
 
 #include <unordered_map>
 #include <map>
@@ -12,9 +12,9 @@
 #include "Game/GameEntityManager.hpp"
 
 namespace Systems {
-        void EnemyAISystem(Game::GameEntityManager& entityManager, float dt) {
-            Entity& aiEntity = entityManager.getEnemyAIEntity();
-            auto* aiComponent = aiEntity.getComponent<Components::EnemyAIComponent>();
+        void AISystem(Game::GameEntityManager& entityManager, float dt) {
+            Entity& aiEntity = entityManager.getAIEntity();
+            auto* aiComponent = aiEntity.getComponent<Components::AIComponent>();
 
             if(!aiComponent){
                 log_err << "Failed to get aiComponent" << std::endl;
@@ -234,4 +234,4 @@ namespace Systems {
 
 }
 
-#endif // ENEMY_AI_SYSTEM_HPP
+#endif // AI_SYSTEM_HPP

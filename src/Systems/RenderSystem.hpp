@@ -126,8 +126,8 @@ namespace Systems {
         }
 
         // 3. Draw Debug Symbols
-        // Entity& aiEntity = entityManager.getEnemyAIEntity();
-        // auto* aiComp = aiEntity.getComponent<Components::EnemyAIComponent>();
+        // Entity& aiEntity = entityManager.getAIEntity();
+        // auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
         // if (aiComp && aiComp->highlightedEntityID != 0) {
         //     auto* transform = entityManager.getEntity(aiComp->highlightedEntityID).getComponent<Components::TransformComponent>();
         //     if (transform) {
