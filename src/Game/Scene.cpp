@@ -31,7 +31,7 @@
 #include "Systems/ProductionSystem.hpp"
 #include "Systems/CombatSystem.hpp"
 #include "Systems/ShieldSystem.hpp"
-#include "Systems/AISystem.hpp"
+#include "Systems/AI/AISystem.hpp"
 #include "Systems/GameStateSystem.hpp"
 
 #include "Game/Builder.hpp"
@@ -98,7 +98,7 @@ void Scene::update(float dt)
     Systems::ShieldSystem(entityManager, dt);
     Systems::CombatSystem(entityManager, dt);
     Systems::LabelUpdateSystem(entityManager, dt);
-    Systems::AISystem(entityManager, dt);
+    Systems::AI::AISystem(entityManager, dt);
     Systems::GameStateSystem(entityManager, dt);
 
     // Wrap Camera Position

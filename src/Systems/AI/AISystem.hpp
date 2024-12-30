@@ -10,8 +10,11 @@
 
 
 #include "Game/GameEntityManager.hpp"
+#include "Systems/AI/ExecuteSystem.hpp"
+#include "Systems/AI/PlanSystem.hpp"
+#include "Systems/AI/PerceptionSystem.hpp"
 
-namespace Systems {
+namespace Systems::AI {
         void AISystem(Game::GameEntityManager& entityManager, float dt) {
 
             // Run AI every 1 second
@@ -23,6 +26,17 @@ namespace Systems {
                 return;
             }
             decisionTimer = 0.f;
+
+            // Run AI
+            Systems::AI::PerceptionSystem(entityManager, dt);
+            Systems::AI::PlanSystem(entityManager, dt);
+            Systems::AI::ExecuteSystem(entityManager, dt);
+
+            return;
+
+            // ----------------------------- 
+            // OLD AI -- ignore
+            // -----------------------------
 
             // Get data
             Entity& aiEntity = entityManager.getAIEntity();
