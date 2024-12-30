@@ -14,7 +14,6 @@ namespace Systems::AI {
             entityManager.addComponent(source, Components::AttackOrderComponent{source, target});
         }
     }
-
 }
 
 #endif // AI_EXECUTE_SYSTEM_HPP

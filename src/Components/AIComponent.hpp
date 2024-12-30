@@ -5,21 +5,29 @@
 #include <unordered_set>
 #include <map>
 #include <vector>
+#include <set>
 
 namespace Components {
     struct EntityIDPair{
         EntityID source;
         EntityID target;
+
+        // Define ordering for std::set
+        bool operator<(const EntityIDPair& other) const {
+            return std::tie(source, target) < std::tie(other.source, other.target);
+        }
     };
 
     struct AIPerception {
         unsigned int aiTotalDrones = 0;
         unsigned int aiTotalEnergy = 0;
         float aiDroneProductionRate = 0.f;
+        std::set<EntityIDPair> aiAttackOrders;
 
         unsigned int playerTotalDrones = 0;
         unsigned int playerTotalEnergy = 0;
         float playerDroneProductionRate = 0.f;
+        std::set<EntityIDPair> playerAttackOrders;
 
         sf::Vector2f aiCentralPosition;
 
@@ -44,6 +52,9 @@ namespace Components {
 
             playerGarissons.clear();
             aiGarissons.clear();
+
+            aiAttackOrders.clear();
+            playerAttackOrders.clear();
         }
     };
 

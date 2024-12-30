@@ -94,6 +94,20 @@ namespace Systems::AI {
                 // log_info << "Garisson:" << aiGarissonID << " -> " << targetEntityID << " : " << distance;
             }
         }
+
+        // Get all attack orders
+        for(auto& [id, entity] : entities){
+            auto *attackOrder = entity.getComponent<Components::AttackOrderComponent>();
+            auto* faction = entity.getComponent<Components::FactionComponent>();
+            if(attackOrder && faction){
+                if(faction->faction == Components::Faction::PLAYER_1){
+                    aiComp->perception.playerAttackOrders.insert({attackOrder->origin, attackOrder->target});
+                }
+                if(faction->faction == Components::Faction::PLAYER_2){
+                    aiComp->perception.aiAttackOrders.insert({attackOrder->origin, attackOrder->target});
+                }
+            }
+        }
     }
 }
 
