@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.24)
 project(ColonySimulator LANGUAGES CXX)
 
 # Set output directory for executables
@@ -27,7 +27,7 @@ target_link_libraries(FleetDominion PRIVATE
     sfml-system 
     sfml-window 
     sfml-graphics 
-    sfml-audio 
+#    sfml-audio 
     TGUI::TGUI
 )
 
