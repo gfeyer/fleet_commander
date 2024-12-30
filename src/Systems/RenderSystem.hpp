@@ -128,7 +128,7 @@ namespace Systems {
         // 3. Draw Debug Symbols
         Entity& aiEntity = entityManager.getAIEntity();
         auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
-        if (aiComp && aiComp) {
+        if (aiComp && aiComp && false) { // disable
             for (auto& target : aiComp->debug.pinkDebugTargets) {
                 sf::CircleShape selectionShape(20.f);
                 selectionShape.setOrigin(10.f, 10.f);

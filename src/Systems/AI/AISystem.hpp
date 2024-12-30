@@ -17,9 +17,9 @@
 namespace Systems::AI {
         void AISystem(Game::GameEntityManager& entityManager, float dt) {
 
-            // Run AI every 2 seconds
+            // Run AI every few seconds
             static float decisionTimer = 0.f;
-            static float decisionTimerMax = 1.5f;
+            static float decisionTimerMax = 2.5f;
 
             decisionTimer += dt;
             if(decisionTimer < decisionTimerMax){
