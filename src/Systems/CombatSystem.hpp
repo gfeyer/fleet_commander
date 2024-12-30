@@ -75,8 +75,8 @@ namespace Systems {
 
                         Entity& originEntity = entityManager.getEntity(attackOrder->origin);
                         Entity& targetEntity = entityManager.getEntity(attackOrder->target);
-
-                        auto* originFaction = originEntity.getComponent<Components::FactionComponent>();
+                        
+                        auto* originFaction = entity.getComponent<Components::FactionComponent>(); // Get the faction of the drone, in case the origin entity changed factions
                         auto* targetFaction = targetEntity.getComponent<Components::FactionComponent>();
                         auto* targetGarisson = targetEntity.getComponent<Components::GarissonComponent>();
                         auto* targetShield = targetEntity.getComponent<Components::ShieldComponent>();
