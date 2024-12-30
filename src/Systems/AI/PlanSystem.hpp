@@ -165,11 +165,12 @@ namespace Systems::AI {
                     continue;
                 }
 
+                EntityID sourceID = source;
                 auto found_source = std::find_if(
                     aiComp->perception.aiAttackOrders.begin(),
                     aiComp->perception.aiAttackOrders.end(),
-                    [source](const Components::EntityIDPair& pair) {
-                        return pair.source == source;
+                    [sourceID](const Components::EntityIDPair& pair) {
+                        return pair.source == sourceID;
                     }
                 );
 
