@@ -48,7 +48,10 @@ namespace Systems {
                             targetSelectableComp->isSelected = false;
 
                             Entity& originEntity = entityManager.getEntity(originEntityID);
-                            entityManager.addComponent(originEntityID, Components::AttackOrderComponent{originEntityID, targetID});
+                            auto* factionComp = originEntity.getComponent<Components::FactionComponent>();
+                            if(factionComp->faction == Components::Faction::PLAYER_1){
+                                entityManager.addComponent(originEntityID, Components::AttackOrderComponent{originEntityID, targetID});
+                            }
                             originEntity.getComponent<Components::SelectableComponent>()->isSelected = false;
                         }else{
                             auto* factionComp = targetEntity.getComponent<Components::FactionComponent>();
