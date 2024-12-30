@@ -34,7 +34,7 @@ namespace Systems::AI {
         auto shieldRegenRate = targetShield->regenRate;
         auto shieldRegenCost = timeToReachTarget * shieldRegenRate;
 
-        return droneCost + currentShield + shieldRegenCost + 1.f;
+        return droneCost + currentShield + shieldRegenCost;
     }
 
     std::unordered_map<Strategy, float> computeStrategyPriorities(Game::GameEntityManager& entityManager) {
@@ -120,11 +120,12 @@ namespace Systems::AI {
 
             for(auto [distance, targetEntityID] : it->second){
                 float costForSuccesfulAttack = computeAttackCost(entityManager, targetEntityID, distance);
+                costForSuccesfulAttack += 2.f; // add some buffer
 
                 auto droneCountAtThisGarisson = aiComp->perception.garissonByDroneCount.at(originGarissonID);
 
                 if(droneCountAtThisGarisson > costForSuccesfulAttack){
-                    // log_info << "Can conquer " << targetEntityID << " from " << originGarissonID;
+                    log_info << "Can conquer " << targetEntityID << " from " << originGarissonID << ", dist: " << distance;
 
                     auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
                     auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
@@ -146,7 +147,7 @@ namespace Systems::AI {
                 auto* targetPowerPlantComp = entityManager.getComponent<Components::PowerPlantComponent>(target);
                 auto* targetFactoryComp = entityManager.getComponent<Components::FactoryComponent>(target);
 
-                auto found = std::find_if(
+                auto found_target = std::find_if(
                     aiComp->perception.aiAttackOrders.begin(),
                     aiComp->perception.aiAttackOrders.end(),
                     [target](const Components::EntityIDPair& pair) {
@@ -154,8 +155,21 @@ namespace Systems::AI {
                     }
                 );
 
-                if(found != aiComp->perception.aiAttackOrders.end()){
-                    // Already issued orders on this and order is in flight
+                if(found_target != aiComp->perception.aiAttackOrders.end()){
+                    // Already issued attach orders for this target
+                    continue;
+                }
+
+                auto found_source = std::find_if(
+                    aiComp->perception.aiAttackOrders.begin(),
+                    aiComp->perception.aiAttackOrders.end(),
+                    [source](const Components::EntityIDPair& pair) {
+                        return pair.source == source;
+                    }
+                );
+
+                if(found_source != aiComp->perception.aiAttackOrders.end()){
+                    // Already issued orders from this source
                     continue;
                 }
 
