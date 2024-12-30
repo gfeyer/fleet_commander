@@ -85,6 +85,8 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 Scene::~Scene()
 {
     log_info << "Destroying Scene";
+    log_info << "Releasing GUI resources";
+    gui.release();
 }
 
 void Scene::update(float dt)

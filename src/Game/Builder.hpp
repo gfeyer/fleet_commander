@@ -35,7 +35,8 @@ namespace Game {
         entityManager.addComponent(factoryID, Components::FactoryComponent{name, productionRate});
         entityManager.addComponent(factoryID, Components::TransformComponent{position, 0, sf::Vector2f(1, 1)});
         auto shape = sf::RectangleShape({Config::FACTORY_SIZE, Config::FACTORY_SIZE});
-        shape.setFillColor(sf::Color::Color(100, 100, 100));
+        sf::Color color{100, 100, 100};
+        shape.setFillColor(color);
         shape.setOrigin(shape.getSize().x / 2, shape.getSize().y / 2);
         entityManager.addComponent(factoryID, Components::ShapeComponent{std::make_shared<sf::RectangleShape>(shape)});
         entityManager.addComponent(factoryID, Components::LabelComponent{name, 
@@ -57,7 +58,8 @@ namespace Game {
         entityManager.addComponent(powerPlantID, Components::PowerPlantComponent{name,energyCapacity});
         entityManager.addComponent(powerPlantID, Components::TransformComponent{position, 0, sf::Vector2f(1, 1)});
         auto shape = sf::CircleShape(Config::POWER_PLANT_RADIUS);
-        shape.setFillColor(sf::Color::Color(100, 100, 100));
+        sf::Color color{100, 100, 100};
+        shape.setFillColor(color);
         shape.setOrigin(Config::POWER_PLANT_RADIUS, Config::POWER_PLANT_RADIUS);
         entityManager.addComponent(powerPlantID, Components::ShapeComponent{std::make_shared<sf::CircleShape>(shape)});
         entityManager.addComponent(powerPlantID, Components::LabelComponent{name, 
@@ -87,8 +89,8 @@ namespace Game {
         shape->setPoint(0, sf::Vector2f(0.f, -Config::DRONE_LENGTH));  // Top point
         shape->setPoint(1, sf::Vector2f(-Config::DRONE_LENGTH, Config::DRONE_LENGTH)); // Bottom-left point
         shape->setPoint(2, sf::Vector2f(Config::DRONE_LENGTH, Config::DRONE_LENGTH));  // Bottom-right point
-
-        shape->setFillColor(sf::Color::Color(100, 100, 100));
+        sf::Color color{100, 100, 100};
+        shape->setFillColor(color);
         entityManager.addComponent(droneID, Components::ShapeComponent{shape});
         entityManager.addComponent(droneID, Components::LabelComponent{name, 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
