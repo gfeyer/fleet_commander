@@ -12,11 +12,12 @@ namespace Game::AI {
 
         // Register Nodes
         // TODO ...
-        factory.registerSimpleAction("CheckBattery", [&](BT::TreeNode&){ return BT::NodeStatus::SUCCESS; });
+        factory.registerSimpleAction("ReturnSuccess", [&](BT::TreeNode&){
+            log_info << "Node: ReturnSuccess";
+            return BT::NodeStatus::SUCCESS; 
+        });
 
-        log_info << "Creating Behavior Tree";
-        auto tree = factory.createTreeFromFile("behaviortree_balanced.xml");
-        log_info << "Finished Behavior Tree";
+        auto tree = factory.createTreeFromFile("ai_balanced.xml");
         return tree;
     }
 }

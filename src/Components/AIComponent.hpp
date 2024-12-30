@@ -7,8 +7,6 @@
 namespace Components {
     struct AIComponent {
         BT::Tree AITree;
-        float decisionTimer = 0.f;// TODO: move this out to the system
-        float decisionTimerMax = 1.f; // TODO: move this out to the system
         EntityID highlightedEntityID = 0;
 
         AIComponent(BT::Tree&& tree) : AITree(std::move(tree)) {}
