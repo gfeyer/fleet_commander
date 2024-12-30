@@ -6,8 +6,8 @@
 
 namespace Components {
     struct GameStateComponent {
-        std::unordered_map<Faction, unsigned int> playerDrones;
-        std::unordered_map<Faction, unsigned int> playerEnergy;
+        std::unordered_map<Faction, int> playerDrones;
+        std::unordered_map<Faction, int> playerEnergy;
         Faction winner = Faction::NEUTRAL;
         bool isGameOver = false;
 

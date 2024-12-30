@@ -126,7 +126,7 @@ namespace Systems::AI {
                 auto droneCountAtThisGarisson = aiComp->perception.garissonByDroneCount.at(originGarissonID);
 
                 if(droneCountAtThisGarisson > costForSuccesfulAttack){
-                    log_info << "Can conquer " << targetEntityID << " from " << originGarissonID << ", dist: " << distance;
+                    // log_info << "Can conquer " << targetEntityID << " from " << originGarissonID << ", dist: " << distance;
 
                     auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
                     auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
@@ -157,7 +157,7 @@ namespace Systems::AI {
                 );
 
                 if(found_target != aiComp->perception.aiAttackOrders.end()){
-                    log_info << "Already issued attack orders to this target";
+                    // log_info << "Already issued attack orders to this target";
                     continue;
                 }
 
@@ -170,7 +170,7 @@ namespace Systems::AI {
                 );
 
                 if(found_source != aiComp->perception.aiAttackOrders.end()){
-                    log_info << "Already issued attack orders from this source";
+                    // log_info << "Already issued attack orders from this source";
                     continue;
                 }
 
@@ -210,20 +210,29 @@ namespace Systems::AI {
         }
 
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
-        if(aiComp->plan.potentialSingleAttackTargetsByDistance.empty()){
-            
-            // Find a random garisson
+        if (aiComp->plan.potentialSingleAttackTargetsByDistance.empty()) {
             std::vector<EntityID> garissons{aiComp->perception.aiGarissons.begin(), aiComp->perception.aiGarissons.end()};
 
-            if(!garissons.empty()){
-                unsigned int randIndx = Utils::getRandomFloat(0.f, garissons.size()-1);
-                EntityID targetGarissonID = garissons[randIndx];
+            if (!garissons.empty()) {
+                // Shuffle garissons for randomness
+                std::shuffle(garissons.begin(), garissons.end(), std::mt19937(std::random_device()()));
 
-                log_info << "Consolidate drones into " << targetGarissonID;
+                // Determine number of groups (1 per 5 garissons)
+                size_t groupCount = static_cast<size_t>(std::ceil(garissons.size() / 5.0));
 
-                for(auto sourceID : aiComp->perception.aiGarissons){
-                    if(sourceID != targetGarissonID){
-                        aiComp->execute.finalTargets.push_back({sourceID, targetGarissonID});
+                // Select groupCount random targets
+                std::vector<EntityID> targetGarissons;
+                for (size_t i = 0; i < groupCount && i < garissons.size(); ++i) {
+                    targetGarissons.push_back(garissons[i]);
+                }
+
+                log_info << "Consolidating drones into " << groupCount << " groups, totalGarissons: " << garissons.size();
+
+                // Assign garissons to groups
+                for (size_t i = 0; i < garissons.size(); ++i) {
+                    size_t targetIndex = i / 5; // Determine group index based on 5 per group
+                    if (targetIndex < targetGarissons.size() && garissons[i] != targetGarissons[targetIndex]) {
+                        aiComp->execute.finalTargets.push_back({garissons[i], targetGarissons[targetIndex]});
                     }
                 }
             }

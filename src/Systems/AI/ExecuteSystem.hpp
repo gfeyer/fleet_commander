@@ -10,7 +10,7 @@ namespace Systems::AI {
         auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
 
         for(auto& [source, target] : aiComp->execute.finalTargets){
-            log_info << "Attack: "<< source << " -> " << target;
+            // log_info << "Attack: "<< source << " -> " << target;
             entityManager.addComponent(source, Components::AttackOrderComponent{source, target});
         }
     }
