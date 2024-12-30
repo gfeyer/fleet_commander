@@ -149,11 +149,14 @@ namespace Systems::AI {
                 auto* targetPowerPlantComp = entityManager.getComponent<Components::PowerPlantComponent>(target);
                 auto* targetFactoryComp = entityManager.getComponent<Components::FactoryComponent>(target);
 
+                // Explicit local variable for target (macOS compiler workaround)
+                EntityID targetID = target; 
+
                 auto found_target = std::find_if(
                     aiComp->perception.aiAttackOrders.begin(),
                     aiComp->perception.aiAttackOrders.end(),
-                    [target](const Components::EntityIDPair& pair) {
-                        return pair.target == target;
+                    [targetID](const Components::EntityIDPair& pair) {
+                        return pair.target == targetID;
                     }
                 );
 
