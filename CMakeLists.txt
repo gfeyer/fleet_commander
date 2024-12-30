@@ -40,3 +40,16 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:FleetDominion>/assets
 )
+
+# Copy Behavior Tree XML files to the output directory
+file(GLOB BEHAVIOR_TREE_FILES 
+    ${CMAKE_SOURCE_DIR}/src/Game/AI/BehaviorTrees/*.xml
+)
+foreach(xml_file ${BEHAVIOR_TREE_FILES})
+    add_custom_command(
+        TARGET FleetDominion POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${xml_file}
+        $<TARGET_FILE_DIR:FleetDominion>/${CMAKE_FILE_NAME}
+    )
+endforeach()

@@ -3,6 +3,7 @@
 
 #include <behaviortree_cpp/bt_factory.h>
 
+#include "Utils/Logger.hpp"
 namespace Game::AI {
     BT::Tree BuildBehaviorTree(){
 
@@ -11,9 +12,11 @@ namespace Game::AI {
 
         // Register Nodes
         // TODO ...
+        factory.registerSimpleAction("CheckBattery", [&](BT::TreeNode&){ return BT::NodeStatus::SUCCESS; });
 
-        auto tree = factory.createTreeFromFile("balanced_behavior.xml");
-
+        log_info << "Creating Behavior Tree";
+        auto tree = factory.createTreeFromFile("behaviortree_balanced.xml");
+        log_info << "Finished Behavior Tree";
         return tree;
     }
 }
