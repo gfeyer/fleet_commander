@@ -5,7 +5,7 @@
 ### TODO
 - Move AI to behavior tree
     - make it aggressive 
-- Skin the game (sprites/anim)
+- Skin the game (sprites+animations)
 
 ### Screenshots
 
