@@ -12,7 +12,7 @@ namespace Game::AI {
         // Register Nodes
         // TODO ...
 
-        auto tree = factory.createTreeFromFile("BehaviorTrees/balanced_behavior.xml");
+        auto tree = factory.createTreeFromFile("balanced_behavior.xml");
 
         return tree;
     }

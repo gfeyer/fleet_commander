@@ -36,8 +36,8 @@ public:
 
     // Add a component
     template<typename T>
-    void addComponent(EntityID id, T component) {
-        entities[id].addComponent<T>(component);
+    void addComponent(EntityID id, T&& component) {
+        entities[id].addComponent<T>(std::forward<T>(component));
     }
 
     // Remove a component

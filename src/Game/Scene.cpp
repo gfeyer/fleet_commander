@@ -36,6 +36,7 @@
 
 #include "Game/GameBuilder.hpp"
 #include "Game/MapGenerator.hpp"
+#include "Game/AI/AIBuilder.hpp"
 
 #include "Utils/Random.hpp"
 
@@ -75,8 +76,10 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     EntityID gameStateID = entityManager.createEntity();
     entityManager.addComponent(gameStateID, Components::GameStateComponent{2});
 
+    // Create Game AI
     EntityID gameAI = entityManager.createEntity();
-    entityManager.addComponent(gameAI, Components::AIComponent{});
+    BT::Tree tree = Game::AI::BuildBehaviorTree();
+    entityManager.addComponent(gameAI, Components::AIComponent{std::move(tree)});
 
     // Generate Map
     Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 30, 100);

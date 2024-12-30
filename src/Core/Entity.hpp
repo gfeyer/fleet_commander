@@ -15,8 +15,8 @@ private:
 protected:
     // These functions are protected so they can only be called by the manager class which holds the lists
     template<typename T>
-    void addComponent(T component) {
-        components[std::type_index(typeid(T))] = std::make_shared<T>(component);
+    void addComponent(T&& component) {
+        components[std::type_index(typeid(T))] = std::make_shared<T>(std::forward<T>(component));
     }
     template<typename T>
     void removeComponent() {

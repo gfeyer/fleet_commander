@@ -103,8 +103,8 @@ namespace Game {
 
         // Add a component and update lists
         template<typename T>
-        void addComponent(EntityID id, T component) {
-            coreManager.addComponent<T>(id, component);
+        void addComponent(EntityID id, T&& component) { // && b/c i have to move the AI component in (only one)
+            coreManager.addComponent<T>(id, std::forward<T>(component));
 
             if constexpr (std::is_same<T, Components::FactoryComponent>::value) {
                 factoryEntities.push_back(id);
