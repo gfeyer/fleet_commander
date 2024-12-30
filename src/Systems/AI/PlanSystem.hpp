@@ -4,6 +4,7 @@
 #include "Game/GameEntityManager.hpp"
 
 #include "Utils/Logger.hpp"
+#include "Utils/Random.hpp"
 #include "Config.hpp"
 
 namespace Systems::AI {
@@ -156,7 +157,7 @@ namespace Systems::AI {
                 );
 
                 if(found_target != aiComp->perception.aiAttackOrders.end()){
-                    // Already issued attach orders for this target
+                    log_info << "Already issued attack orders to this target";
                     continue;
                 }
 
@@ -169,7 +170,7 @@ namespace Systems::AI {
                 );
 
                 if(found_source != aiComp->perception.aiAttackOrders.end()){
-                    // Already issued orders from this source
+                    log_info << "Already issued attack orders from this source";
                     continue;
                 }
 
@@ -209,15 +210,22 @@ namespace Systems::AI {
         }
 
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
-        if(aiComp->plan.potentialSingleAttackTargetsByDistance.empty() && aiComp->perception.aiTotalEnergy > 40){
-            log_info << "Consolidate drones";
+        if(aiComp->plan.potentialSingleAttackTargetsByDistance.empty()){
             
-            auto it = aiComp->perception.aiGarissons.begin();
-            EntityID consolidatedGarissonID = *it;
-            it++;
-            for(it; it != aiComp->perception.aiGarissons.end(); it++){
-                EntityID source = *it;
-                aiComp->execute.finalTargets.push_back({source, consolidatedGarissonID});
+            // Find a random garisson
+            std::vector<EntityID> garissons{aiComp->perception.aiGarissons.begin(), aiComp->perception.aiGarissons.end()};
+
+            if(!garissons.empty()){
+                unsigned int randIndx = Utils::getRandomFloat(0.f, garissons.size()-1);
+                EntityID targetGarissonID = garissons[randIndx];
+
+                log_info << "Consolidate drones into " << targetGarissonID;
+
+                for(auto sourceID : aiComp->perception.aiGarissons){
+                    if(sourceID != targetGarissonID){
+                        aiComp->execute.finalTargets.push_back({sourceID, targetGarissonID});
+                    }
+                }
             }
         }
     }
