@@ -18,6 +18,8 @@ namespace Systems::AI {
             log_err << "Failed to get aiComponent";
         }
 
+        aiComp->perception.reset();
+
         log_info << "Running AI Perception System";
 
         auto& entities = entityManager.getAllEntities();
@@ -27,18 +29,35 @@ namespace Systems::AI {
             auto* faction = entity.getComponent<Components::FactionComponent>();
 
             // Get drone counts per faction
-            if(garisson && faction && faction->faction != Components::Faction::NEUTRAL){
-                if(garisson->getDroneCount() > 0 && faction->faction == Components::Faction::PLAYER_1){
+            if(garisson && garisson->getDroneCount() > 0 && faction && faction->faction != Components::Faction::NEUTRAL){
+                
+                aiComp->perception.garissonByDroneCount[id] = garisson->getDroneCount();
+                aiComp->perception.garissonByFaction[id] = faction->faction;
+
+                if( faction->faction == Components::Faction::PLAYER_1){
                     aiComp->perception.playerTotalDrones += garisson->getDroneCount();
                 }
-                if(garisson->getDroneCount() > 0 && faction->faction == Components::Faction::PLAYER_2){
+                if(faction->faction == Components::Faction::PLAYER_2){
                     aiComp->perception.aiTotalDrones += garisson->getDroneCount();
+                }
+            }
+
+            auto* powerPlant = entity.getComponent<Components::PowerPlantComponent>();
+            if(powerPlant && powerPlant->capacity > 0 && faction && faction->faction != Components::Faction::NEUTRAL){
+
+                if( faction->faction == Components::Faction::PLAYER_1){
+                    aiComp->perception.playerTotalEnergy += powerPlant->capacity;
+                }
+                if(faction->faction == Components::Faction::PLAYER_2){
+                    aiComp->perception.aiTotalEnergy += powerPlant->capacity;
                 }
             }
         }
 
+        
+        log_info << "Perception data: " << aiComp->perception.playerTotalDrones << ", " << aiComp->perception.playerTotalEnergy << ", " << aiComp->perception.aiTotalDrones << ", " << aiComp->perception.aiTotalEnergy;
+        log_info << "perception maps: " << aiComp->perception.garissonByDroneCount.size() << ", " << aiComp->perception.garissonByFaction.size();
 
-        // aiComp->perception.aiTotalDrones = entityManager.getDroneCount();
     }
 }
 

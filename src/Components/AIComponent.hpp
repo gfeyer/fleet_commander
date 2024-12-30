@@ -1,6 +1,8 @@
 #ifndef AI_COMPONENT_HPP
 #define AI_COMPONENT_HPP
 
+#include <unordered_map>
+
 namespace Components {
     struct AIPerception {
         unsigned int aiTotalDrones = 0;
@@ -9,7 +11,9 @@ namespace Components {
         unsigned int playerTotalDrones = 0;
         unsigned int playerTotalEnergy = 0;
         sf::Vector2f aiCentralPosition;
-        std::unordered_map<unsigned int, bool> garisons;
+
+        std::unordered_map<EntityID, unsigned int> garissonByDroneCount;
+        std::unordered_map<EntityID, Components::Faction> garissonByFaction;
 
         void reset(){
             aiTotalDrones = 0;
@@ -17,6 +21,11 @@ namespace Components {
             playerTotalDrones = 0;
             playerTotalEnergy = 0;
             aiCentralPosition = {0.f, 0.f};
+
+            garissonByDroneCount.clear();
+            garissonByFaction.clear();
+
+            
         }
     };
 
