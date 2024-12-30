@@ -136,6 +136,7 @@ namespace Systems::AI {
             }
         }
 
+        bool submittedAnAttackOrder = false;
         if(!aiComp->plan.potentialSingleAttackTargetsByDistance.empty()){
             logStrategy(strategy);
             // implement the strategy 
@@ -178,6 +179,7 @@ namespace Systems::AI {
                     // issue orders to attack
                     aiComp->execute.finalTargets.push_back({source, target});
                     aiComp->perception.aiAttackOrders.insert({source, target});
+                    submittedAnAttackOrder = true;
 
                     // Debug symbols
                     auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
@@ -189,6 +191,7 @@ namespace Systems::AI {
                     // issue orders to attack
                     aiComp->execute.finalTargets.push_back({source, target});
                     aiComp->perception.aiAttackOrders.insert({source, target});
+                    submittedAnAttackOrder = true;
 
                     // Debug symbols
                     auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
@@ -199,6 +202,7 @@ namespace Systems::AI {
                     // issue orders to attack
                     aiComp->execute.finalTargets.push_back({source, target});
                     aiComp->perception.aiAttackOrders.insert({source, target});
+                    submittedAnAttackOrder = true;
 
                     // Debug symbols
                     auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
@@ -210,15 +214,17 @@ namespace Systems::AI {
         }
 
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
-        if (aiComp->plan.potentialSingleAttackTargetsByDistance.empty()) {
+        if (aiComp->plan.potentialSingleAttackTargetsByDistance.empty() || !submittedAnAttackOrder) {
             std::vector<EntityID> garissons{aiComp->perception.aiGarissons.begin(), aiComp->perception.aiGarissons.end()};
 
             if (!garissons.empty()) {
                 // Shuffle garissons for randomness
                 std::shuffle(garissons.begin(), garissons.end(), std::mt19937(std::random_device()()));
 
+                // garison croup count
+                int groupSize = 10;
                 // Determine number of groups (1 per 5 garissons)
-                size_t groupCount = static_cast<size_t>(std::ceil(garissons.size() / 5.0));
+                size_t groupCount = static_cast<size_t>(std::ceil(garissons.size() / groupSize)) + 1;
 
                 // Select groupCount random targets
                 std::vector<EntityID> targetGarissons;
@@ -230,7 +236,7 @@ namespace Systems::AI {
 
                 // Assign garissons to groups
                 for (size_t i = 0; i < garissons.size(); ++i) {
-                    size_t targetIndex = i / 5; // Determine group index based on 5 per group
+                    size_t targetIndex = i / groupSize; // Determine group index based on 5 per group
                     if (targetIndex < targetGarissons.size() && garissons[i] != targetGarissons[targetIndex]) {
                         aiComp->execute.finalTargets.push_back({garissons[i], targetGarissons[targetIndex]});
                     }

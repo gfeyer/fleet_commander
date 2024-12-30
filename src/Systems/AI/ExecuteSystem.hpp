@@ -16,7 +16,7 @@ namespace Systems::AI {
             entityManager.addComponent(source, Components::AttackOrderComponent{source, target});
             attackOrdersExecuted++;
 
-            if (attackOrdersExecuted >=1) break;
+            if (attackOrdersExecuted >=2) break;
         }
     }
 }

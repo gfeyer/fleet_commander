@@ -131,7 +131,14 @@ namespace Systems {
                     float productionRate = factoryComp->droneProductionRate;
 
                     // Format Production Rate and Time Left
-                    ss << std::format("\nProduction rate: {:.1f} /s", productionRate);
+                    char buffer[100];
+                    std::snprintf(
+                        buffer, 
+                        sizeof(buffer), 
+                        "\nProduction rate: %.1f /s", 
+                        productionRate
+                    );
+                    ss << buffer;
                 }
 
                 if (powerPlantComp) {
@@ -144,12 +151,16 @@ namespace Systems {
 
                 if(shieldComp){
                     // Format Shield values
-                    ss << std::format(
-                        "\nShield: {:.1f}/{:.1f}\nShield Regen: {:.1f}/s", 
+                    char buffer[100];
+                    std::snprintf(
+                        buffer, 
+                        sizeof(buffer), 
+                        "\nShield: %.1f/%.1f\nShield Regen: %.1f/s", 
                         shieldComp->currentShield, 
                         shieldComp->maxShield, 
                         shieldComp->regenRate
                     );
+                    ss << buffer;
                 }
 
                 auto label = tgui::Label::create(ss.str());
