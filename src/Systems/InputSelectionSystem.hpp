@@ -52,7 +52,9 @@ namespace Systems {
                             originEntity.getComponent<Components::SelectableComponent>()->isSelected = false;
                         }else{
                             auto* factionComp = targetEntity.getComponent<Components::FactionComponent>();
-                            if(factionComp->faction == Components::Faction::PLAYER_1){
+                            if(factionComp->faction == Components::Faction::PLAYER_1
+                            || factionComp->faction == Components::Faction::PLAYER_2 // TODO: remove this line after AI complete
+                            ){
                                 targetSelectableComp->isSelected = true;
                             }
                         }
