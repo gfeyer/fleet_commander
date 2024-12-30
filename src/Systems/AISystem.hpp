@@ -13,6 +13,18 @@
 
 namespace Systems {
         void AISystem(Game::GameEntityManager& entityManager, float dt) {
+
+            // Run AI every 1 second
+            static float decisionTimer = 0.f;
+            static float decisionTimerMax = 1.f;
+
+            decisionTimer += dt;
+            if(decisionTimer < decisionTimerMax){
+                return;
+            }
+            decisionTimer = 0.f;
+
+            // Get data
             Entity& aiEntity = entityManager.getAIEntity();
             auto* aiComponent = aiEntity.getComponent<Components::AIComponent>();
 
@@ -21,12 +33,7 @@ namespace Systems {
                 return;
             }
 
-            aiComponent->decisionTimer += dt;
-            if (aiComponent->decisionTimer <= aiComponent->decisionTimerMax) {
-                return;
-            }
-
-            aiComponent->decisionTimer = 0.f;
+            // Reset highlighted entity
             aiComponent->highlightedEntityID = 0;
 
              // Get Game State
