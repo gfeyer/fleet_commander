@@ -82,10 +82,10 @@ namespace Systems::AI {
 
                 auto distance = getDistanceBetweenEntities(entityManager, aiGarissonID, targetEntityID);
                 aiComp->perception.garissonsByDistance[aiGarissonID][distance] = targetEntityID;
+                // log_info << "Garisson:" << aiGarissonID << " -> " << targetEntityID << " : " << distance;
             }
         }
     }
-    
 }
 
 

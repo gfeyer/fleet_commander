@@ -37,10 +37,10 @@ namespace Components {
 
     struct AIPlan {
         std::string currentAction;
-        std::unordered_map<EntityID, EntityID> potentialAttackTargets; 
+        std::unordered_map<EntityID, EntityID> potentialSingleAttackTargets; 
 
         void reset(){
-            potentialAttackTargets.clear();
+            potentialSingleAttackTargets.clear();
         }
     };
 

@@ -39,33 +39,37 @@ namespace Systems::AI {
         // Reset last plan
         aiComp->plan.reset();
 
+        // Strategy: need energy or more factories?
+        // TODO
+
+
         // Plan: Check if any single garisson can conquer an adjacent target
         for(auto it = aiComp->perception.garissonsByDistance.begin(); it != aiComp->perception.garissonsByDistance.end(); it++){
             auto originGarissonID = it->first;
-            auto distance = it->second.begin()->first;
-            auto targetEntityID = it->second.begin()->second;
 
-            float costForSuccesfulAttack = computeAttackCost(entityManager, targetEntityID, distance);
-            auto droneCountAtThisGarisson = aiComp->perception.garissonByDroneCount.at(originGarissonID);
+            // distance and targetEntityID there's more than 1
+            for(auto [distance, targetEntityID] : it->second){
+                float costForSuccesfulAttack = computeAttackCost(entityManager, targetEntityID, distance);
 
-            if(droneCountAtThisGarisson > costForSuccesfulAttack){
-                log_info << "Can conquer " << targetEntityID << " from " << originGarissonID;
+                auto droneCountAtThisGarisson = aiComp->perception.garissonByDroneCount.at(originGarissonID);
 
-                auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
-                auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
-                aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
-                aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
+                if(droneCountAtThisGarisson > costForSuccesfulAttack){
+                    log_info << "Can conquer " << targetEntityID << " from " << originGarissonID;
 
-                aiComp->plan.potentialAttackTargets[originGarissonID] = targetEntityID;
+                    auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
+                    auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
+                    aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
+                    aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
+
+                    aiComp->plan.potentialSingleAttackTargets[originGarissonID] = targetEntityID;
+                }
             }
         }
-        
 
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
-        if(aiComp->plan.potentialAttackTargets.empty()){
+        if(aiComp->plan.potentialSingleAttackTargets.empty()){
             log_info << "No garisson alone can conquer adjacent targets, computing collective plan";
         }
-
     }
 }
 
