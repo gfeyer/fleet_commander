@@ -19,7 +19,7 @@ namespace Systems::AI {
 
             // Run AI every 2 seconds
             static float decisionTimer = 0.f;
-            static float decisionTimerMax = 1.f;
+            static float decisionTimerMax = 1.5f;
 
             decisionTimer += dt;
             if(decisionTimer < decisionTimerMax){

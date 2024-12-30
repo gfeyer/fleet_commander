@@ -50,15 +50,24 @@ namespace Systems::AI {
 
         // Compute total droens in 5 seconds if no attack planned
         float totalDrones = 0.f;
-        // totalDrones += aiComp->perception.aiTotalDrones;
+        totalDrones += aiComp->perception.aiTotalDrones;
         // totalDrones += aiComp->perception.aiDroneProductionRate * 5.f;
         float aiTotalEnergy = aiComp->perception.aiTotalEnergy;
+        float droneToEnergyRatio = totalDrones / aiTotalEnergy;
+
+        log_info << "droneEnergyRatio: " << droneToEnergyRatio << ", totalDrones: " << totalDrones << ", aiTotalEnergy: " << aiTotalEnergy;
 
         if(aiTotalEnergy < 20){
+            //  log_info << "energy < 20, ENERGY";
             priorities[Strategy::ENERGY] = 1.f;
-        }else if(totalDrones/aiTotalEnergy < 0.75f){
+        }else if(droneToEnergyRatio < 0.5f){
+            //  log_info << "droneToEnergyRatio < 0.5, PRODUCTION, " << droneToEnergyRatio;
             priorities[Strategy::PRODUCTION] = 1.f;
-        }else{
+        }else if(droneToEnergyRatio > 0.9f){
+            priorities[Strategy::ENERGY] = 1.f;
+        }
+        else{
+            // log_info << "DISTANCE";
             priorities[Strategy::DISTANCE] = 1.f;
         }
 
@@ -82,6 +91,9 @@ namespace Systems::AI {
             break;
         case Strategy::ATTACK:
             log_info << "Strategy: Attack";
+            break;
+        case Strategy::DISTANCE:
+            log_info << "Strategy: Distance";
             break;
         default:
             break;
@@ -123,51 +135,76 @@ namespace Systems::AI {
         }
 
         if(!aiComp->plan.potentialSingleAttackTargetsByDistance.empty()){
+            logStrategy(strategy);
             // implement the strategy 
-            if(strategy == Strategy::ENERGY || strategy == Strategy::PRODUCTION){
-                // scan through potential targets and chooe a target
-                for(auto& [distance, entityPair] : aiComp->plan.potentialSingleAttackTargetsByDistance){
-                    auto [source, target] = entityPair;
+            // scan through potential targets and chooe a target
+            for(auto& [distance, entityPair] : aiComp->plan.potentialSingleAttackTargetsByDistance){
+                auto [source, target] = entityPair;
 
-                    auto* targetPowerPlantComp = entityManager.getComponent<Components::PowerPlantComponent>(target);
-                    auto* targetFactoryComp = entityManager.getComponent<Components::FactoryComponent>(target);
+                // log_info << "dist: " << distance << " source: " << source << " target: " << target;
 
-                    auto found = aiComp->perception.aiAttackOrders.find({source, target});
-                    if(found != aiComp->perception.aiAttackOrders.end()){
-                        // Already issued orders on this and order is in flight
-                        continue;
+                auto* targetPowerPlantComp = entityManager.getComponent<Components::PowerPlantComponent>(target);
+                auto* targetFactoryComp = entityManager.getComponent<Components::FactoryComponent>(target);
+
+                auto found = std::find_if(
+                    aiComp->perception.aiAttackOrders.begin(),
+                    aiComp->perception.aiAttackOrders.end(),
+                    [target](const Components::EntityIDPair& pair) {
+                        return pair.target == target;
                     }
+                );
 
-                    if(targetPowerPlantComp && strategy == Strategy::ENERGY){
-                        // issue orders to attack
-                        aiComp->execute.finalTargets.push_back({source, target});
-                        aiComp->perception.aiAttackOrders.insert({source, target});
+                if(found != aiComp->perception.aiAttackOrders.end()){
+                    // Already issued orders on this and order is in flight
+                    continue;
+                }
 
-                        // Debug symbols
-                        auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
-                        auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
-                        aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
-                        aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
-                    }else if(targetFactoryComp && strategy == Strategy::PRODUCTION){
-                        // issue orders to attack
-                        aiComp->execute.finalTargets.push_back({source, target});
-                        aiComp->perception.aiAttackOrders.insert({source, target});
+                if(targetPowerPlantComp && strategy == Strategy::ENERGY){
+                    // issue orders to attack
+                    aiComp->execute.finalTargets.push_back({source, target});
+                    aiComp->perception.aiAttackOrders.insert({source, target});
 
-                        // Debug symbols
-                        auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
-                        auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
-                        aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
-                        aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
-                    }
+                    // Debug symbols
+                    auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
+                    auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
+                    aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
+                    aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
+
+                }else if(targetFactoryComp && strategy == Strategy::PRODUCTION){
+                    // issue orders to attack
+                    aiComp->execute.finalTargets.push_back({source, target});
+                    aiComp->perception.aiAttackOrders.insert({source, target});
+
+                    // Debug symbols
+                    auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
+                    auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
+                    aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
+                    aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
+                }else if(strategy == Strategy::DISTANCE && (targetPowerPlantComp || targetFactoryComp)){
+                    // issue orders to attack
+                    aiComp->execute.finalTargets.push_back({source, target});
+                    aiComp->perception.aiAttackOrders.insert({source, target});
+
+                    // Debug symbols
+                    auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
+                    auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
+                    aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
+                    aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
                 }
             }
-
-
         }
 
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
-        if(aiComp->plan.potentialSingleAttackTargetsByDistance.empty()){
-            log_info << "No garisson alone can conquer adjacent targets, computing collective plan";
+        if(aiComp->plan.potentialSingleAttackTargetsByDistance.empty() && aiComp->perception.aiTotalEnergy > 40){
+            log_info << "Consolidate drones";
+            
+            auto it = aiComp->perception.aiGarissons.begin();
+            EntityID consolidatedGarissonID = *it;
+            it++;
+            for(it; it != aiComp->perception.aiGarissons.end(); it++){
+                EntityID source = *it;
+                aiComp->execute.finalTargets.push_back({source, consolidatedGarissonID});
+            }
         }
     }
 }

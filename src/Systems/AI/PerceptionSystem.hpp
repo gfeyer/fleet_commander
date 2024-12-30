@@ -32,7 +32,7 @@ namespace Systems::AI {
             auto* garisson = entity.getComponent<Components::GarissonComponent>();
             auto* faction = entity.getComponent<Components::FactionComponent>();
 
-            // Get drone counts per faction
+            // Get drone counts in garrisons for faction
             if(garisson && garisson->getDroneCount() > 0 && faction && faction->faction != Components::Faction::NEUTRAL){
                 
                 aiComp->perception.garissonByDroneCount[id] = garisson->getDroneCount();
@@ -44,6 +44,18 @@ namespace Systems::AI {
                 if(faction->faction == Components::Faction::PLAYER_2){
                     aiComp->perception.aiTotalDrones += garisson->getDroneCount();
                     aiComp->perception.aiGarissons.insert(id);
+                }
+            }
+
+            // Add in flight drones
+            auto* droneComp = entity.getComponent<Components::DroneComponent>();
+            if(droneComp && faction && faction->faction != Components::Faction::NEUTRAL){
+
+                if( faction->faction == Components::Faction::PLAYER_1){
+                    aiComp->perception.playerTotalDrones += 1;
+                }
+                if(faction->faction == Components::Faction::PLAYER_2){
+                    aiComp->perception.aiTotalDrones += 1;
                 }
             }
 
