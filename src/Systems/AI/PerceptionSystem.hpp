@@ -28,8 +28,6 @@ namespace Systems::AI {
 
         aiComp->perception.reset();
 
-        log_info << "Running AI Perception System";
-
         auto& entities = entityManager.getAllEntities();
 
         for(auto& [id, entity] : entities){
@@ -38,7 +36,6 @@ namespace Systems::AI {
 
             // Get drone counts per faction
             if(garisson && garisson->getDroneCount() > 0 && faction && faction->faction != Components::Faction::NEUTRAL){
-                
                 
                 aiComp->perception.garissonByDroneCount[id] = garisson->getDroneCount();
 

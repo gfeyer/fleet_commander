@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <map>
+#include <vector>
 
 namespace Components {
     struct AIPerception {
@@ -43,7 +44,13 @@ namespace Components {
     };
 
     struct AIDebug {
-        float lastDecisionTime = 0.0f;
+        std::vector<sf::Vector2f> yellowDebugTargets;
+        std::vector<sf::Vector2f> pinkDebugTargets;
+
+        void reset() { 
+            yellowDebugTargets.clear();
+            pinkDebugTargets.clear(); 
+        }
     };
 
     struct AIComponent {
@@ -54,7 +61,8 @@ namespace Components {
         AIDebug debug;
 
         void reset() { 
-            perception.reset(); 
+            perception.reset();
+            debug.reset();
         }
     };
 }

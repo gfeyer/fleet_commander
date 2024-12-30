@@ -31,10 +31,10 @@ namespace Systems {
 
                 std::stringstream ss;
                 if(factory){
-                    ss << std::format("Factory\n{:.1f}/s", factory->droneProductionRate);
+                    ss << std::format("Factory {}\n{:.1f}/s", id, factory->droneProductionRate);
                 }
                 if(powerPlant){
-                    ss << std::format("FusionReactor\nCapacity: {}", powerPlant->capacity);
+                    ss << std::format("FusionReactor {}\nCapacity: {}",id,powerPlant->capacity);
                 }
                 if(drone){
                     ss << drone->droneName;

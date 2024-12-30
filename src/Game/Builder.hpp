@@ -99,7 +99,7 @@ namespace Game {
             sf::Vector2f(Config::DRONE_LENGTH*2, 5)
         });
 
-        entityManager.addComponent(droneID, Components::MoveComponent{100.f, 0.f});
+        entityManager.addComponent(droneID, Components::MoveComponent{Config::DRONE_SPEED, 0.f});
         entityManager.addComponent(droneID, Components::FactionComponent{faction});
 
         return droneID;
