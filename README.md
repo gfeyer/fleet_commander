@@ -25,7 +25,7 @@
 cd /opt
 git clone git@github.com/microsoft/vcpkg.git
 cd vcpkg
-./bootstrap.sh # linux, macos
+./bootstrap-vcpkg.sh # linux, macos
 bootstrap.bat  # windows
 
 # install dependencies
