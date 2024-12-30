@@ -27,6 +27,11 @@ namespace Systems::AI {
             }
             decisionTimer = 0.f;
 
+            // Reset last plan
+            Entity& aiEntity = entityManager.getAIEntity();
+            auto* aiComponent = aiEntity.getComponent<Components::AIComponent>();
+            aiComponent->reset();
+
             // Run AI
             Systems::AI::PerceptionSystem(entityManager, dt);
             Systems::AI::PlanSystem(entityManager, dt);
@@ -39,8 +44,8 @@ namespace Systems::AI {
             // -----------------------------
 
             // Get data
-            Entity& aiEntity = entityManager.getAIEntity();
-            auto* aiComponent = aiEntity.getComponent<Components::AIComponent>();
+            // Entity& aiEntity = entityManager.getAIEntity();
+            // auto* aiComponent = aiEntity.getComponent<Components::AIComponent>();
 
             if(!aiComponent){
                 log_err << "Failed to get aiComponent" << std::endl;

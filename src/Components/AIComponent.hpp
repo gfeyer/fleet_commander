@@ -7,12 +7,20 @@
 #include <vector>
 
 namespace Components {
+    struct EntityIDPair{
+        EntityID source;
+        EntityID target;
+    };
+
     struct AIPerception {
         unsigned int aiTotalDrones = 0;
         unsigned int aiTotalEnergy = 0;
+        float aiDroneProductionRate = 0.f;
 
         unsigned int playerTotalDrones = 0;
         unsigned int playerTotalEnergy = 0;
+        float playerDroneProductionRate = 0.f;
+
         sf::Vector2f aiCentralPosition;
 
         std::unordered_map<EntityID, unsigned int> garissonByDroneCount;
@@ -23,8 +31,12 @@ namespace Components {
         void reset(){
             aiTotalDrones = 0;
             aiTotalEnergy = 0;
+            aiDroneProductionRate = 0.f;
+
             playerTotalDrones = 0;
             playerTotalEnergy = 0;
+            playerDroneProductionRate = 0.f;
+
             aiCentralPosition = {0.f, 0.f};
 
             garissonByDroneCount.clear();
@@ -37,15 +49,17 @@ namespace Components {
 
     struct AIPlan {
         std::string currentAction;
-        std::unordered_map<EntityID, EntityID> potentialSingleAttackTargets; 
+        std::map<float, EntityIDPair> potentialSingleAttackTargetsByDistance; 
 
         void reset(){
-            potentialSingleAttackTargets.clear();
+            potentialSingleAttackTargetsByDistance.clear();
         }
     };
 
     struct AIExecute {
-        std::unordered_set<EntityID> selectedTargets;
+        std::vector<EntityIDPair> finalTargets;
+
+        void reset() { finalTargets.clear(); }
     };
 
     struct AIDebug {
@@ -68,6 +82,7 @@ namespace Components {
         void reset() { 
             perception.reset();
             plan.reset();
+            execute.reset();
             debug.reset();
         }
     };

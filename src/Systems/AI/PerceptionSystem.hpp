@@ -26,9 +26,6 @@ namespace Systems::AI {
             log_err << "Failed to get aiComponent";
         }
 
-        aiComp->perception.reset();
-        aiComp->debug.reset();
-
         auto& entities = entityManager.getAllEntities();
 
         for(auto& [id, entity] : entities){
@@ -47,6 +44,18 @@ namespace Systems::AI {
                 if(faction->faction == Components::Faction::PLAYER_2){
                     aiComp->perception.aiTotalDrones += garisson->getDroneCount();
                     aiComp->perception.aiGarissons.insert(id);
+                }
+            }
+
+            // Get total production rate
+            auto* factory = entity.getComponent<Components::FactoryComponent>();
+            if(factory && factory->droneProductionRate > 0 && faction && faction->faction != Components::Faction::NEUTRAL){
+
+                if( faction->faction == Components::Faction::PLAYER_1){
+                    aiComp->perception.playerDroneProductionRate += factory->droneProductionRate;
+                }
+                if(faction->faction == Components::Faction::PLAYER_2){
+                    aiComp->perception.aiDroneProductionRate += factory->droneProductionRate;
                 }
             }
 
