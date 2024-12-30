@@ -12,7 +12,7 @@
 #include "Game/GameEntityManager.hpp"
 
 namespace Systems {
-        void EnemyAISystem(Game::GameEntityManager& entityManager, float dt) {
+        void AISystem(Game::GameEntityManager& entityManager, float dt) {
 
             static float decisionTimer = 0.f;
             static float decisionTimerMax = 1.f; 
