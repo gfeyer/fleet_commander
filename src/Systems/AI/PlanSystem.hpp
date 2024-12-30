@@ -36,6 +36,9 @@ namespace Systems::AI {
             log_err << "Failed to get aiComponent";
         }
 
+        // Reset last plan
+        aiComp->plan.reset();
+
         // Plan: Check if any single garisson can conquer an adjacent target
         for(auto it = aiComp->perception.garissonsByDistance.begin(); it != aiComp->perception.garissonsByDistance.end(); it++){
             auto originGarissonID = it->first;
@@ -45,19 +48,23 @@ namespace Systems::AI {
             float costForSuccesfulAttack = computeAttackCost(entityManager, targetEntityID, distance);
             auto droneCountAtThisGarisson = aiComp->perception.garissonByDroneCount.at(originGarissonID);
 
-            log_info << "ID: " << originGarissonID << " Distance: " << distance << " Target: " << targetEntityID << " Cost: " << costForSuccesfulAttack << " Drones: " << droneCountAtThisGarisson;
-
             if(droneCountAtThisGarisson > costForSuccesfulAttack){
-                log_info << "Attacking " << targetEntityID << " from " << originGarissonID;
+                log_info << "Can conquer " << targetEntityID << " from " << originGarissonID;
 
                 auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
                 auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
                 aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
                 aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
+
+                aiComp->plan.potentialAttackTargets[originGarissonID] = targetEntityID;
             }
         }
         
+
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
+        if(aiComp->plan.potentialAttackTargets.empty()){
+            log_info << "No garisson alone can conquer adjacent targets, computing collective plan";
+        }
 
     }
 }

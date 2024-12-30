@@ -37,6 +37,11 @@ namespace Components {
 
     struct AIPlan {
         std::string currentAction;
+        std::unordered_map<EntityID, EntityID> potentialAttackTargets; 
+
+        void reset(){
+            potentialAttackTargets.clear();
+        }
     };
 
     struct AIExecute {
@@ -62,6 +67,7 @@ namespace Components {
 
         void reset() { 
             perception.reset();
+            plan.reset();
             debug.reset();
         }
     };

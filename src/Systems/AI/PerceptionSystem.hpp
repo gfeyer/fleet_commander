@@ -27,6 +27,7 @@ namespace Systems::AI {
         }
 
         aiComp->perception.reset();
+        aiComp->debug.reset();
 
         auto& entities = entityManager.getAllEntities();
 
