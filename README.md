@@ -20,7 +20,7 @@
 ```
 # get the package manager
 cd /opt
-git clone git@github.com/microsoft/vcpkg.git
+git clone https://github.com/microsoft/vcpkg.git
 cd vcpkg
 ./bootstrap-vcpkg.sh # linux, macos
 bootstrap.bat  # windows
