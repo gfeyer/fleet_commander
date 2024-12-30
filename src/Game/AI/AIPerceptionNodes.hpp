@@ -2,8 +2,9 @@
 #define AI_PERCEPTION_NODES_HPP
 
 #include <behaviortree_cpp/bt_factory.h>
-
 #include "Utils/Logger.hpp"
+
+#include "Game/GameEntityManager.hpp"
 
 namespace Game::AI::Nodes {
 

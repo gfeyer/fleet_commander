@@ -5,6 +5,7 @@
 #include "Utils/Logger.hpp"
 
 #include "Game/AI/AIPerceptionNodes.hpp"
+#include "Game/GameEntityManager.hpp"
 
 namespace Game::AI {
     BT::Tree BuildBehaviorTree(){
