@@ -56,7 +56,7 @@ namespace Systems::AI {
         float aiTotalEnergy = aiComp->perception.aiTotalEnergy;
         float droneToEnergyRatio = totalDrones / aiTotalEnergy;
 
-        log_info << "droneEnergyRatio: " << droneToEnergyRatio << ", totalDrones: " << totalDrones << ", aiTotalEnergy: " << aiTotalEnergy;
+        // log_info << "droneEnergyRatio: " << droneToEnergyRatio << ", totalDrones: " << totalDrones << ", aiTotalEnergy: " << aiTotalEnergy;
 
         if(aiTotalEnergy < 20){
             //  log_info << "energy < 20, ENERGY";
@@ -113,7 +113,7 @@ namespace Systems::AI {
         auto priorities = computeStrategyPriorities(entityManager);
         auto strategy = std::max_element(priorities.begin(), priorities.end(), [](const std::pair<Strategy, float>& a, const std::pair<Strategy, float>& b) { return a.second < b.second; })->first;
 
-        logStrategy(strategy);
+        // logStrategy(strategy);
 
         // Plan: Check if any single garisson can conquer an adjacent target
         for(auto it = aiComp->perception.garissonsByDistance.begin(); it != aiComp->perception.garissonsByDistance.end(); it++){
@@ -138,7 +138,7 @@ namespace Systems::AI {
 
         bool submittedAnAttackOrder = false;
         if(!aiComp->plan.potentialSingleAttackTargetsByDistance.empty()){
-            logStrategy(strategy);
+            // logStrategy(strategy);
             // implement the strategy 
             // scan through potential targets and chooe a target
             for(auto& [distance, entityPair] : aiComp->plan.potentialSingleAttackTargetsByDistance){
@@ -214,7 +214,7 @@ namespace Systems::AI {
         }
 
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
-        if (aiComp->plan.potentialSingleAttackTargetsByDistance.empty() || !submittedAnAttackOrder) {
+        if (aiComp->plan.potentialSingleAttackTargetsByDistance.empty() || submittedAnAttackOrder == false) {
             std::vector<EntityID> garissons{aiComp->perception.aiGarissons.begin(), aiComp->perception.aiGarissons.end()};
 
             if (!garissons.empty()) {
@@ -232,7 +232,7 @@ namespace Systems::AI {
                     targetGarissons.push_back(garissons[i]);
                 }
 
-                log_info << "Consolidating drones into " << groupCount << " groups, totalGarissons: " << garissons.size();
+                // log_info << "Consolidating drones into " << groupCount << " groups, totalGarissons: " << garissons.size();
 
                 // Assign garissons to groups
                 for (size_t i = 0; i < garissons.size(); ++i) {
