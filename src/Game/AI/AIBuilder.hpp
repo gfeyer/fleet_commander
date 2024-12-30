@@ -2,8 +2,10 @@
 #define AI_BUILDER_HPP
 
 #include <behaviortree_cpp/bt_factory.h>
-
 #include "Utils/Logger.hpp"
+
+#include "Game/AI/AIPerceptionNodes.hpp"
+
 namespace Game::AI {
     BT::Tree BuildBehaviorTree(){
 
@@ -12,9 +14,9 @@ namespace Game::AI {
 
         // Register Nodes
         // TODO ...
-        factory.registerSimpleAction("ReturnSuccess", [&](BT::TreeNode&){
-            log_info << "Node: ReturnSuccess";
-            return BT::NodeStatus::SUCCESS; 
+        factory.registerSimpleAction("CheckBattery", [&](BT::TreeNode&){ 
+            log_info << "Battery: A [ OK ]"; 
+            return Game::AI::Nodes::CheckBattery("AAA");
         });
 
         auto tree = factory.createTreeFromFile("ai_balanced.xml");

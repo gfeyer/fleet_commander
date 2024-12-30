@@ -46,10 +46,12 @@ file(GLOB BEHAVIOR_TREE_FILES
     ${CMAKE_SOURCE_DIR}/src/Game/AI/BehaviorTrees/*.xml
 )
 foreach(xml_file ${BEHAVIOR_TREE_FILES})
+    get_filename_component(xml_filename ${xml_file} NAME)
     add_custom_command(
         TARGET FleetDominion POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
         ${xml_file}
-        $<TARGET_FILE_DIR:FleetDominion>/${CMAKE_FILE_NAME}
+        $<TARGET_FILE_DIR:FleetDominion>/${xml_filename}
+        COMMAND ${CMAKE_COMMAND} -E echo "Copied ${xml_filename} to $<TARGET_FILE_DIR:FleetDominion>"
     )
 endforeach()

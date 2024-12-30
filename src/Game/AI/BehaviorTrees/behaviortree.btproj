@@ -2,5 +2,7 @@
 <root BTCPP_format="4" project_name="Project">
     <include path="ai_balanced.xml"/>
     <!-- Description of Node Models (used by Groot) -->
-    <TreeNodesModel/>
+    <TreeNodesModel>
+        <Action ID="CheckBattery" editable="true"/>
+    </TreeNodesModel>
 </root>

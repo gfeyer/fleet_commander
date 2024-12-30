@@ -32,12 +32,14 @@ namespace Systems {
                 return;
             }
 
+            auto status = aiComponent->AITree.tickWhileRunning();
+
+            log_info << "AI completed with status: " << status;
 
             return;
             // --------------------------------------------------------------------
             // Old logic
             // -------------------------------------------------------------------
-            
 
             aiComponent->highlightedEntityID = 0;
 
