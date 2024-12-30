@@ -27,7 +27,7 @@ target_link_libraries(FleetDominion PRIVATE
     sfml-system 
     sfml-window 
     sfml-graphics 
-    sfml-audio 
+#    sfml-audio 
     TGUI::TGUI
 )
 
