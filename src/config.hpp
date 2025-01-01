@@ -19,7 +19,7 @@ namespace Config {
     const bool ENABLE_DEBUG_SYMBOLS = true;
 
     // Game consts
-    const float DRONE_SPEED = 100.f;
+    const float DRONE_SPEED = 800.f;
 
     const float AI_DECISION_INTERVAL = 10.f;
     const unsigned int AI_MAX_EXECUTIONS_PER_TURN = 10;

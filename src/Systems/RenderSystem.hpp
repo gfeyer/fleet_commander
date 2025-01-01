@@ -13,6 +13,7 @@
 #include "Components/FactionComponent.hpp"
 #include "Components/ShieldComponent.hpp"
 #include "Components/GarissonComponent.hpp"
+#include "Components/DroneTransferComponent.hpp"
 
 #include "Utils/Circle.hpp"
 
@@ -23,10 +24,21 @@ namespace Systems {
         
         // 1. Draw selection, shield, sprite, shapes
         for(auto& [id, entity] : entities) {
-            // Draw shapes/sprites/shields
-            // Draw selectable component first (and draw sprite over it)
-            auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
+            
             auto* transform = entity.getComponent<Components::TransformComponent>();
+
+            // Draw auto transfer orders (back plane)
+            auto* transferOrder = entity.getComponent<Components::DroneTransferComponent>();
+            if (transferOrder) {
+                auto* targetTransform = entityManager.getComponent<Components::TransformComponent>(transferOrder->target);
+                if(targetTransform){
+                    Utils::drawDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f, 5.f);
+                }
+            }
+
+            // Draw shapes/sprites/shields
+            // Draw selectable component
+            auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
             if (selectableComp && selectableComp->isSelected && transform) {
                 sf::CircleShape selectionShape(Config::FACTORY_SIZE);
                 selectionShape.setOrigin(Config::FACTORY_SIZE, Config::FACTORY_SIZE);

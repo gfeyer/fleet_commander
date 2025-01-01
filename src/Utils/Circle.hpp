@@ -32,6 +32,25 @@ namespace Utils {
 
         return arc;
     }
+
+    // Function to draw a dotted line
+    void drawDottedLine(sf::RenderWindow& window, sf::Vector2f start, sf::Vector2f end, float dotSpacing, float dotRadius) {
+        sf::Vector2f direction = end - start;
+        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+        // Normalize direction vector
+        direction /= length;
+
+        // Place dots along the line
+        for (float i = 0; i < length; i += dotSpacing) {
+            sf::Vector2f position = start + direction * i;
+            sf::CircleShape dot(dotRadius);
+            dot.setFillColor(sf::Color::White);
+            dot.setPosition(position - sf::Vector2f(dotRadius, dotRadius)); // Center the dot
+
+            window.draw(dot);
+        }
+    }
 }
 
 #endif // CIRCLE_HPP
