@@ -60,10 +60,8 @@ namespace Components {
 
     struct AIPlan {
         std::string currentAction;
-        std::map<float, EntityIDPair> potentialSingleAttackTargetsByDistance; 
 
         void reset(){
-            potentialSingleAttackTargetsByDistance.clear();
         }
     };
 

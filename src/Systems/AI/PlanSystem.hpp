@@ -1,6 +1,8 @@
 #ifndef AI_PLAN_SYSTEM_HPP
 #define AI_PLAN_SYSTEM_HPP
 
+#include <map>
+
 #include "Game/GameEntityManager.hpp"
 
 #include "Utils/Logger.hpp"
@@ -59,7 +61,7 @@ namespace Systems::AI {
         // log_info << "droneEnergyRatio: " << droneToEnergyRatio << ", totalDrones: " << totalDrones << ", aiTotalEnergy: " << aiTotalEnergy;
 
         if(aiTotalEnergy < 20){
-            //  log_info << "energy < 20, ENERGY";
+            //  log_info << "energy < 21, ENERGY";
             priorities[Strategy::ENERGY] = 1.f;
         }else if(droneToEnergyRatio < 0.5f){
             //  log_info << "droneToEnergyRatio < 0.5, PRODUCTION, " << droneToEnergyRatio;
@@ -109,13 +111,18 @@ namespace Systems::AI {
             log_err << "Failed to get aiComponent";
         }
 
+        // Declare local vars
+        std::map<float, Components::EntityIDPair> potentialSuccesfulSingleAttackTargetsByDistance; 
+        std::map<float, Components::EntityIDPair> potentialFailedSingleAttackTargetsByDistance;
+
         // Strategy: need energy or more factories?
         auto priorities = computeStrategyPriorities(entityManager);
         auto strategy = std::max_element(priorities.begin(), priorities.end(), [](const std::pair<Strategy, float>& a, const std::pair<Strategy, float>& b) { return a.second < b.second; })->first;
 
         // logStrategy(strategy);
 
-        // Plan: Check if any single garisson can conquer an adjacent target
+        // Plan: Check if any single garisson can conquer an adjacent target and save it
+        // if not, save it to potential failed attacks
         for(auto it = aiComp->perception.garissonsByDistance.begin(); it != aiComp->perception.garissonsByDistance.end(); it++){
             auto originGarissonID = it->first;
 
@@ -125,23 +132,24 @@ namespace Systems::AI {
 
                 auto droneCountAtThisGarisson = aiComp->perception.garissonByDroneCount.at(originGarissonID);
 
+                auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
+                auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
+
                 if(droneCountAtThisGarisson > costForSuccesfulAttack){
                     // log_info << "Can conquer " << targetEntityID << " from " << originGarissonID << ", dist: " << distance;
-
-                    auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
-                    auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
-                    // aiComp->plan.potentialSingleAttackTargets[originGarissonID] = targetEntityID;
-                    aiComp->plan.potentialSingleAttackTargetsByDistance[distance] = {originGarissonID, targetEntityID};
+                    potentialSuccesfulSingleAttackTargetsByDistance[distance] = {originGarissonID, targetEntityID};
+                }else{
+                    potentialFailedSingleAttackTargetsByDistance[distance] = {originGarissonID, targetEntityID};
                 }
             }
         }
 
         bool submittedAnAttackOrder = false;
-        if(!aiComp->plan.potentialSingleAttackTargetsByDistance.empty()){
+        if(!potentialSuccesfulSingleAttackTargetsByDistance.empty()){
             // logStrategy(strategy);
             // implement the strategy 
             // scan through potential targets and chooe a target
-            for(auto& [distance, entityPair] : aiComp->plan.potentialSingleAttackTargetsByDistance){
+            for(auto& [distance, entityPair] : potentialSuccesfulSingleAttackTargetsByDistance){
                 auto [source, target] = entityPair;
 
                 // log_info << "dist: " << distance << " source: " << source << " target: " << target;
@@ -149,9 +157,10 @@ namespace Systems::AI {
                 auto* targetPowerPlantComp = entityManager.getComponent<Components::PowerPlantComponent>(target);
                 auto* targetFactoryComp = entityManager.getComponent<Components::FactoryComponent>(target);
 
-                // Explicit local variable for target (macOS compiler workaround)
+                // Explicit local variable (macOS compiler workaround)
                 EntityID targetID = target; 
 
+                // If orders to this target are already issued, don't issue them again
                 auto found_target = std::find_if(
                     aiComp->perception.aiAttackOrders.begin(),
                     aiComp->perception.aiAttackOrders.end(),
@@ -159,12 +168,12 @@ namespace Systems::AI {
                         return pair.target == targetID;
                     }
                 );
-
                 if(found_target != aiComp->perception.aiAttackOrders.end()){
                     // log_info << "Already issued attack orders to this target";
                     continue;
                 }
 
+                // If orders from this source are already issued, don't issue them again
                 EntityID sourceID = source;
                 auto found_source = std::find_if(
                     aiComp->perception.aiAttackOrders.begin(),
@@ -173,9 +182,14 @@ namespace Systems::AI {
                         return pair.source == sourceID;
                     }
                 );
-
                 if(found_source != aiComp->perception.aiAttackOrders.end()){
                     // log_info << "Already issued attack orders from this source";
+                    continue;
+                }
+
+                // If the distance between the source and target is too large, don't attack
+                if(distance > Config::AI_MAX_DISTANCE_TO_ATTACK){
+                    // log_info << "Distance between source and target is too large, skipping";
                     continue;
                 }
 
@@ -218,33 +232,16 @@ namespace Systems::AI {
         }
 
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
-        if (aiComp->plan.potentialSingleAttackTargetsByDistance.empty() || submittedAnAttackOrder == false) {
-            std::vector<EntityID> garissons{aiComp->perception.aiGarissons.begin(), aiComp->perception.aiGarissons.end()};
+        if (potentialSuccesfulSingleAttackTargetsByDistance.empty() || submittedAnAttackOrder == false) {
+            // 1. Consolidate into the closest ai target 
 
-            if (!garissons.empty()) {
-                // Shuffle garissons for randomness
-                std::shuffle(garissons.begin(), garissons.end(), std::mt19937(std::random_device()()));
+            auto& [distance, pair] = *potentialFailedSingleAttackTargetsByDistance.begin();
+            auto [consolidateSource, target] = pair;
 
-                // garison croup count
-                int groupSize = 10;
-                // Determine number of groups (1 per 5 garissons)
-                size_t groupCount = static_cast<size_t>(std::ceil(garissons.size() / groupSize)) + 1;
+            for(auto& garisson : aiComp->perception.aiGarissons){
+                if(garisson == consolidateSource) continue;
 
-                // Select groupCount random targets
-                std::vector<EntityID> targetGarissons;
-                for (size_t i = 0; i < groupCount && i < garissons.size(); ++i) {
-                    targetGarissons.push_back(garissons[i]);
-                }
-
-                // log_info << "Consolidating drones into " << groupCount << " groups, totalGarissons: " << garissons.size();
-
-                // Assign garissons to groups
-                for (size_t i = 0; i < garissons.size(); ++i) {
-                    size_t targetIndex = i / groupSize; // Determine group index based on 5 per group
-                    if (targetIndex < targetGarissons.size() && garissons[i] != targetGarissons[targetIndex]) {
-                        aiComp->execute.finalTargets.push_back({garissons[i], targetGarissons[targetIndex]});
-                    }
-                }
+                aiComp->execute.finalTargets.push_back({garisson, consolidateSource});
             }
         }
     }

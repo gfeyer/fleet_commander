@@ -22,6 +22,7 @@ namespace Config {
 
     const float AI_DECISION_INTERVAL = 1.f;
     const unsigned int AI_MAX_EXECUTIONS_PER_TURN = 20;
+    const float AI_MAX_DISTANCE_TO_ATTACK = 300.f;
 
 }
 
