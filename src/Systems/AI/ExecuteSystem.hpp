@@ -11,7 +11,7 @@ namespace Systems::AI {
         Entity& aiEntity = entityManager.getAIEntity();
         auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
     
-        int attackOrdersExecuted = 0;
+        unsigned int attackOrdersExecuted = 0;
 
         for(auto& [source, target, distance, cost] : aiComp->execute.finalTargets){
             // log_info << "Attack: "<< source << " -> " << target;

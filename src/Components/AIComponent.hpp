@@ -8,46 +8,48 @@
 #include <set>
 
 namespace Components {
-    struct TargetIDPair{
-        EntityID source;
-        EntityID target;
-        float distance = 0.f;
-        float cost = 0.f;
 
-        TargetIDPair(EntityID source, EntityID target, float dist, float cost) : source(source), target(target), distance(dist), cost(cost) {}
-    };
+    namespace AI{
+        struct AttackPair{
+                EntityID source;
+                EntityID target;
+                float distance = 0.f;
+                float cost = 0.f;
 
-    // Comparator for Cost
-    struct ComparatorPairByCost {
-        bool operator()(const TargetIDPair& a, const TargetIDPair& b) const {
-            if (a.cost != b.cost) {
-                return a.cost < b.cost;
-            }
-            return std::tie(a.source, a.target) < std::tie(b.source, b.target);
-        }
-    };
+                AttackPair(EntityID source, EntityID target, float dist, float cost) : source(source), target(target), distance(dist), cost(cost) {}
+            };
 
-    // Comparator for Distance
-    struct ComparatorPairByDistance {
-        bool operator()(const TargetIDPair& a, const TargetIDPair& b) const {
-            if (a.distance != b.distance) {
-                return a.distance < b.distance;
-            }
-            return std::tie(a.source, a.target) < std::tie(b.source, b.target);
-        }
-    };
+            // Comparator for Cost
+            struct ComparatorPairByCost {
+                bool operator()(const AttackPair& a, const AttackPair& b) const {
+                    if (a.cost != b.cost) {
+                        return a.cost < b.cost;
+                    }
+                    return std::tie(a.source, a.target) < std::tie(b.source, b.target);
+                }
+            };
 
-
+            // Comparator for Distance
+            struct ComparatorPairByDistance {
+                bool operator()(const AttackPair& a, const AttackPair& b) const {
+                    if (a.distance != b.distance) {
+                        return a.distance < b.distance;
+                    }
+                    return std::tie(a.source, a.target) < std::tie(b.source, b.target);
+                }
+            };
+    }
+    
     struct AIPerception {
         unsigned int aiTotalDrones = 0;
         unsigned int aiTotalEnergy = 0;
         float aiDroneProductionRate = 0.f;
-        std::set<TargetIDPair, ComparatorPairByDistance> aiAttackOrders;
+        std::set<AI::AttackPair, AI::ComparatorPairByDistance> aiAttackOrders;
 
         unsigned int playerTotalDrones = 0;
         unsigned int playerTotalEnergy = 0;
         float playerDroneProductionRate = 0.f;
-        std::set<TargetIDPair, ComparatorPairByDistance> playerAttackOrders;
+        std::set<AI::AttackPair, AI::ComparatorPairByDistance> playerAttackOrders;
 
         sf::Vector2f aiCentralPosition;
 
@@ -86,7 +88,7 @@ namespace Components {
     };
 
     struct AIExecute {
-        std::vector<TargetIDPair> finalTargets;
+        std::vector<Components::AI::AttackPair> finalTargets;
 
         void reset() { finalTargets.clear(); }
     };

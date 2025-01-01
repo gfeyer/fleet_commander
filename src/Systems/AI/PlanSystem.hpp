@@ -114,9 +114,9 @@ namespace Systems::AI {
         }
 
         // Declare local vars
-        std::set<Components::TargetIDPair, Components::ComparatorPairByDistance> potentialSuccesfulSingleAttackTargetsByDistance; 
-        std::set<Components::TargetIDPair, Components::ComparatorPairByDistance> potentialFailedSingleAttackTargetsByDistance;
-        std::set<Components::TargetIDPair, Components::ComparatorPairByCost> potentialFailedSingleAttackTargetsByCost;
+        std::set<Components::AI::AttackPair, Components::AI::ComparatorPairByDistance> potentialSuccesfulSingleAttackTargetsByDistance; 
+        std::set<Components::AI::AttackPair, Components::AI::ComparatorPairByDistance> potentialFailedSingleAttackTargetsByDistance;
+        std::set<Components::AI::AttackPair, Components::AI::ComparatorPairByCost> potentialFailedSingleAttackTargetsByCost;
 
         // Strategy: need energy or more factories?
         auto priorities = computeStrategyPriorities(entityManager);
@@ -138,7 +138,7 @@ namespace Systems::AI {
                 auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
                 auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
 
-                auto pair = Components::TargetIDPair(originGarissonID, targetEntityID, distance, costForSuccesfulAttack);
+                auto pair = Components::AI::AttackPair(originGarissonID, targetEntityID, distance, costForSuccesfulAttack);
                 if(droneCountAtThisGarisson > costForSuccesfulAttack){
                     // log_info << "Can conquer " << targetEntityID << " from " << originGarissonID << ", dist: " << distance;
                     potentialSuccesfulSingleAttackTargetsByDistance.insert(pair);
@@ -169,7 +169,7 @@ namespace Systems::AI {
                 auto found_target = std::find_if(
                     aiComp->perception.aiAttackOrders.begin(),
                     aiComp->perception.aiAttackOrders.end(),
-                    [targetID](const Components::TargetIDPair& pair) {
+                    [targetID](const Components::AI::AttackPair& pair) {
                         return pair.target == targetID;
                     }
                 );
@@ -183,7 +183,7 @@ namespace Systems::AI {
                 auto found_source = std::find_if(
                     aiComp->perception.aiAttackOrders.begin(),
                     aiComp->perception.aiAttackOrders.end(),
-                    [sourceID](const Components::TargetIDPair& pair) {
+                    [sourceID](const Components::AI::AttackPair& pair) {
                         return pair.source == sourceID;
                     }
                 );
@@ -256,7 +256,7 @@ namespace Systems::AI {
                 for(auto& garisson : aiComp->perception.aiGarissons){
                     if(garisson == consolidationSource) continue; // cannot consolidate with self
                     
-                    auto consolidatePair = Components::TargetIDPair(garisson, consolidationSource, distance, cost);
+                    auto consolidatePair = Components::AI::AttackPair(garisson, consolidationSource, distance, cost);
                     aiComp->execute.finalTargets.push_back(consolidatePair);
                     // log_info << "consolidating (source, target, distance, cost):" << consolidatePair.source << ", " << consolidatePair.target << ", " << consolidatePair.distance << ", " << consolidatePair.cost;
                 }
