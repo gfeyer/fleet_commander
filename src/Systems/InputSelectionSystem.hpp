@@ -51,7 +51,6 @@ namespace Systems {
     }
 
     void InputSelectionSystem(const sf::Event& event, Game::GameEntityManager& entityManager, const sf::RenderWindow& window) {
-        log_info << "Click event";
 
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             // Get the click position in world coordinates
