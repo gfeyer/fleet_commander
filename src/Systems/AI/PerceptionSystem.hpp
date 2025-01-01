@@ -113,10 +113,10 @@ namespace Systems::AI {
             auto* faction = entity.getComponent<Components::FactionComponent>();
             if(attackOrder && faction){
                 if(faction->faction == Components::Faction::PLAYER_1){
-                    aiComp->perception.playerAttackOrders.insert({attackOrder->origin, attackOrder->target});
+                    aiComp->perception.playerAttackOrders.insert({attackOrder->origin, attackOrder->target,0.f ,0.f});
                 }
                 if(faction->faction == Components::Faction::PLAYER_2){
-                    aiComp->perception.aiAttackOrders.insert({attackOrder->origin, attackOrder->target});
+                    aiComp->perception.aiAttackOrders.insert({attackOrder->origin, attackOrder->target, 0.f, 0.f});
                 }
             }
         }

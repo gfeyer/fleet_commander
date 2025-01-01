@@ -11,29 +11,43 @@ namespace Components {
     struct TargetIDPair{
         EntityID source;
         EntityID target;
+        float distance = 0.f;
         float cost = 0.f;
 
-        // Define ordering for std::set
-        bool operator<(const TargetIDPair& other) const {
-            // Compare by cost first (ascending order)
-            if (cost != other.cost) {
-                return cost < other.cost;
+        TargetIDPair(EntityID source, EntityID target, float dist, float cost) : source(source), target(target), distance(dist), cost(cost) {}
+    };
+
+    // Comparator for Cost
+    struct ComparatorPairByCost {
+        bool operator()(const TargetIDPair& a, const TargetIDPair& b) const {
+            if (a.cost != b.cost) {
+                return a.cost < b.cost;
             }
-            // If costs are equal, compare by source and target
-            return std::tie(source, target) < std::tie(other.source, other.target);
+            return std::tie(a.source, a.target) < std::tie(b.source, b.target);
         }
     };
+
+    // Comparator for Distance
+    struct ComparatorPairByDistance {
+        bool operator()(const TargetIDPair& a, const TargetIDPair& b) const {
+            if (a.distance != b.distance) {
+                return a.distance < b.distance;
+            }
+            return std::tie(a.source, a.target) < std::tie(b.source, b.target);
+        }
+    };
+
 
     struct AIPerception {
         unsigned int aiTotalDrones = 0;
         unsigned int aiTotalEnergy = 0;
         float aiDroneProductionRate = 0.f;
-        std::set<TargetIDPair> aiAttackOrders;
+        std::set<TargetIDPair, ComparatorPairByDistance> aiAttackOrders;
 
         unsigned int playerTotalDrones = 0;
         unsigned int playerTotalEnergy = 0;
         float playerDroneProductionRate = 0.f;
-        std::set<TargetIDPair> playerAttackOrders;
+        std::set<TargetIDPair, ComparatorPairByDistance> playerAttackOrders;
 
         sf::Vector2f aiCentralPosition;
 

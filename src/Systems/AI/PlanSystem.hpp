@@ -5,6 +5,8 @@
 
 #include "Game/GameEntityManager.hpp"
 
+#include "Components/GarissonComponent.hpp"
+
 #include "Utils/Logger.hpp"
 #include "Utils/Random.hpp"
 #include "Config.hpp"
@@ -112,8 +114,9 @@ namespace Systems::AI {
         }
 
         // Declare local vars
-        std::map<float, Components::TargetIDPair> potentialSuccesfulSingleAttackTargetsByDistance; 
-        std::map<float, Components::TargetIDPair> potentialFailedSingleAttackTargetsByDistance;
+        std::set<Components::TargetIDPair, Components::ComparatorPairByDistance> potentialSuccesfulSingleAttackTargetsByDistance; 
+        std::set<Components::TargetIDPair, Components::ComparatorPairByDistance> potentialFailedSingleAttackTargetsByDistance;
+        std::set<Components::TargetIDPair, Components::ComparatorPairByCost> potentialFailedSingleAttackTargetsByCost;
 
         // Strategy: need energy or more factories?
         auto priorities = computeStrategyPriorities(entityManager);
@@ -128,18 +131,20 @@ namespace Systems::AI {
 
             for(auto [distance, targetEntityID] : it->second){
                 float costForSuccesfulAttack = computeAttackCost(entityManager, targetEntityID, distance);
-                costForSuccesfulAttack += 2.f; // add some buffer
+                costForSuccesfulAttack += 1.f; // add some buffer
 
                 auto droneCountAtThisGarisson = aiComp->perception.garissonByDroneCount.at(originGarissonID);
 
                 auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
                 auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
 
+                auto pair = Components::TargetIDPair(originGarissonID, targetEntityID, distance, costForSuccesfulAttack);
                 if(droneCountAtThisGarisson > costForSuccesfulAttack){
                     // log_info << "Can conquer " << targetEntityID << " from " << originGarissonID << ", dist: " << distance;
-                    potentialSuccesfulSingleAttackTargetsByDistance[distance] = {originGarissonID, targetEntityID, costForSuccesfulAttack};
+                    potentialSuccesfulSingleAttackTargetsByDistance.insert(pair);
                 }else{
-                    potentialFailedSingleAttackTargetsByDistance[distance] = {originGarissonID, targetEntityID, costForSuccesfulAttack};
+                    potentialFailedSingleAttackTargetsByDistance.insert(pair);
+                    potentialFailedSingleAttackTargetsByCost.insert(pair);
                 }
             }
         }
@@ -149,8 +154,8 @@ namespace Systems::AI {
             // logStrategy(strategy);
             // implement the strategy 
             // scan through potential targets and chooe a target
-            for(auto& [distance, entityPair] : potentialSuccesfulSingleAttackTargetsByDistance){
-                auto [source, target, cost] = entityPair;
+            for(auto& pair : potentialSuccesfulSingleAttackTargetsByDistance){
+                auto [source, target, distance, cost] = pair;
 
                 // log_info << "dist: " << distance << " source: " << source << " target: " << target;
 
@@ -195,52 +200,67 @@ namespace Systems::AI {
 
                 if(targetPowerPlantComp && strategy == Strategy::ENERGY){
                     // issue orders to attack
-                    aiComp->execute.finalTargets.push_back({source, target});
-                    aiComp->perception.aiAttackOrders.insert({source, target});
+                    aiComp->execute.finalTargets.push_back(pair);
+                    aiComp->perception.aiAttackOrders.insert(pair);
                     submittedAnAttackOrder = true;
+                    // log_info << "Attacking power plant (source, target, distance, cost):" << source << ", " << target << ", " << distance << ", " << cost;
 
-                    // Debug symbols
-                    auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
-                    auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
-                    aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
-                    aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
-
-                }else if(targetFactoryComp && strategy == Strategy::PRODUCTION){
+                }if(targetFactoryComp && strategy == Strategy::PRODUCTION){
                     // issue orders to attack
-                    aiComp->execute.finalTargets.push_back({source, target});
-                    aiComp->perception.aiAttackOrders.insert({source, target});
+                    aiComp->execute.finalTargets.push_back(pair);
+                    aiComp->perception.aiAttackOrders.insert(pair);
                     submittedAnAttackOrder = true;
+                    // log_info << "Attacking factory (source, target, distance, cost):" << source << ", " << target << ", " << distance << ", " << cost;
 
-                    // Debug symbols
-                    auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
-                    auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
-                    aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
-                    aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
-                }else if(strategy == Strategy::DISTANCE && (targetPowerPlantComp || targetFactoryComp)){
-                    // issue orders to attack
-                    aiComp->execute.finalTargets.push_back({source, target});
-                    aiComp->perception.aiAttackOrders.insert({source, target});
-                    submittedAnAttackOrder = true;
+                }
+            }
 
-                    // Debug symbols
-                    auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
-                    auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
-                    aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
-                    aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
+            // Was not able to submit an attack order acording to the desired strategy
+            // Issue orders that can be submitted
+            if(submittedAnAttackOrder == false){
+            
+                for(auto& potentialSuccesfulSingleAttackTargetsByDistance : potentialSuccesfulSingleAttackTargetsByDistance){
+                    auto [source, target, distance, cost] = potentialSuccesfulSingleAttackTargetsByDistance;
+                    // log_info << "MapData (source,target,distance,cost): " << source << ", " << target << ", " << distance << ", " << cost;
+                }
+                for(auto& pair : potentialSuccesfulSingleAttackTargetsByDistance){
+                    auto [source, target, distance, cost] = pair;
+                    auto* garissonComp = entityManager.getComponent<Components::GarissonComponent>(target);
+
+                    if(distance > Config::AI_MAX_DISTANCE_TO_ATTACK){
+                        continue;
+                    }
+
+                    if(garissonComp){
+                        // issue orders to attack
+                        aiComp->execute.finalTargets.push_back(pair);
+                        aiComp->perception.aiAttackOrders.insert(pair);
+                        submittedAnAttackOrder = true;
+                        // log_info << "Attacking closest target (source, target, distance, cost):" << source << ", " << target << ", " << distance << ", " << cost;
+                    }
                 }
             }
         }
 
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
-        if (potentialSuccesfulSingleAttackTargetsByDistance.empty() || submittedAnAttackOrder == false) {
-            // 1. Consolidate into the closest ai target 
-            auto& [distance, pair] = *potentialFailedSingleAttackTargetsByDistance.begin();
-            auto [consolidateSource, target, cost] = pair;
+        if (submittedAnAttackOrder == false) {
+            // 1. Consolidate into the closest ai garisson 
 
-            for(auto& garisson : aiComp->perception.aiGarissons){
-                if(garisson == consolidateSource) continue;
-                aiComp->execute.finalTargets.push_back({garisson, consolidateSource});
-                // log_info << "no single attack target, consolidating into " << consolidateSource;
+            for(auto& pair : potentialFailedSingleAttackTargetsByDistance){
+                auto [consolidationSource, target, distance, cost] = pair;
+
+                if(distance > Config::AI_MAX_DISTANCE_TO_ATTACK) continue;
+
+                // log_info << "Consolidation target: " << consolidationSource;
+
+                for(auto& garisson : aiComp->perception.aiGarissons){
+                    if(garisson == consolidationSource) continue; // cannot consolidate with self
+                    
+                    auto consolidatePair = Components::TargetIDPair(garisson, consolidationSource, distance, cost);
+                    aiComp->execute.finalTargets.push_back(consolidatePair);
+                    // log_info << "consolidating (source, target, distance, cost):" << consolidatePair.source << ", " << consolidatePair.target << ", " << consolidatePair.distance << ", " << consolidatePair.cost;
+                }
+                break;
             }
         }
     }

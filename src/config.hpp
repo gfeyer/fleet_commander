@@ -16,13 +16,14 @@ namespace Config {
 
     // GUI consts
     constexpr float GUI_TEXT_SIZE = 18.f;
+    const bool ENABLE_DEBUG_SYMBOLS = true;
 
     // Game consts
     const float DRONE_SPEED = 800.f;
 
     const float AI_DECISION_INTERVAL = 1.f;
     const unsigned int AI_MAX_EXECUTIONS_PER_TURN = 20;
-    const float AI_MAX_DISTANCE_TO_ATTACK = 300.f;
+    const float AI_MAX_DISTANCE_TO_ATTACK = 500.f;
 
 }
 

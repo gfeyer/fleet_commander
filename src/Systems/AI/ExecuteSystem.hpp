@@ -13,10 +13,17 @@ namespace Systems::AI {
     
         int attackOrdersExecuted = 0;
 
-        for(auto& [source, target, cost] : aiComp->execute.finalTargets){
+        for(auto& [source, target, distance, cost] : aiComp->execute.finalTargets){
             // log_info << "Attack: "<< source << " -> " << target;
             entityManager.addComponent(source, Components::AttackOrderComponent{source, target});
             attackOrdersExecuted++;
+
+            if(Config::ENABLE_DEBUG_SYMBOLS){
+                auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
+                auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
+                aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
+                aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
+            }
 
             if (attackOrdersExecuted >= Config::AI_MAX_EXECUTIONS_PER_TURN) break;
         }
