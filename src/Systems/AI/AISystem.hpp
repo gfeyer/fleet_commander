@@ -14,15 +14,16 @@
 #include "Systems/AI/PlanSystem.hpp"
 #include "Systems/AI/PerceptionSystem.hpp"
 
+#include "Config.hpp"
+
 namespace Systems::AI {
         void AISystem(Game::GameEntityManager& entityManager, float dt) {
 
             // Run AI every few seconds
             static float decisionTimer = 0.f;
-            static float decisionTimerMax = 3.f;
 
             decisionTimer += dt;
-            if(decisionTimer < decisionTimerMax){
+            if(decisionTimer < Config::AI_DECISION_INTERVAL){
                 return;
             }
             decisionTimer = 0.f;

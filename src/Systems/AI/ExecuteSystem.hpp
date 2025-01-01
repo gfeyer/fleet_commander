@@ -3,6 +3,8 @@
 
 #include "Game/GameEntityManager.hpp"
 
+#include "Config.hpp"
+
 namespace Systems::AI {
 
     void ExecuteSystem(Game::GameEntityManager& entityManager, float dt){
@@ -16,7 +18,7 @@ namespace Systems::AI {
             entityManager.addComponent(source, Components::AttackOrderComponent{source, target});
             attackOrdersExecuted++;
 
-            if (attackOrdersExecuted >=2) break;
+            if (attackOrdersExecuted >= Config::AI_MAX_EXECUTIONS_PER_TURN) break;
         }
     }
 }
