@@ -8,12 +8,18 @@
 #include <set>
 
 namespace Components {
-    struct EntityIDPair{
+    struct TargetIDPair{
         EntityID source;
         EntityID target;
+        float cost = 0.f;
 
         // Define ordering for std::set
-        bool operator<(const EntityIDPair& other) const {
+        bool operator<(const TargetIDPair& other) const {
+            // Compare by cost first (ascending order)
+            if (cost != other.cost) {
+                return cost < other.cost;
+            }
+            // If costs are equal, compare by source and target
             return std::tie(source, target) < std::tie(other.source, other.target);
         }
     };
@@ -22,12 +28,12 @@ namespace Components {
         unsigned int aiTotalDrones = 0;
         unsigned int aiTotalEnergy = 0;
         float aiDroneProductionRate = 0.f;
-        std::set<EntityIDPair> aiAttackOrders;
+        std::set<TargetIDPair> aiAttackOrders;
 
         unsigned int playerTotalDrones = 0;
         unsigned int playerTotalEnergy = 0;
         float playerDroneProductionRate = 0.f;
-        std::set<EntityIDPair> playerAttackOrders;
+        std::set<TargetIDPair> playerAttackOrders;
 
         sf::Vector2f aiCentralPosition;
 
@@ -66,7 +72,7 @@ namespace Components {
     };
 
     struct AIExecute {
-        std::vector<EntityIDPair> finalTargets;
+        std::vector<TargetIDPair> finalTargets;
 
         void reset() { finalTargets.clear(); }
     };

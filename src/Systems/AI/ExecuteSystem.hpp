@@ -13,7 +13,7 @@ namespace Systems::AI {
     
         int attackOrdersExecuted = 0;
 
-        for(auto& [source, target] : aiComp->execute.finalTargets){
+        for(auto& [source, target, cost] : aiComp->execute.finalTargets){
             // log_info << "Attack: "<< source << " -> " << target;
             entityManager.addComponent(source, Components::AttackOrderComponent{source, target});
             attackOrdersExecuted++;

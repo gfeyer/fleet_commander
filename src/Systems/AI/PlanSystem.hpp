@@ -112,8 +112,8 @@ namespace Systems::AI {
         }
 
         // Declare local vars
-        std::map<float, Components::EntityIDPair> potentialSuccesfulSingleAttackTargetsByDistance; 
-        std::map<float, Components::EntityIDPair> potentialFailedSingleAttackTargetsByDistance;
+        std::map<float, Components::TargetIDPair> potentialSuccesfulSingleAttackTargetsByDistance; 
+        std::map<float, Components::TargetIDPair> potentialFailedSingleAttackTargetsByDistance;
 
         // Strategy: need energy or more factories?
         auto priorities = computeStrategyPriorities(entityManager);
@@ -137,9 +137,9 @@ namespace Systems::AI {
 
                 if(droneCountAtThisGarisson > costForSuccesfulAttack){
                     // log_info << "Can conquer " << targetEntityID << " from " << originGarissonID << ", dist: " << distance;
-                    potentialSuccesfulSingleAttackTargetsByDistance[distance] = {originGarissonID, targetEntityID};
+                    potentialSuccesfulSingleAttackTargetsByDistance[distance] = {originGarissonID, targetEntityID, costForSuccesfulAttack};
                 }else{
-                    potentialFailedSingleAttackTargetsByDistance[distance] = {originGarissonID, targetEntityID};
+                    potentialFailedSingleAttackTargetsByDistance[distance] = {originGarissonID, targetEntityID, costForSuccesfulAttack};
                 }
             }
         }
@@ -150,7 +150,7 @@ namespace Systems::AI {
             // implement the strategy 
             // scan through potential targets and chooe a target
             for(auto& [distance, entityPair] : potentialSuccesfulSingleAttackTargetsByDistance){
-                auto [source, target] = entityPair;
+                auto [source, target, cost] = entityPair;
 
                 // log_info << "dist: " << distance << " source: " << source << " target: " << target;
 
@@ -164,7 +164,7 @@ namespace Systems::AI {
                 auto found_target = std::find_if(
                     aiComp->perception.aiAttackOrders.begin(),
                     aiComp->perception.aiAttackOrders.end(),
-                    [targetID](const Components::EntityIDPair& pair) {
+                    [targetID](const Components::TargetIDPair& pair) {
                         return pair.target == targetID;
                     }
                 );
@@ -178,7 +178,7 @@ namespace Systems::AI {
                 auto found_source = std::find_if(
                     aiComp->perception.aiAttackOrders.begin(),
                     aiComp->perception.aiAttackOrders.end(),
-                    [sourceID](const Components::EntityIDPair& pair) {
+                    [sourceID](const Components::TargetIDPair& pair) {
                         return pair.source == sourceID;
                     }
                 );
@@ -234,14 +234,13 @@ namespace Systems::AI {
         // Plan: If no garisson alone can conquer adjacent targets, compute collective plan
         if (potentialSuccesfulSingleAttackTargetsByDistance.empty() || submittedAnAttackOrder == false) {
             // 1. Consolidate into the closest ai target 
-
             auto& [distance, pair] = *potentialFailedSingleAttackTargetsByDistance.begin();
-            auto [consolidateSource, target] = pair;
+            auto [consolidateSource, target, cost] = pair;
 
             for(auto& garisson : aiComp->perception.aiGarissons){
                 if(garisson == consolidateSource) continue;
-
                 aiComp->execute.finalTargets.push_back({garisson, consolidateSource});
+                // log_info << "no single attack target, consolidating into " << consolidateSource;
             }
         }
     }
