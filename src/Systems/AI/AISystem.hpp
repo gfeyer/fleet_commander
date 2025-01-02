@@ -23,7 +23,7 @@ namespace Systems::AI {
             static float decisionTimer = 0.f;
 
             decisionTimer += dt;
-            if(decisionTimer < Config::AI_DECISION_INTERVAL_SEC){
+            if(decisionTimer < Config::Difficulty::AI_DECISION_INTERVAL_SEC) {
                 return;
             }
             decisionTimer = 0.f;

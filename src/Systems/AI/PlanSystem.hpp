@@ -193,7 +193,7 @@ namespace Systems::AI {
                 }
 
                 // If the distance between the source and target is too large, don't attack
-                if(distance > Config::AI_MAX_DISTANCE_TO_ATTACK){
+                if(distance > Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK){
                     // log_info << "Distance between source and target is too large, skipping";
                     continue;
                 }
@@ -227,7 +227,7 @@ namespace Systems::AI {
                     auto [source, target, distance, cost] = pair;
                     auto* garissonComp = entityManager.getComponent<Components::GarissonComponent>(target);
 
-                    if(distance > Config::AI_MAX_DISTANCE_TO_ATTACK){
+                    if(distance > Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK){
                         continue;
                     }
 
@@ -249,7 +249,7 @@ namespace Systems::AI {
             for(auto& pair : potentialFailedSingleAttackTargetsByDistance){
                 auto [consolidationSource, target, distance, cost] = pair;
 
-                if(distance > Config::AI_MAX_DISTANCE_TO_ATTACK) continue;
+                if(distance > Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK) continue;
 
                 // log_info << "Consolidation target: " << consolidationSource;
 

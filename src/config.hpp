@@ -16,15 +16,17 @@ namespace Config {
 
     // GUI consts
     constexpr float GUI_TEXT_SIZE = 18.f;
-    const bool ENABLE_DEBUG_SYMBOLS = true;
+    const bool ENABLE_DEBUG_SYMBOLS = false;
 
     // Game consts
     const float DRONE_SPEED = 800.f;
-
-    const float AI_DECISION_INTERVAL_SEC = 5.f;
-    const unsigned int AI_MAX_EXECUTIONS_PER_TURN = 10;
-    const float AI_MAX_DISTANCE_TO_ATTACK = 500.f;
-
+    
+    // Game Difficulty
+    struct Difficulty {
+        inline static float AI_DECISION_INTERVAL_SEC = 5.f;
+        inline static unsigned int AI_MAX_EXECUTIONS_PER_TURN = 10;
+        inline static float AI_MAX_DISTANCE_TO_ATTACK = 500.f;
+    };
 }
 
 

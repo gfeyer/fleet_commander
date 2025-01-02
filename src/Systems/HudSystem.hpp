@@ -58,6 +58,56 @@ namespace Systems {
             player2Label->setSize({"50%", "100%"}); // Occupy 50% of the panel width
             player2Label->setPosition({"50%", "0"}); // Start at the middle of the panel
             topPanel->add(player2Label);
+
+            // Add AI Difficulty Label
+            auto difficultyLabel = tgui::Label::create("AI Difficulty:");
+            difficultyLabel->setRenderer(theme->getRenderer("Label"));
+            difficultyLabel->setTextSize(Config::GUI_TEXT_SIZE);
+            difficultyLabel->setPosition({"55%", "10"});
+            topPanel->add(difficultyLabel);
+
+            // Add AI Difficulty ComboBox
+            auto difficultyComboBox = tgui::ComboBox::create();
+            difficultyComboBox->setRenderer(theme->getRenderer("ComboBox"));
+            difficultyComboBox->setSize({"20%", "50%"}); // Adjust width and height
+            difficultyComboBox->setPosition({"55%", "40"}); // Position under the label
+            difficultyComboBox->setTextSize(Config::GUI_TEXT_SIZE - 2);
+
+            // Add difficulty levels
+            difficultyComboBox->addItem("Easy");
+            difficultyComboBox->addItem("Medium");
+            difficultyComboBox->addItem("Hard");
+            difficultyComboBox->addItem("Impossible");
+
+            // Default selection
+            difficultyComboBox->setSelectedItem("Medium");
+
+            // Handle selection change
+            difficultyComboBox->onItemSelect([&](const tgui::String& item){
+                auto difficulty = item.toStdString();
+                log_info << "AI Difficulty: " << difficulty;
+                if(difficulty == "Easy"){
+                    Config::Difficulty::AI_DECISION_INTERVAL_SEC = 10.f;
+                    Config::Difficulty::AI_MAX_EXECUTIONS_PER_TURN = 2;
+                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 300.f;
+                }else if(difficulty == "Medium"){
+                    Config::Difficulty::AI_DECISION_INTERVAL_SEC = 5.f;
+                    Config::Difficulty::AI_MAX_EXECUTIONS_PER_TURN = 10;
+                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 500.f;
+                }else if(difficulty == "Hard"){
+                    Config::Difficulty::AI_DECISION_INTERVAL_SEC = 3.f;
+                    Config::Difficulty::AI_MAX_EXECUTIONS_PER_TURN = 15;
+                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 750.f;
+                }else if(difficulty == "Impossible"){
+                    Config::Difficulty::AI_DECISION_INTERVAL_SEC = 1.f;
+                    Config::Difficulty::AI_MAX_EXECUTIONS_PER_TURN = 30;
+                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 2000.f;
+                }
+            });
+
+            // Add ComboBox to the panel
+            topPanel->add(difficultyComboBox, "difficultyComboBox");
+
         }
 
         // Top Panel display logic

@@ -119,6 +119,7 @@ void Scene::render()
 
 void Scene::handleInput(sf::Event &event)
 {
+    gui->handleEvent(event);
     Systems::InputSelectionSystem(event, entityManager, windowRef);
 
     // Handle Camera Movement

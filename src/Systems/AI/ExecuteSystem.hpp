@@ -25,7 +25,7 @@ namespace Systems::AI {
                 aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
             }
 
-            if (attackOrdersExecuted >= Config::AI_MAX_EXECUTIONS_PER_TURN) break;
+            if (attackOrdersExecuted >= Config::Difficulty::AI_MAX_EXECUTIONS_PER_TURN) break;
         }
     }
 }
