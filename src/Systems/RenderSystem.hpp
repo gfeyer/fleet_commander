@@ -33,12 +33,11 @@ namespace Systems {
             // Draw auto transfer orders (back plane)
             auto* transferOrder = entity.getComponent<Components::DroneTransferComponent>();
             if (transferOrder) {
-                auto* targetTransform = entityManager.getComponent<Components::TransformComponent>(transferOrder->target);
-                if(targetTransform){
-                    sf::Color transparentWhite(255, 255, 255, 128); // 50% Transparent White 
-                    Utils::drawDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f, transparentWhite);
-                    Utils::drawGradientDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f);
-                }
+                auto* targetTransform = entityManager.getEntity(transferOrder->target).getComponent<Components::TransformComponent>();
+                sf::Color transparentWhite(255, 255, 255, 128); // 50% Transparent White 
+                // Render the dot at the pre-calculated position
+                
+                Utils::drawGradientDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f);
             }
         }
 

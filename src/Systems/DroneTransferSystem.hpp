@@ -7,7 +7,7 @@
 
 namespace Systems {
 
-    void DroneTransferSystem(Game::GameEntityManager& entityManager) {
+    void DroneTransferSystem(Game::GameEntityManager& entityManager, float dt) {
 
         auto& entities = entityManager.getAllEntities();
         for (auto& [id, entity] : entities) {
@@ -29,6 +29,29 @@ namespace Systems {
                     auto target = droneTransferComp->target;
                     entityManager.addComponent(source, Components::AttackOrderComponent{source, target});
                 }
+
+                // Update Animation dot 
+                /*
+                auto* sourceTransform = entityManager.getComponent<Components::TransformComponent>(droneTransferComp->source);
+                auto* targetTransform = entityManager.getComponent<Components::TransformComponent>(droneTransferComp->target);
+
+                if (sourceTransform && targetTransform) {
+                    sf::Vector2f start = sourceTransform->getPosition();
+                    sf::Vector2f end = targetTransform->getPosition();
+
+                    sf::Vector2f direction = end - start;
+                    float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+                    direction /= length; // Normalize
+
+                    // Update animation progress
+                    droneTransferComp->currentDistance += droneTransferComp->speed * dt;
+                    if (droneTransferComp->currentDistance > length) {
+                        droneTransferComp->currentDistance = 0.f; // Reset animation
+                    }
+
+                    // Calculate dot position
+                    droneTransferComp->dotPosition = start + direction * droneTransferComp->currentDistance;
+                }*/
             }
         }
     }

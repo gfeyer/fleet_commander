@@ -84,6 +84,9 @@ namespace Utils {
             window.draw(dot);
         }
     }
+
+
+
 }
 
 #endif // CIRCLE_HPP

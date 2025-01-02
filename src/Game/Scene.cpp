@@ -95,7 +95,7 @@ void Scene::update(float dt)
     Systems::InputHoverSystem(entityManager, windowRef);
     Systems::HudSystem(entityManager, *gui);
     Systems::ProductionSystem(entityManager, dt);
-    Systems::DroneTransferSystem(entityManager);
+    Systems::DroneTransferSystem(entityManager, dt);
     Systems::MovementSystem(entityManager, dt);
     Systems::ShieldSystem(entityManager, dt);
     Systems::CombatSystem(entityManager, dt);
