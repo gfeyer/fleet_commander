@@ -8,10 +8,7 @@
 
 ### Screenshots
 
-![Screenshot1](docs/images/screenshot_007.png)
-
-
-![Screenshot2](docs/images/screenshot_010.png)
+![Screenshot1](docs/images/screenshot_010.png)
 
 
 ### Build from source
