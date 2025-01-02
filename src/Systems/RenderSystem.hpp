@@ -139,17 +139,19 @@ namespace Systems {
         }
 
         // Layer 3
-        // Draw non gui labels
+        // Draw labels (non-gui)
         for (auto& [id, entity] : entities) {
 
             // Draw non-gui text
             auto* textComp = entity.getComponent<Components::LabelComponent>();
             if (textComp) {
                 window.draw(textComp->text);
+                window.draw(textComp->text2);
             }
         }
 
-        // 3. Draw Debug Symbols
+        // Layer 4
+        // 4. Draw Debug Symbols
         Entity& aiEntity = entityManager.getAIEntity();
         auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
         if (aiComp && aiComp && Config::ENABLE_DEBUG_SYMBOLS) { 

@@ -22,6 +22,7 @@ namespace Systems {
             if (labelComp && transform) {
                 // Update the text position based on parent position + offset
                 labelComp->text.setPosition(transform->getPosition() + labelComp->offset);
+                labelComp->text2.setPosition(transform->getPosition());
 
                 // Update the text on the label:
                 auto* factory = entity.getComponent<Components::FactoryComponent>();
@@ -32,12 +33,14 @@ namespace Systems {
                 std::stringstream ss;
                 if(factory){
                     char buffer[50];
-                    std::snprintf(buffer, sizeof(buffer), "Factory %d\n%.1f/s",id, factory->droneProductionRate);
+                    // std::snprintf(buffer, sizeof(buffer), "Factory %d\n%.1f/s",id, factory->droneProductionRate);
+                    std::snprintf(buffer, sizeof(buffer), "Factory\n%.1f/s",factory->droneProductionRate);
                     ss << buffer;
                 }
                 if(powerPlant){
                     char buffer[50];
-                    std::snprintf(buffer, sizeof(buffer), "FusionReactor %d\nCapacity: %d", id, powerPlant->capacity);
+                    // std::snprintf(buffer, sizeof(buffer), "FusionReactor %d\nCapacity: %d", id, powerPlant->capacity);
+                    std::snprintf(buffer, sizeof(buffer), "FusionReactor\nCapacity: %d", powerPlant->capacity);
                     ss << buffer;
                 }
                 if(drone){
@@ -45,9 +48,12 @@ namespace Systems {
                 }
                 if(garisson){
                     if (garisson->getDroneCount() > 0){
-                        char buffer[50];
-                        std::snprintf(buffer, sizeof(buffer), "\nDrones: %d", garisson->getDroneCount());
-                        ss << buffer;
+                        labelComp->text2.setString(std::to_string(garisson->getDroneCount()));
+                        sf::FloatRect textBounds = labelComp->text2.getLocalBounds();
+                        labelComp->text2.setOrigin(
+                            textBounds.left + textBounds.width / 2.f, 
+                            textBounds.top + textBounds.height / 2.f
+                        );
                     }
                 }
 
