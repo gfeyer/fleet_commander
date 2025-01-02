@@ -68,6 +68,22 @@ namespace Utils {
         window.draw(dots);
     }
 
+    void drawGradientDottedLine(sf::RenderWindow& window, sf::Vector2f start, sf::Vector2f end, float dotSpacing) {
+        sf::Vector2f direction = end - start;
+        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+        direction /= length;
+
+        for (float i = 0; i < length; i += dotSpacing) {
+            sf::Vector2f position = start + direction * i;
+            sf::Color color = sf::Color(255, 255, 255,  255 * ((length - i) / length)); // Gradient effect
+
+            sf::CircleShape dot(3.f);
+            dot.setFillColor(color);
+            dot.setPosition(position - sf::Vector2f(3.f, 3.f));
+
+            window.draw(dot);
+        }
+    }
 }
 
 #endif // CIRCLE_HPP

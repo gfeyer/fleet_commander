@@ -37,6 +37,7 @@ namespace Systems {
                 if(targetTransform){
                     sf::Color transparentWhite(255, 255, 255, 128); // 50% Transparent White 
                     Utils::drawDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f, transparentWhite);
+                    Utils::drawGradientDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f);
                 }
             }
         }
