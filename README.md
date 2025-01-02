@@ -3,9 +3,8 @@
 ### Space strategy game
 
 ### TODO
-- Move AI to behavior tree
-    - make it aggressive 
 - Skin the game (sprites+animations)
+- Improve map generation
 
 ### Screenshots
 
