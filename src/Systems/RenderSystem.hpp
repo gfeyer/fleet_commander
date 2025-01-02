@@ -15,16 +15,19 @@
 #include "Components/GarissonComponent.hpp"
 #include "Components/DroneTransferComponent.hpp"
 
-#include "Utils/Circle.hpp"
+#include "Utils/Graphics.hpp"
 
 namespace Systems {
 
     void RenderSystem(Game::GameEntityManager& entityManager, sf::RenderWindow& window) {
         auto& entities = entityManager.getAllEntities();
         
-        // 1. Draw selection, shield, sprite, shapes
+
+        // Layer 0
+        // Background
+
+        // Layer 1
         for(auto& [id, entity] : entities) {
-            
             auto* transform = entity.getComponent<Components::TransformComponent>();
 
             // Draw auto transfer orders (back plane)
@@ -32,9 +35,16 @@ namespace Systems {
             if (transferOrder) {
                 auto* targetTransform = entityManager.getComponent<Components::TransformComponent>(transferOrder->target);
                 if(targetTransform){
-                    Utils::drawDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f, 5.f);
+                    Utils::drawDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f);
                 }
             }
+        }
+
+        // Layer 2
+        // Selection, shield, sprites, shapes
+        for(auto& [id, entity] : entities) {
+            
+            auto* transform = entity.getComponent<Components::TransformComponent>();
 
             // Draw shapes/sprites/shields
             // Draw selectable component
@@ -127,7 +137,8 @@ namespace Systems {
             }
         }
 
-        // 2. Draw non gui text last
+        // Layer 3
+        // Draw non gui labels
         for (auto& [id, entity] : entities) {
 
             // Draw non-gui text

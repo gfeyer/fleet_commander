@@ -34,7 +34,7 @@ namespace Utils {
     }
 
     // Function to draw a dotted line
-    void drawDottedLine(sf::RenderWindow& window, sf::Vector2f start, sf::Vector2f end, float dotSpacing, float dotRadius) {
+    void drawDottedCircles(sf::RenderWindow& window, sf::Vector2f start, sf::Vector2f end, float dotSpacing, float dotRadius) {
         sf::Vector2f direction = end - start;
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
@@ -51,6 +51,23 @@ namespace Utils {
             window.draw(dot);
         }
     }
+
+    void drawDottedLine(sf::RenderWindow& window, sf::Vector2f start, sf::Vector2f end, float dotSpacing) {
+        sf::Vector2f direction = end - start;
+        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+        direction /= length;
+
+        sf::VertexArray dots(sf::Points);
+
+        for (float i = 0; i < length; i += dotSpacing) {
+            sf::Vector2f position = start + direction * i;
+            dots.append(sf::Vertex(position, sf::Color::White));
+        }
+
+        window.draw(dots);
+    }
+
 }
 
 #endif // CIRCLE_HPP
