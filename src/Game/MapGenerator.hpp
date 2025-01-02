@@ -59,7 +59,7 @@ namespace Game {
     }
 
     void GenerateRandomMap(Game::GameEntityManager& entityManager, float mapWidth, float mapHeight, int unitCount, float minDistance) {
-        float minPlayerDistance = 300.0f; // Minimum distance between players
+        float minPlayerDistance = 700.0f; // Minimum distance between players
 
         std::random_device rd;
         std::mt19937 gen(rd());
