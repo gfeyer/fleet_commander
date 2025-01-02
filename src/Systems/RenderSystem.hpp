@@ -35,7 +35,8 @@ namespace Systems {
             if (transferOrder) {
                 auto* targetTransform = entityManager.getComponent<Components::TransformComponent>(transferOrder->target);
                 if(targetTransform){
-                    Utils::drawDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f);
+                    sf::Color transparentWhite(255, 255, 255, 128); // 50% Transparent White 
+                    Utils::drawDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f, transparentWhite);
                 }
             }
         }

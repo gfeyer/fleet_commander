@@ -52,7 +52,7 @@ namespace Utils {
         }
     }
 
-    void drawDottedLine(sf::RenderWindow& window, sf::Vector2f start, sf::Vector2f end, float dotSpacing) {
+    void drawDottedLine(sf::RenderWindow& window, sf::Vector2f start, sf::Vector2f end, float dotSpacing, sf::Color color) {
         sf::Vector2f direction = end - start;
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
@@ -62,7 +62,7 @@ namespace Utils {
 
         for (float i = 0; i < length; i += dotSpacing) {
             sf::Vector2f position = start + direction * i;
-            dots.append(sf::Vertex(position, sf::Color::White));
+            dots.append(sf::Vertex(position, color));
         }
 
         window.draw(dots);
