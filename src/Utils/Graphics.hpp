@@ -75,7 +75,7 @@ namespace Utils {
 
         for (float i = 0; i < length; i += dotSpacing) {
             sf::Vector2f position = start + direction * i;
-            sf::Color color = sf::Color(255, 255, 255,  255 * ((length - i) / length)); // Gradient effect
+            sf::Color color = sf::Color(255, 255, 255,  255 * (i/ length)); // Gradient effect
 
             sf::CircleShape dot(3.f);
             dot.setFillColor(color);
