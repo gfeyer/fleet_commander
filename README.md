@@ -2,6 +2,17 @@
 
 ### Space strategy game
 
+### How to play
+
+- Factories produce drones up to the maximum enery capacity
+- Power plants increase the maximum capacity
+- Use drones to conquer other structures
+- Select structure and:
+    - left click to attack another target
+    - right click to create drone transfer route
+    - right click anywhere (not on target) to cancel existing route
+- W A S D to move around the world
+
 ### TODO
 - Skin the game (sprites+animations)
 - Improve map generation
