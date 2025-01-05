@@ -18,23 +18,15 @@ namespace Systems {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
-        auto& entities = manager.getAllEntityIDs();
-        for (auto id: entities) {
+        for (auto&& [id, transform, shape, hover]: manager.view<Components::TransformComponent, Components::ShapeComponent, Components::HoverComponent>().each()) {
+            // Check if mouse is within entity bounds
+            if (shape.shape->getGlobalBounds().contains(worldPos)) {
+                hover.isHovered = true;
+                // hoverComp->position = worldPos;
+                hover.position = static_cast<sf::Vector2f>(mousePos);
 
-            auto* transform = manager.getComponent<Components::TransformComponent>(id);
-            auto* shapeComp = manager.getComponent<Components::ShapeComponent>(id);
-            auto* hoverComp = manager.getComponent<Components::HoverComponent>(id);
-
-            if (transform && shapeComp && hoverComp) {
-                // Check if mouse is within entity bounds
-                if (shapeComp->shape->getGlobalBounds().contains(worldPos)) {
-                    hoverComp->isHovered = true;
-                    // hoverComp->position = worldPos;
-                    hoverComp->position = static_cast<sf::Vector2f>(mousePos);
-
-                } else {
-                    hoverComp->isHovered = false;
-                }
+            } else {
+                hover.isHovered = false;
             }
         }
     }
