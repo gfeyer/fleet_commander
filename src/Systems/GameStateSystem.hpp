@@ -20,14 +20,10 @@ namespace Systems {
         std::unordered_map<Components::Faction, unsigned int> units;
 
         // check if both players have units on the map
-            
-        for(auto id : manager.getAllEntityIDs()) {
-            auto* faction = manager.getComponent<Components::FactionComponent>(id);
-            if (faction) {
-                units[faction->faction] += 1;
-            }
+        for(auto&& [id, faction] : manager.view<Components::FactionComponent>().each()) {
+            units[faction.faction] += 1;
         }
-
+            
         if(units[Components::Faction::PLAYER_1] == 0) {
             // Player1 has lost
             auto* gameState = manager.getGameStateComponent();
