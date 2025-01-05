@@ -32,7 +32,7 @@
 #include "Systems/CombatSystem.hpp"
 #include "Systems/ShieldSystem.hpp"
 // #include "Systems/AI/AISystem.hpp"
-// #include "Systems/GameStateSystem.hpp"
+#include "Systems/GameStateSystem.hpp"
 #include "Systems/DroneTransferSystem.hpp"
 
 #include "Game/Builder.hpp"
@@ -101,7 +101,7 @@ void Scene::update(float dt)
     Systems::CombatSystem(entityManager, dt);
     Systems::LabelUpdateSystem(entityManager, dt);
     // Systems::AI::AISystem(entityManager, dt);
-    // Systems::GameStateSystem(entityManager, dt);
+    Systems::GameStateSystem(entityManager, dt);
 
     // Wrap Camera Position
     cameraPosition.x = fmod(cameraPosition.x + Config::MAP_WIDTH, Config::MAP_WIDTH);

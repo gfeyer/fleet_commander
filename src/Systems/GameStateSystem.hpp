@@ -7,7 +7,7 @@
 
 namespace Systems {
 
-    void GameStateSystem(Game::GameEntityManager& entityManager, float dt) {
+    void GameStateSystem(Game::GameEntityManager& manager, float dt) {
 
         static float timer = 0.f;
         // Run this check every 5 seconds
@@ -21,8 +21,8 @@ namespace Systems {
 
         // check if both players have units on the map
             
-        for(auto& [id, entity] : entityManager.getAllEntities()) {
-            auto* faction = entity.getComponent<Components::FactionComponent>();
+        for(auto id : manager.getAllEntityIDs()) {
+            auto* faction = manager.getComponent<Components::FactionComponent>(id);
             if (faction) {
                 units[faction->faction] += 1;
             }
@@ -30,14 +30,14 @@ namespace Systems {
 
         if(units[Components::Faction::PLAYER_1] == 0) {
             // Player1 has lost
-            auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+            auto* gameState = manager.getGameStateComponent();
             gameState->winner = Components::Faction::PLAYER_2;
             gameState->isGameOver = true;
         }
 
         if (units[Components::Faction::PLAYER_2] == 0) {
             // Player2 has lost
-            auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+            auto* gameState = manager.getGameStateComponent();
             gameState->winner = Components::Faction::PLAYER_1;
             gameState->isGameOver = true;
         }
