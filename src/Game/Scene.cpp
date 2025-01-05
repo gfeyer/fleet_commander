@@ -22,7 +22,7 @@
 #include "Components/GameStateComponent.hpp"
 #include "Components/AIComponent.hpp"
 
-// #include "Systems/MovementSystem.hpp"
+#include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
 // #include "Systems/LabelUpdateSystem.hpp"
 // #include "Systems/InputSelectionSystem.hpp"
@@ -96,7 +96,7 @@ void Scene::update(float dt)
     Systems::HudSystem(entityManager, *gui);
     Systems::ProductionSystem(entityManager, dt);
     // Systems::DroneTransferSystem(entityManager, dt);
-    // Systems::MovementSystem(entityManager, dt);
+    Systems::MovementSystem(entityManager, dt);
     // Systems::ShieldSystem(entityManager, dt);
     Systems::CombatSystem(entityManager, dt);
     // Systems::LabelUpdateSystem(entityManager, dt);
