@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 #include <sstream>
-#include "Core/Entity.hpp"
+
 
 #include "Components/FactoryComponent.hpp"
 #include "Game/Builder.hpp"
@@ -13,16 +13,16 @@
 
 namespace Systems {
 
-    void ProductionSystem(Game::GameEntityManager& entityManager, float dt) {
+    void ProductionSystem(Game::GameEntityManager& manager, float dt) {
 
-        auto& entities = entityManager.getAllEntities();
-        auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+        auto entities = manager.getAllEntityIDs();
+        auto* gameState = manager.getGameStateComponent();
 
         // Update all energy totals
         gameState->ClearAllEnergy();
-        for(auto& [id, entity] : entities){
-            auto* powerPlant = entity.getComponent<Components::PowerPlantComponent>();
-            auto* faction = entity.getComponent<Components::FactionComponent>();
+        for(auto id : entities){
+            auto* powerPlant = manager.getComponent<Components::PowerPlantComponent>(id);
+            auto* faction = manager.getComponent<Components::FactionComponent>(id);
             
             if(powerPlant && faction){
                 gameState->playerEnergy[faction->faction] += powerPlant->capacity; 
@@ -30,11 +30,11 @@ namespace Systems {
         }
 
         // Update all drone production
-        for (auto& [id, entity] : entities) {
+        for (auto id : entities) {
 
-            auto* factory = entity.getComponent<Components::FactoryComponent>();
-            auto* faction = entity.getComponent<Components::FactionComponent>();
-            auto* garisson = entity.getComponent<Components::GarissonComponent>(); 
+            auto* factory = manager.getComponent<Components::FactoryComponent>(id);
+            auto* faction = manager.getComponent<Components::FactionComponent>(id);
+            auto* garisson = manager.getComponent<Components::GarissonComponent>(id); 
 
             // Generate drones in factories
             if (factory && garisson && faction && faction->faction != Components::Faction::NEUTRAL) {
@@ -50,7 +50,7 @@ namespace Systems {
                 factory->productionTimer -= 1.f;
 
                 // If less energy than drones, do not generate new drones
-                auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+                auto* gameState = manager.getGameStateComponent();
                 if(gameState->playerEnergy[faction->faction] <= gameState->playerDrones[faction->faction]){
                     continue;
                 }

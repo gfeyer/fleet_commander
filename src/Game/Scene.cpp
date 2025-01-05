@@ -7,8 +7,6 @@
 #include "Resources/ResourceManager.hpp"
 #include "Config.hpp"
 
-#include "Core/Entity.hpp"
-
 #include "Components/FactionComponent.hpp"
 #include "Components/FactoryComponent.hpp"
 #include "Components/PowerPlantComponent.hpp"
@@ -74,10 +72,10 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 
     // Create Game State Entity
     EntityID gameStateID = entityManager.createEntity();
-    entityManager.addComponent(gameStateID, Components::GameStateComponent{2});
+    entityManager.addComponent<Components::GameStateComponent>(gameStateID, 2);
 
     EntityID enemyAI = entityManager.createEntity();
-    entityManager.addComponent(enemyAI, Components::AIComponent{});
+    entityManager.addComponent<Components::AIComponent>(enemyAI);
 
     // Generate Map
     Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 30, 100);

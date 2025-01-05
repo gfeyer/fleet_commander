@@ -5,12 +5,13 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
-#include "Core/Entity.hpp"
+
 #include "Config.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Components/SelectableComponent.hpp"
 #include "Components/AttackOrderComponent.hpp"
 #include "Components/DroneTransferComponent.hpp"
+#include "Components/FactionComponent.hpp"
 
 #include "Game/Builder.hpp"
 
@@ -18,27 +19,27 @@
 
 namespace Systems {
 
-    EntityID getPreviouslySelectedEntity(Game::GameEntityManager& entityManager){
+    EntityID getPreviouslySelectedEntity(Game::GameEntityManager& manager){
 
-        auto& entities = entityManager.getAllEntities();
-        for (auto& [id, entity] : entities) {
-            auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
+        auto entities = manager.getAllEntityIDs();
+        for (auto id : entities) {
+            auto* selectableComp = manager.getComponent<Components::SelectableComponent>(id);
             if (selectableComp && selectableComp->isSelected) {
                 return id;
             }
         }
-        return -1;
+        return NullEntityID;
     }
 
-    EntityID getSelectedEntity(const sf::Event& event, Game::GameEntityManager& entityManager, const sf::RenderWindow& window){
+    EntityID getSelectedEntity(const sf::Event& event, Game::GameEntityManager& manager, const sf::RenderWindow& window){
         sf::Vector2f worldPos = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
 
-        auto& entities = entityManager.getAllEntities();
+        auto entities = manager.getAllEntityIDs();
         // Determine if a new selection was made
-        for (auto& [targetID, targetEntity] : entities) {
-            auto* targetTransform = targetEntity.getComponent<Components::TransformComponent>();
-            auto* targetShapeComp = targetEntity.getComponent<Components::ShapeComponent>();
-            auto* targetSelectableComp = targetEntity.getComponent<Components::SelectableComponent>();
+        for (auto targetID : entities) {
+            auto* targetTransform = manager.getComponent<Components::TransformComponent>(targetID);
+            auto* targetShapeComp = manager.getComponent<Components::ShapeComponent>(targetID);
+            auto* targetSelectableComp = manager.getComponent<Components::SelectableComponent>(targetID);
 
             if (targetTransform && targetShapeComp && targetSelectableComp) {
                     // Check if mouse is within entity bounds (eg. click on entity)
@@ -47,46 +48,44 @@ namespace Systems {
                 }
             }
         }
-        return -1;
+        return NullEntityID;
     }
 
-    void InputSelectionSystem(const sf::Event& event, Game::GameEntityManager& entityManager, const sf::RenderWindow& window) {
+    void InputSelectionSystem(const sf::Event& event, Game::GameEntityManager& manager, const sf::RenderWindow& window) {
 
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             // Get the click position in world coordinates
             
-            EntityID previouslySelectedEntityID = getPreviouslySelectedEntity(entityManager);
-            EntityID selectedEntityID = getSelectedEntity(event, entityManager, window);
+            EntityID previouslySelectedEntityID = getPreviouslySelectedEntity(manager);
+            EntityID selectedEntityID = getSelectedEntity(event, manager, window);
 
-            if(previouslySelectedEntityID != -1 && selectedEntityID == -1){
+            if(previouslySelectedEntityID != NullEntityID && selectedEntityID == NullEntityID){
                 // A target already has been selected previously
                 // No new target is selected now
                 // Cancel old selection
-                entityManager.getComponent<Components::SelectableComponent>(previouslySelectedEntityID)->isSelected = false;
+                manager.getComponent<Components::SelectableComponent>(previouslySelectedEntityID)->isSelected = false;
 
-            }else if (previouslySelectedEntityID != -1 && previouslySelectedEntityID != selectedEntityID) {
+            }else if (previouslySelectedEntityID != NullEntityID && previouslySelectedEntityID != selectedEntityID) {
                 // A target has already been selected previously
                 // This new selection is different than the old one
                 // Add attack orders
 
                 // log_info << "Attack entity " << selectedEntityID << " from " << previouslySelectedEntityID;              
-                Entity& originEntity = entityManager.getEntity(previouslySelectedEntityID);
-                auto* factionComp = originEntity.getComponent<Components::FactionComponent>();
+                auto* factionComp = manager.getComponent<Components::FactionComponent>(previouslySelectedEntityID);
                 if(factionComp->faction == Components::Faction::PLAYER_1){
-                    entityManager.addComponent(previouslySelectedEntityID, Components::AttackOrderComponent{previouslySelectedEntityID, selectedEntityID});
+                    manager.addOrReplaceComponent<Components::AttackOrderComponent>(previouslySelectedEntityID, previouslySelectedEntityID, selectedEntityID);
                 }               
                 // deselect targets after attack order
-                entityManager.getComponent<Components::SelectableComponent>(previouslySelectedEntityID)->isSelected = false;
-                entityManager.getComponent<Components::SelectableComponent>(selectedEntityID)->isSelected = false;
+                manager.getComponent<Components::SelectableComponent>(previouslySelectedEntityID)->isSelected = false;
+                manager.getComponent<Components::SelectableComponent>(selectedEntityID)->isSelected = false;
 
-            }else if(previouslySelectedEntityID == -1 && selectedEntityID != -1){
+            }else if(previouslySelectedEntityID == NullEntityID && selectedEntityID != NullEntityID){
                 // A target has not been selected previously
                 // This is the first selection
                 // Select the target
-                Entity& targetEntity = entityManager.getEntity(selectedEntityID);
-                auto* factionComp = targetEntity.getComponent<Components::FactionComponent>();
+                auto* factionComp = manager.getComponent<Components::FactionComponent>(selectedEntityID);
                 if(factionComp->faction == Components::Faction::PLAYER_1){
-                    entityManager.getComponent<Components::SelectableComponent>(selectedEntityID)->isSelected = true;
+                    manager.getComponent<Components::SelectableComponent>(selectedEntityID)->isSelected = true;
                 }
             }else{
                 // do nothing
@@ -94,42 +93,59 @@ namespace Systems {
         }
 
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
-            EntityID previouslySelectedEntityID = getPreviouslySelectedEntity(entityManager);
-            EntityID selectedEntityID = getSelectedEntity(event, entityManager, window);
+            EntityID previouslySelectedEntityID = getPreviouslySelectedEntity(manager);
+            EntityID selectedEntityID = getSelectedEntity(event, manager, window);
 
-            if(previouslySelectedEntityID != -1 && selectedEntityID == -1){
+            if(previouslySelectedEntityID != NullEntityID && selectedEntityID == NullEntityID){
                 // A target already has been selected previously
                 // No new target is selected now
                 // Cancel old selection and orders
-                auto* transferComp = entityManager.getComponent<Components::DroneTransferComponent>(previouslySelectedEntityID);
+                auto* transferComp = manager.getComponent<Components::DroneTransferComponent>(previouslySelectedEntityID);
                 if(transferComp){
-                    entityManager.removeComponent<Components::DroneTransferComponent>(previouslySelectedEntityID);
+                    manager.removeComponent<Components::DroneTransferComponent>(previouslySelectedEntityID);
                 }
                 // deselect
-                entityManager.getComponent<Components::SelectableComponent>(previouslySelectedEntityID)->isSelected = false;
+                manager.getComponent<Components::SelectableComponent>(previouslySelectedEntityID)->isSelected = false;
 
-            }else if(previouslySelectedEntityID != -1 && previouslySelectedEntityID != selectedEntityID){
+            }else if(previouslySelectedEntityID != NullEntityID && previouslySelectedEntityID != selectedEntityID){
                 // A target has already been selected previously
                 // This new selection is different than the old one
                 // Add transfer orders
 
-                auto* sourceGarissonComp = entityManager.getComponent<Components::GarissonComponent>(previouslySelectedEntityID);
-                auto* targetGarissonComp = entityManager.getComponent<Components::GarissonComponent>(selectedEntityID);
+                auto* sourceGarissonComp = manager.getComponent<Components::GarissonComponent>(previouslySelectedEntityID);
+                auto* targetGarissonComp = manager.getComponent<Components::GarissonComponent>(selectedEntityID);
                 // auto* sourceTransferComp = entityManager.getComponent<Components::DroneTransferComponent>(previouslySelectedEntityID);
 
                 if(sourceGarissonComp && targetGarissonComp){
-                    auto* factionComp = entityManager.getEntity(previouslySelectedEntityID).getComponent<Components::FactionComponent>();
+                    auto* factionComp = manager.getComponent<Components::FactionComponent>(previouslySelectedEntityID);
 
                     if(factionComp->faction == Components::Faction::PLAYER_1){
-                        entityManager.addComponent(previouslySelectedEntityID, Components::DroneTransferComponent(previouslySelectedEntityID, selectedEntityID, factionComp->faction));
+                        log_info << "adding trasnfer component";
+                        manager.addOrReplaceComponent<Components::DroneTransferComponent>(previouslySelectedEntityID, previouslySelectedEntityID, selectedEntityID, factionComp->faction);
                     }
                 }
 
                 // deselect both targets
-                entityManager.getComponent<Components::SelectableComponent>(previouslySelectedEntityID)->isSelected = false;
-                entityManager.getComponent<Components::SelectableComponent>(selectedEntityID)->isSelected = false;
+                manager.getComponent<Components::SelectableComponent>(previouslySelectedEntityID)->isSelected = false;
+                manager.getComponent<Components::SelectableComponent>(selectedEntityID)->isSelected = false;
             }
         }
+
+        /* -- Debug --
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle){
+            auto selectedEntityID = getSelectedEntity(event, manager, window);
+            if(selectedEntityID != NullEntityID){
+                auto* factionComp = manager.getComponent<Components::FactionComponent>(selectedEntityID);
+
+                if(factionComp->faction == Components::Faction::PLAYER_1){
+                    factionComp->faction = Components::Faction::PLAYER_2;
+                }
+                else{
+                    factionComp->faction = Components::Faction::PLAYER_1;
+                }
+
+            }
+        } */ 
     }
 }
 

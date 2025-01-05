@@ -4,14 +4,15 @@
 #include <unordered_map>
 #include <cmath>
 
+#include "Game/GameEntityManager.hpp"
 #include "Components/ShieldComponent.hpp"
-#include "Core/Entity.hpp"
-namespace Systems {
-    void ShieldSystem(Game::GameEntityManager& entityManager, float dt) {
 
-        auto& entities = entityManager.getAllEntities();
-        for (auto& [id, entity] : entities) {
-            auto* shield = entity.getComponent<Components::ShieldComponent>();
+namespace Systems {
+    void ShieldSystem(Game::GameEntityManager& manager, float dt) {
+
+        auto entities = manager.getAllEntityIDs();
+        for (auto id : entities) {
+            auto* shield = manager.getComponent<Components::ShieldComponent>(id);
             if (shield) {
                 // Skip if shield is already full
                 if(shield->maxShield == shield->currentShield){

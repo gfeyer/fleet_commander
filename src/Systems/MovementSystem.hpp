@@ -4,20 +4,19 @@
 #include <unordered_map>
 #include <cmath>
 
-#include "Core/Entity.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Config.hpp"
 #include "Utils/Logger.hpp"
 
 namespace Systems {
-    void MovementSystem(Game::GameEntityManager& entityManager, float dt) {
+    void MovementSystem(Game::GameEntityManager& manager, float dt) {
 
-        auto& entities = entityManager.getAllEntities();
-        for (auto& [id, entity] : entities) {
-            auto* transform = entity.getComponent<Components::TransformComponent>();
-            auto* move = entity.getComponent<Components::MoveComponent>();
-            auto* tag = entity.getComponent<Components::TagComponent>();
+        auto entities = manager.getAllEntityIDs();
+        for (auto id : entities) {
+            auto* transform = manager.getComponent<Components::TransformComponent>(id);
+            auto* move = manager.getComponent<Components::MoveComponent>(id);
+            auto* tag = manager.getComponent<Components::TagComponent>(id);
 
             if (transform && move) {
                 // Handle movement towards target

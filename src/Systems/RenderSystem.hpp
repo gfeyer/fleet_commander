@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 
-#include "Core/Entity.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/SpriteComponent.hpp"
 #include "Components/ShapeComponent.hpp"
@@ -19,21 +18,21 @@
 
 namespace Systems {
 
-    void RenderSystem(Game::GameEntityManager& entityManager, sf::RenderWindow& window) {
-        auto& entities = entityManager.getAllEntities();
+    void RenderSystem(Game::GameEntityManager& manager, sf::RenderWindow& window) {
+        auto entities = manager.getAllEntityIDs();
         
 
         // Layer 0
         // Background
 
         // Layer 1
-        for(auto& [id, entity] : entities) {
-            auto* transform = entity.getComponent<Components::TransformComponent>();
+        for(auto id : entities) {
+            auto* transform = manager.getComponent<Components::TransformComponent>(id);
 
             // Draw auto transfer orders (back plane)
-            auto* transferOrder = entity.getComponent<Components::DroneTransferComponent>();
+            auto* transferOrder = manager.getComponent<Components::DroneTransferComponent>(id);
             if (transferOrder) {
-                auto* targetTransform = entityManager.getEntity(transferOrder->target).getComponent<Components::TransformComponent>();
+                auto* targetTransform = manager.getComponent<Components::TransformComponent>(transferOrder->target);
                 sf::Color transparentWhite(255, 255, 255, 128); // 50% Transparent White 
                 // Render the dot at the pre-calculated position
                 
@@ -43,13 +42,13 @@ namespace Systems {
 
         // Layer 2
         // Selection, shield, sprites, shapes
-        for(auto& [id, entity] : entities) {
+        for(auto id : entities) {
             
-            auto* transform = entity.getComponent<Components::TransformComponent>();
+            auto* transform = manager.getComponent<Components::TransformComponent>(id);
 
             // Draw shapes/sprites/shields
             // Draw selectable component
-            auto* selectableComp = entity.getComponent<Components::SelectableComponent>();
+            auto* selectableComp = manager.getComponent<Components::SelectableComponent>(id);
             if (selectableComp && selectableComp->isSelected && transform) {
                 sf::CircleShape selectionShape(Config::FACTORY_SIZE);
                 selectionShape.setOrigin(Config::FACTORY_SIZE, Config::FACTORY_SIZE);
@@ -59,7 +58,7 @@ namespace Systems {
             }
 
             // Draw Shield
-            auto* shield = entity.getComponent<Components::ShieldComponent>();
+            auto* shield = manager.getComponent<Components::ShieldComponent>(id);
             if (shield && transform) {
                 sf::Vector2f center(transform->getPosition().x, transform->getPosition().y);
                 float baseRadius = 50.f;       // Base radius for the first circle
@@ -107,7 +106,7 @@ namespace Systems {
             }
 
             // Render SpriteComponent
-            auto* sprite = entity.getComponent<Components::SpriteComponent>();
+            auto* sprite = manager.getComponent<Components::SpriteComponent>(id);
             if (sprite && transform) {
                 sprite->sprite.setPosition(transform->getPosition());
                 sprite->sprite.setRotation(transform->getRotation());
@@ -118,13 +117,13 @@ namespace Systems {
             }
 
             // Render ShapeComponent
-            auto* shape = entity.getComponent<Components::ShapeComponent>();
+            auto* shape = manager.getComponent<Components::ShapeComponent>(id);
             if (shape && transform && shape->shape) {
                 shape->shape->setPosition(transform->getPosition());
                 shape->shape->setRotation(transform->getRotation());
                 shape->shape->setScale(transform->getScale());
 
-                auto* faction = entity.getComponent<Components::FactionComponent>();
+                auto* faction = manager.getComponent<Components::FactionComponent>(id);
                 if (faction) {
                     if (faction->faction == Components::Faction::PLAYER_1) {
                         shape->shape->setFillColor(sf::Color::Red);
@@ -140,10 +139,10 @@ namespace Systems {
 
         // Layer 3
         // Draw labels (non-gui)
-        for (auto& [id, entity] : entities) {
+        for (auto id : entities) {
 
             // Draw non-gui text
-            auto* textComp = entity.getComponent<Components::LabelComponent>();
+            auto* textComp = manager.getComponent<Components::LabelComponent>(id);
             if (textComp) {
                 window.draw(textComp->text);
                 window.draw(textComp->text2);
@@ -152,8 +151,7 @@ namespace Systems {
 
         // Layer 4
         // 4. Draw Debug Symbols
-        Entity& aiEntity = entityManager.getAIEntity();
-        auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
+        auto* aiComp = manager.getAIComponent();
         if (aiComp && aiComp && Config::ENABLE_DEBUG_SYMBOLS) { 
             for (auto& target : aiComp->debug.pinkDebugTargets) {
                 sf::CircleShape selectionShape(20.f);
