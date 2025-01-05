@@ -33,7 +33,7 @@
 // #include "Systems/ShieldSystem.hpp"
 // #include "Systems/AI/AISystem.hpp"
 // #include "Systems/GameStateSystem.hpp"
-// #include "Systems/DroneTransferSystem.hpp"
+#include "Systems/DroneTransferSystem.hpp"
 
 #include "Game/Builder.hpp"
 #include "Game/MapGenerator.hpp"
@@ -95,7 +95,7 @@ void Scene::update(float dt)
     Systems::InputHoverSystem(entityManager, windowRef);
     Systems::HudSystem(entityManager, *gui);
     Systems::ProductionSystem(entityManager, dt);
-    // Systems::DroneTransferSystem(entityManager, dt);
+    Systems::DroneTransferSystem(entityManager, dt);
     Systems::MovementSystem(entityManager, dt);
     // Systems::ShieldSystem(entityManager, dt);
     Systems::CombatSystem(entityManager, dt);
