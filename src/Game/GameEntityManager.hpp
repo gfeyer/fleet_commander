@@ -116,11 +116,18 @@ namespace Game {
         }
 
         Components::GameStateComponent* getGameStateComponent() {
-        if (registry.valid(gameStateEntityID) && registry.all_of<Components::GameStateComponent>(gameStateEntityID)) {
-            return &registry.get<Components::GameStateComponent>(gameStateEntityID);
+            if (registry.valid(gameStateEntityID) && registry.all_of<Components::GameStateComponent>(gameStateEntityID)) {
+                return &registry.get<Components::GameStateComponent>(gameStateEntityID);
+            }
+            return nullptr;
         }
-        return nullptr;
-    }
+
+        Components::AIComponent* getAIComponent() {
+            if (registry.valid(AIEntityID) && registry.all_of<Components::AIComponent>(AIEntityID)) {
+                return &registry.get<Components::AIComponent>(AIEntityID);
+            }
+            return nullptr;
+        }
 
 
         template<typename T>

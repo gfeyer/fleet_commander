@@ -23,7 +23,7 @@
 #include "Components/AIComponent.hpp"
 
 // #include "Systems/MovementSystem.hpp"
-// #include "Systems/RenderSystem.hpp"
+#include "Systems/RenderSystem.hpp"
 // #include "Systems/LabelUpdateSystem.hpp"
 // #include "Systems/InputSelectionSystem.hpp"
 // #include "Systems/InputHoverSystem.hpp"
@@ -113,7 +113,7 @@ void Scene::update(float dt)
 
 void Scene::render()
 {
-    // Systems::RenderSystem(entityManager, windowRef);
+    Systems::RenderSystem(entityManager, windowRef);
     gui->draw();
 }
 
