@@ -95,26 +95,33 @@ namespace Game {
 
 
         // Get All Entity IDs
-        std::vector<EntityID> getAllEntityIDs() const {
+        std::vector<EntityID> getAllEntityIDs() {
             std::vector<EntityID> entityIDs;
 
-             // TODO
-            
-            // Iterate through all valid entities
-            // for (auto entity : registry.storage<entt::entity>()) {
-            //     if (registry.valid(entity)) {
-            //         entityIDs.push_back(entity);
-            //     }
-            // }
+            // Iterate through the storage of all entities
+            auto& storage = registry.storage<entt::entity>();
+
+            for (auto entity : storage) {
+                if (registry.valid(entity)) {
+                    entityIDs.push_back(entity);
+                }
+            }
 
             return entityIDs;
         }
-
 
         // Get Game State Entity
         EntityID getGameStateEntityID() const {
             return gameStateEntityID;
         }
+
+        Components::GameStateComponent* getGameStateComponent() {
+        if (registry.valid(gameStateEntityID) && registry.all_of<Components::GameStateComponent>(gameStateEntityID)) {
+            return &registry.get<Components::GameStateComponent>(gameStateEntityID);
+        }
+        return nullptr;
+    }
+
 
         template<typename T>
         T* getGameStateComponent() {

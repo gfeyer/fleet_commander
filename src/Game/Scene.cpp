@@ -22,18 +22,18 @@
 #include "Components/GameStateComponent.hpp"
 #include "Components/AIComponent.hpp"
 
-#include "Systems/MovementSystem.hpp"
-#include "Systems/RenderSystem.hpp"
-#include "Systems/LabelUpdateSystem.hpp"
-#include "Systems/InputSelectionSystem.hpp"
-#include "Systems/InputHoverSystem.hpp"
-#include "Systems/HudSystem.hpp"
-#include "Systems/ProductionSystem.hpp"
+// #include "Systems/MovementSystem.hpp"
+// #include "Systems/RenderSystem.hpp"
+// #include "Systems/LabelUpdateSystem.hpp"
+// #include "Systems/InputSelectionSystem.hpp"
+// #include "Systems/InputHoverSystem.hpp"
+// #include "Systems/HudSystem.hpp"
+// #include "Systems/ProductionSystem.hpp"
 #include "Systems/CombatSystem.hpp"
-#include "Systems/ShieldSystem.hpp"
-#include "Systems/AI/AISystem.hpp"
-#include "Systems/GameStateSystem.hpp"
-#include "Systems/DroneTransferSystem.hpp"
+// #include "Systems/ShieldSystem.hpp"
+// #include "Systems/AI/AISystem.hpp"
+// #include "Systems/GameStateSystem.hpp"
+// #include "Systems/DroneTransferSystem.hpp"
 
 #include "Game/Builder.hpp"
 #include "Game/MapGenerator.hpp"
@@ -92,16 +92,16 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
-    Systems::InputHoverSystem(entityManager, windowRef);
-    Systems::HudSystem(entityManager, *gui);
-    Systems::ProductionSystem(entityManager, dt);
-    Systems::DroneTransferSystem(entityManager, dt);
-    Systems::MovementSystem(entityManager, dt);
-    Systems::ShieldSystem(entityManager, dt);
+    // Systems::InputHoverSystem(entityManager, windowRef);
+    // Systems::HudSystem(entityManager, *gui);
+    // Systems::ProductionSystem(entityManager, dt);
+    // Systems::DroneTransferSystem(entityManager, dt);
+    // Systems::MovementSystem(entityManager, dt);
+    // Systems::ShieldSystem(entityManager, dt);
     Systems::CombatSystem(entityManager, dt);
-    Systems::LabelUpdateSystem(entityManager, dt);
-    Systems::AI::AISystem(entityManager, dt);
-    Systems::GameStateSystem(entityManager, dt);
+    // Systems::LabelUpdateSystem(entityManager, dt);
+    // Systems::AI::AISystem(entityManager, dt);
+    // Systems::GameStateSystem(entityManager, dt);
 
     // Wrap Camera Position
     cameraPosition.x = fmod(cameraPosition.x + Config::MAP_WIDTH, Config::MAP_WIDTH);
@@ -113,14 +113,14 @@ void Scene::update(float dt)
 
 void Scene::render()
 {
-    Systems::RenderSystem(entityManager, windowRef);
+    // Systems::RenderSystem(entityManager, windowRef);
     gui->draw();
 }
 
 void Scene::handleInput(sf::Event &event)
 {
     gui->handleEvent(event);
-    Systems::InputSelectionSystem(event, entityManager, windowRef);
+    // Systems::InputSelectionSystem(event, entityManager, windowRef);
 
     // Handle Camera Movement
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) cameraPosition.y -= cameraSpeed * 0.16f;

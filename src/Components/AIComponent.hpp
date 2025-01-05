@@ -7,6 +7,8 @@
 #include <vector>
 #include <set>
 
+using EntityID = entt::entity;
+
 namespace Components {
 
     namespace AI{
@@ -104,7 +106,7 @@ namespace Components {
     };
 
     struct AIComponent {
-        EntityID highlightedEntityID = 0;
+        EntityID highlightedEntityID;
         AIPerception perception;
         AIPlan plan;
         AIExecute execute;
