@@ -110,11 +110,7 @@ namespace Game {
             return entityIDs;
         }
 
-        // Get Game State Entity
-        EntityID getGameStateEntityID() const {
-            return gameStateEntityID;
-        }
-
+        // Get Game State
         Components::GameStateComponent* getGameStateComponent() {
             if (registry.valid(gameStateEntityID) && registry.all_of<Components::GameStateComponent>(gameStateEntityID)) {
                 return &registry.get<Components::GameStateComponent>(gameStateEntityID);
@@ -122,6 +118,7 @@ namespace Game {
             return nullptr;
         }
 
+        // Get AI
         Components::AIComponent* getAIComponent() {
             if (registry.valid(AIEntityID) && registry.all_of<Components::AIComponent>(AIEntityID)) {
                 return &registry.get<Components::AIComponent>(AIEntityID);

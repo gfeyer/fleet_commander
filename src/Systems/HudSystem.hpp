@@ -17,7 +17,7 @@
 #include <TGUI/Backend/SFML-Graphics.hpp>
 
 namespace Systems {
-    void HudSystem(Game::GameEntityManager& entityManager, tgui::Gui& gui) {
+    void HudSystem(Game::GameEntityManager& manager, tgui::Gui& gui) {
         static tgui::Theme::Ptr theme = Resource::ResourceManager::getInstance().getTheme(Resource::Paths::DARK_THEME);
 
         // GUI widgets declarations
@@ -111,7 +111,7 @@ namespace Systems {
         }
 
         // Top Panel display logic
-        auto* gameState = entityManager.getGameStateEntity().getComponent<Components::GameStateComponent>();
+        auto* gameState = manager.getGameStateComponent();
         if (gameState)
         {
             auto totalPlayers = gameState->playerDrones.size();
@@ -156,11 +156,11 @@ namespace Systems {
         
         // Hover Panel display logic
         bool entityHovered = false;
-        auto& entities = entityManager.getAllEntities();
-        for (auto& [id, entity] : entities) {
+        auto entities = manager.getAllEntityIDs();
+        for (auto id : entities) {
 
-            auto* hoverComp = entity.getComponent<Components::HoverComponent>();
-            auto* tagComponent = entity.getComponent<Components::TagComponent>();
+            auto* hoverComp = manager.getComponent<Components::HoverComponent>(id);
+            auto* tagComponent = manager.getComponent<Components::TagComponent>(id);
 
             if (hoverComp && hoverComp->isHovered) {
                 entityHovered = true;
@@ -168,10 +168,10 @@ namespace Systems {
                 infoPanel->setRenderer(theme->getRenderer("Panel"));
                 infoPanel->removeAllWidgets();
 
-                auto* factoryComp = entity.getComponent<Components::FactoryComponent>();
-                auto* powerPlantComp = entity.getComponent<Components::PowerPlantComponent>();
-                auto* garissonComp = entity.getComponent<Components::GarissonComponent>();
-                auto* shieldComp = entity.getComponent<Components::ShieldComponent>();
+                auto* factoryComp = manager.getComponent<Components::FactoryComponent>(id);
+                auto* powerPlantComp = manager.getComponent<Components::PowerPlantComponent>(id);
+                auto* garissonComp = manager.getComponent<Components::GarissonComponent>(id);
+                auto* shieldComp = manager.getComponent<Components::ShieldComponent>(id);
 
                 std::stringstream ss;
 
