@@ -11,6 +11,7 @@
 #include "Components/SelectableComponent.hpp"
 #include "Components/AttackOrderComponent.hpp"
 #include "Components/DroneTransferComponent.hpp"
+#include "Components/FactionComponent.hpp"
 
 #include "Game/Builder.hpp"
 
@@ -129,6 +130,22 @@ namespace Systems {
                 manager.getComponent<Components::SelectableComponent>(selectedEntityID)->isSelected = false;
             }
         }
+
+        /* -- Debug --
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle){
+            auto selectedEntityID = getSelectedEntity(event, manager, window);
+            if(selectedEntityID != NullEntityID){
+                auto* factionComp = manager.getComponent<Components::FactionComponent>(selectedEntityID);
+
+                if(factionComp->faction == Components::Faction::PLAYER_1){
+                    factionComp->faction = Components::Faction::PLAYER_2;
+                }
+                else{
+                    factionComp->faction = Components::Faction::PLAYER_1;
+                }
+
+            }
+        } */ 
     }
 }
 

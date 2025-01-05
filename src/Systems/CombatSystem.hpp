@@ -19,13 +19,13 @@ namespace Systems {
 
             std::unordered_set<EntityID> toRemove;
 
-            // auto& entities = entityManager.getAllEntities();
             auto entities = manager.getAllEntityIDs();
         
             for (auto id : entities) {
                 auto* attackOrder = manager.getComponent<Components::AttackOrderComponent>(id);
                 auto* originGarisson = manager.getComponent<Components::GarissonComponent>(id);
                 auto* drone = manager.getComponent<Components::DroneComponent>(id);
+                auto* droneFaction = manager.getComponent<Components::FactionComponent>(id);
                 auto* move = manager.getComponent<Components::MoveComponent>(id);
 
                 if (attackOrder && originGarisson) {
@@ -77,7 +77,6 @@ namespace Systems {
                         EntityID originEntity = attackOrder->origin;
                         EntityID targetEntity = attackOrder->target;
                         
-                        auto* originFaction = manager.getComponent<Components::FactionComponent>(originEntity); // Get the faction of the drone, in case the origin entity changed factions
                         auto* targetFaction = manager.getComponent<Components::FactionComponent>(targetEntity);
                         auto* targetGarisson = manager.getComponent<Components::GarissonComponent>(targetEntity);
                         auto* targetShield = manager.getComponent<Components::ShieldComponent>(targetEntity);
@@ -86,14 +85,14 @@ namespace Systems {
                             log_err << "EntityID: " << " has no shield, but has an attack order";
                         }
 
-                        if (targetGarisson && originFaction && targetFaction) {
+                        if (targetGarisson && droneFaction && targetFaction) {
                             
                             // No matter what, drone entity needs to be removed
                             toRemove.insert(id);
 
                             auto* gameState = manager.getGameStateComponent();
 
-                            if(originFaction->faction == targetFaction->faction){
+                            if(droneFaction->faction == targetFaction->faction){
                                 // Same faction, park drones
                                 targetGarisson->incrementDroneCount();
                                 continue; 
@@ -108,7 +107,7 @@ namespace Systems {
                             
                             if(targetShield->getShield() > 0.f){
                                 // Shield was hit but still up, attacking player loses drones
-                                gameState->playerDrones[originFaction->faction]--;
+                                gameState->playerDrones[droneFaction->faction]--;
 
                             }else if(targetGarisson->getDroneCount() > 0){
                                 // Shield is down
@@ -117,14 +116,13 @@ namespace Systems {
                                 targetGarisson->decrementDroneCount();
 
                                 // both players lose drones
-                                gameState->playerDrones[originFaction->faction]--;
+                                gameState->playerDrones[droneFaction->faction]--;
                                 gameState->playerDrones[targetFaction->faction]--;
                             }else{
                                 // Different Faction, no shield, no drones, switch factions
-                                targetFaction->faction = originFaction->faction;
+                                targetFaction->faction = droneFaction->faction;
                                 targetGarisson->incrementDroneCount();
                             }
-                            
                         }
                     }
                 }
