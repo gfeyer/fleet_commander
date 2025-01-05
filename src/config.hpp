@@ -19,7 +19,7 @@ namespace Config {
     const bool ENABLE_DEBUG_SYMBOLS = false;
 
     // Game consts
-    const float DRONE_SPEED = 800.f;
+    const float DRONE_SPEED = 100.f;
     
     // Game Difficulty
     struct Difficulty {
