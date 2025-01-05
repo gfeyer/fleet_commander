@@ -28,7 +28,7 @@
 // #include "Systems/InputSelectionSystem.hpp"
 #include "Systems/InputHoverSystem.hpp"
 #include "Systems/HudSystem.hpp"
-// #include "Systems/ProductionSystem.hpp"
+#include "Systems/ProductionSystem.hpp"
 #include "Systems/CombatSystem.hpp"
 // #include "Systems/ShieldSystem.hpp"
 // #include "Systems/AI/AISystem.hpp"
@@ -94,7 +94,7 @@ void Scene::update(float dt)
 {
     Systems::InputHoverSystem(entityManager, windowRef);
     Systems::HudSystem(entityManager, *gui);
-    // Systems::ProductionSystem(entityManager, dt);
+    Systems::ProductionSystem(entityManager, dt);
     // Systems::DroneTransferSystem(entityManager, dt);
     // Systems::MovementSystem(entityManager, dt);
     // Systems::ShieldSystem(entityManager, dt);

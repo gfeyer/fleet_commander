@@ -36,7 +36,7 @@ namespace Game {
         // Create Entity
         EntityID createEntity() {
             EntityID id = registry.create();
-            std::cout << "Entity created: " << static_cast<std::uint32_t>(id) << "\n";
+            // std::cout << "Entity created: " << static_cast<std::uint32_t>(id) << "\n";
             return id;
         }
 
@@ -44,7 +44,7 @@ namespace Game {
         void removeEntity(EntityID id) {
             if (registry.valid(id)) {
                 registry.destroy(id);
-                std::cout << "Entity destroyed: " << static_cast<std::uint32_t>(id) << "\n";
+                // std::cout << "Entity destroyed: " << static_cast<std::uint32_t>(id) << "\n";
             }
         }
 
@@ -52,7 +52,7 @@ namespace Game {
         template<typename T, typename... Args>
         T& addComponent(EntityID id, Args&&... args) {
             T& component = registry.emplace<T>(id, std::forward<Args>(args)...);
-            std::cout << "Component added to entity: " << static_cast<std::uint32_t>(id) << "\n";
+            // std::cout << "Component added to entity: " << static_cast<std::uint32_t>(id) << "\n";
 
             if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
                 gameStateEntityID = id;
@@ -69,7 +69,7 @@ namespace Game {
         void removeComponent(EntityID id) {
             if (registry.all_of<T>(id)) {
                 registry.remove<T>(id);
-                std::cout << "Component removed from entity: " << static_cast<std::uint32_t>(id) << "\n";
+                // std::cout << "Component removed from entity: " << static_cast<std::uint32_t>(id) << "\n";
             }
         }
 
