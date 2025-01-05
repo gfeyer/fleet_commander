@@ -92,10 +92,7 @@ namespace Game {
         // Get Component (Pointer)
         template<typename T>
         T* getComponent(EntityID id) {
-            if (registry.valid(id) && registry.all_of<T>(id)) {
-                return &registry.get<T>(id);
-            }
-            return nullptr;
+            return registry.try_get<T>(id);
         }
 
         // Check if Entity has a Component
@@ -105,13 +102,13 @@ namespace Game {
         }
 
         template<typename... Components>
-        auto getView() {
+        auto view() {
             return registry.view<Components...>();
         }
 
-
         // Get All Entity IDs
         std::vector<EntityID> getAllEntityIDs() {
+            // TODO: temporary until project fully migrated to entt::view 
             std::vector<EntityID> entityIDs;
 
             // Iterate through the storage of all entities
@@ -140,27 +137,6 @@ namespace Game {
                 return &registry.get<Components::AIComponent>(AIEntityID);
             }
             return nullptr;
-        }
-
-
-        template<typename T>
-        T* getGameStateComponent() {
-            return getComponent<T>(gameStateEntityID);
-        }
-
-        // Get AI Entity
-        EntityID getAIEntityID() const {
-            return AIEntityID;
-        }
-
-        template<typename T>
-        T* getAIComponent() {
-            return getComponent<T>(AIEntityID);
-        }
-
-        // Get Registry (For Advanced Use)
-        entt::registry& getRegistry() {
-            return registry;
         }
     };
 }

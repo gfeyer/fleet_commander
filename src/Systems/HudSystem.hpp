@@ -2,7 +2,6 @@
 #define HUD_SYSTEM_HPP
 
 #include <sstream>
-#include <format>
 #include <TGUI/TGUI.hpp>
 #include <cstdio>
 

@@ -25,134 +25,130 @@ namespace Systems {
         // Layer 0
         // Background
 
-        // Layer 1
-        for(auto id : entities) {
-            auto* transform = manager.getComponent<Components::TransformComponent>(id);
-
-            // Draw auto transfer orders (back plane)
-            auto* transferOrder = manager.getComponent<Components::DroneTransferComponent>(id);
-            if (transferOrder) {
-                auto* targetTransform = manager.getComponent<Components::TransformComponent>(transferOrder->target);
+        // Draw transfer lines
+        for(auto&& [entityID, transform, transfer] : 
+                    manager.view<
+                        Components::TransformComponent, 
+                        Components::DroneTransferComponent
+                    >().each()) {
+            
+            auto* targetTransform = manager.getComponent<Components::TransformComponent>(transfer.target);
+            if(targetTransform){
                 sf::Color transparentWhite(255, 255, 255, 128); // 50% Transparent White 
-                // Render the dot at the pre-calculated position
-                
-                Utils::drawGradientDottedLine(window, transform->getPosition(), targetTransform->getPosition(), 10.f);
+                Utils::drawGradientDottedLine(window, transform.getPosition(), targetTransform->getPosition(), 10.f);
             }
         }
 
-        // Layer 2
-        // Selection, shield, sprites, shapes
-        for(auto id : entities) {
-            
-            auto* transform = manager.getComponent<Components::TransformComponent>(id);
-
-            // Draw shapes/sprites/shields
-            // Draw selectable component
-            auto* selectableComp = manager.getComponent<Components::SelectableComponent>(id);
-            if (selectableComp && selectableComp->isSelected && transform) {
+        // Draw Selection
+        for(auto&& [id, transform, selectable] : manager.view<
+                    Components::TransformComponent,
+                    Components::SelectableComponent>().each()) {
+                        
+            if(selectable.isSelected){
                 sf::CircleShape selectionShape(Config::FACTORY_SIZE);
                 selectionShape.setOrigin(Config::FACTORY_SIZE, Config::FACTORY_SIZE);
                 selectionShape.setFillColor(sf::Color(255,255,0,200));
-                selectionShape.setPosition(transform->getPosition());
+                selectionShape.setPosition(transform.getPosition());
                 window.draw(selectionShape);
             }
+        }
 
-            // Draw Shield
-            auto* shield = manager.getComponent<Components::ShieldComponent>(id);
-            if (shield && transform) {
-                sf::Vector2f center(transform->getPosition().x, transform->getPosition().y);
-                float baseRadius = 50.f;       // Base radius for the first circle
-                float radiusStep = 7.f;       // Space between concentric circles
-                float thickness = 7.f;         // Circle thickness
-                int pointCount = 50;           // Smoothness of the arc
+        // Draw Sprites
+        for(auto&& [id, transform, sprite] : manager.view<
+                    Components::TransformComponent, 
+                    Components::SpriteComponent
+                >().each()) {
+            
+            sprite.sprite.setPosition(transform.getPosition());
+            sprite.sprite.setRotation(transform.getRotation());
+            sprite.sprite.setScale(transform.getScale());
+            window.draw(sprite.sprite);
+        }
 
-                // Calculate full circles and remainder (using float logic for smooth rendering)
-                float shieldValue = shield->currentShield;
-                int fullCircles = static_cast<int>(shieldValue / 10.f); // Number of full circles
-                float remainder = std::fmod(shieldValue, 10.f);         // Remaining fractional shield value
+        // Draw Shields
+        for(auto&& [id, transform, shield] : manager.view<
+                    Components::TransformComponent, 
+                    Components::ShieldComponent
+                >().each()) {
+            
+            sf::Vector2f center(transform.getPosition().x, transform.getPosition().y);
+            float baseRadius = 50.f;       // Base radius for the first circle
+            float radiusStep = 7.f;       // Space between concentric circles
+            float thickness = 7.f;         // Circle thickness
+            int pointCount = 50;           // Smoothness of the arc
 
-                // Draw Full Circles
-                for (int i = 0; i < fullCircles; ++i) {
-                    float currentRadius = baseRadius + (i * radiusStep);
+            // Calculate full circles and remainder (using float logic for smooth rendering)
+            float shieldValue = shield.currentShield;
+            int fullCircles = static_cast<int>(shieldValue / 10.f); // Number of full circles
+            float remainder = std::fmod(shieldValue, 10.f);         // Remaining fractional shield value
 
-                    sf::VertexArray arc = Utils::CreateArc(
-                        center,
-                        currentRadius,
-                        thickness,
-                        1.0f, // 100% full circle
-                        pointCount,
-                        sf::Color(0, 255, 255, 200)
-                    );
+            // Draw Full Circles
+            for (int i = 0; i < fullCircles; ++i) {
+                float currentRadius = baseRadius + (i * radiusStep);
 
-                    window.draw(arc);
-                }
+                sf::VertexArray arc = Utils::CreateArc(
+                    center,
+                    currentRadius,
+                    thickness,
+                    1.0f, // 100% full circle
+                    pointCount,
+                    sf::Color(0, 255, 255, 200)
+                );
 
-                // Draw Partial Circle for Remainder
-                if (remainder > 0.f) {
-                    float currentRadius = baseRadius + (fullCircles * radiusStep);
-                    float percentage = remainder / 10.0f; // Partial fill percentage (0.0 to 1.0)
-
-                    sf::VertexArray arc = Utils::CreateArc(
-                        center,
-                        currentRadius,
-                        thickness,
-                        percentage,
-                        pointCount,
-                        sf::Color(0, 255, 255, 200) // Yellow for the partial arc
-                    );
-
-                    window.draw(arc);
-                }
+                window.draw(arc);
             }
 
-            // Render SpriteComponent
-            auto* sprite = manager.getComponent<Components::SpriteComponent>(id);
-            if (sprite && transform) {
-                sprite->sprite.setPosition(transform->getPosition());
-                sprite->sprite.setRotation(transform->getRotation());
-                sprite->sprite.setScale(transform->getScale());
+            // Draw Partial Circle for Remainder
+            if (remainder > 0.f) {
+                float currentRadius = baseRadius + (fullCircles * radiusStep);
+                float percentage = remainder / 10.0f; // Partial fill percentage (0.0 to 1.0)
 
-                // Render the sprite
-                window.draw(sprite->sprite);
+                sf::VertexArray arc = Utils::CreateArc(
+                    center,
+                    currentRadius,
+                    thickness,
+                    percentage,
+                    pointCount,
+                    sf::Color(0, 255, 255, 200) // Yellow for the partial arc
+                );
+                window.draw(arc);
             }
+        }
 
-            // Render ShapeComponent
-            auto* shape = manager.getComponent<Components::ShapeComponent>(id);
-            if (shape && transform && shape->shape) {
-                shape->shape->setPosition(transform->getPosition());
-                shape->shape->setRotation(transform->getRotation());
-                shape->shape->setScale(transform->getScale());
+        // Draw Shapes
+        for(auto&& [id, transform, shape] : manager.view<
+                    Components::TransformComponent, 
+                    Components::ShapeComponent
+                >().each()) {
+            
+            shape.shape->setPosition(transform.getPosition());
+            shape.shape->setRotation(transform.getRotation());
+            shape.shape->setScale(transform.getScale());
 
-                auto* faction = manager.getComponent<Components::FactionComponent>(id);
-                if (faction) {
-                    if (faction->faction == Components::Faction::PLAYER_1) {
-                        shape->shape->setFillColor(sf::Color::Red);
-                    }else if(faction->faction == Components::Faction::PLAYER_2) {
-                        shape->shape->setFillColor(sf::Color::Blue);
-                    }else{
-                        // shape->shape->setFillColor(sf::Color::White);
-                    }
+            auto* faction = manager.getComponent<Components::FactionComponent>(id);
+            if (faction) {
+                if (faction->faction == Components::Faction::PLAYER_1) {
+                    shape.shape->setFillColor(sf::Color::Red);
+                }else if(faction->faction == Components::Faction::PLAYER_2) {
+                    shape.shape->setFillColor(sf::Color::Blue);
+                }else{
+                    // shape->shape->setFillColor(sf::Color::White);
                 }
-                window.draw(*shape->shape);
             }
+            window.draw(*shape.shape);
         }
 
         // Layer 3
         // Draw labels (non-gui)
-        for (auto id : entities) {
-
-            // Draw non-gui text
-            auto* textComp = manager.getComponent<Components::LabelComponent>(id);
-            if (textComp) {
-                window.draw(textComp->text);
-                window.draw(textComp->text2);
-            }
+        for (auto&& [id, label] : manager.view<Components::LabelComponent>().each()) {
+            window.draw(label.text);
+            window.draw(label.text2);
         }
 
         // Layer 4
         // 4. Draw Debug Symbols
         auto* aiComp = manager.getAIComponent();
-        if (aiComp && aiComp && Config::ENABLE_DEBUG_SYMBOLS) { 
+        if (aiComp && Config::ENABLE_DEBUG_SYMBOLS) { 
             for (auto& target : aiComp->debug.pinkDebugTargets) {
                 sf::CircleShape selectionShape(20.f);
                 selectionShape.setOrigin(10.f, 10.f);
