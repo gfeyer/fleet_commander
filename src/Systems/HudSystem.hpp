@@ -155,13 +155,9 @@ namespace Systems {
         
         // Hover Panel display logic
         bool entityHovered = false;
-        auto entities = manager.getAllEntityIDs();
-        for (auto id : entities) {
+        for (auto&& [id, hover] : manager.view<Components::HoverComponent>().each()) {
 
-            auto* hoverComp = manager.getComponent<Components::HoverComponent>(id);
-            auto* tagComponent = manager.getComponent<Components::TagComponent>(id);
-
-            if (hoverComp && hoverComp->isHovered) {
+            if (hover.isHovered) {
                 entityHovered = true;
                 infoPanel->setVisible(true);
                 infoPanel->setRenderer(theme->getRenderer("Panel"));
@@ -217,7 +213,7 @@ namespace Systems {
                 label->setTextSize(Config::GUI_TEXT_SIZE);
                 infoPanel->add(label);
 
-                infoPanel->setPosition({hoverComp->position.x, hoverComp->position.y});
+                infoPanel->setPosition({hover.position.x, hover.position.y});
                 break; // Show info for the first hovered entity only
             }
         }
@@ -225,7 +221,6 @@ namespace Systems {
         if (!entityHovered) {
             infoPanel->setVisible(false);
         }
-
 
         // Game Over Panel - initialization
         if (!gameOverPanel) {
