@@ -19,6 +19,7 @@
 #include "Components/HoverComponent.hpp"
 #include "Components/GameStateComponent.hpp"
 #include "Components/AIComponent.hpp"
+#include <Components/DebugOverlayComponent.hpp>
 
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
@@ -32,6 +33,7 @@
 #include "Systems/AI/AISystem.hpp"
 #include "Systems/GameStateSystem.hpp"
 #include "Systems/DroneTransferSystem.hpp"
+#include "Systems/DebugOverlaySystem.hpp"
 
 #include "Game/Builder.hpp"
 #include "Game/MapGenerator.hpp"
@@ -71,14 +73,19 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     // );
 
     // Create Game State Entity
-    EntityID gameStateID = entityManager.createEntity();
-    entityManager.addComponent<Components::GameStateComponent>(gameStateID, 2);
+    EntityID gameStateID = manager.createEntity();
+    manager.addComponent<Components::GameStateComponent>(gameStateID, 2);
 
-    EntityID enemyAI = entityManager.createEntity();
-    entityManager.addComponent<Components::AIComponent>(enemyAI);
+    EntityID enemyAI = manager.createEntity();
+    manager.addComponent<Components::AIComponent>(enemyAI);
+
+    if (Config::ENABLE_DEBUG_SYMBOLS) {
+        EntityID debugID = manager.createEntity();
+        manager.addComponent<Components::DebugOverlayComponent>(debugID);
+    }
 
     // Generate Map
-    Game::GenerateRandomMap(entityManager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 30, 100);
+    Game::GenerateRandomMap(manager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 30, 100);
 }
 
 Scene::~Scene()
@@ -90,16 +97,17 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
-    Systems::InputHoverSystem(entityManager, windowRef);
-    Systems::HudSystem(entityManager, *gui);
-    Systems::ProductionSystem(entityManager, dt);
-    Systems::DroneTransferSystem(entityManager, dt);
-    Systems::MovementSystem(entityManager, dt);
-    Systems::ShieldSystem(entityManager, dt);
-    Systems::CombatSystem(entityManager, dt);
-    Systems::LabelUpdateSystem(entityManager, dt);
-    Systems::AI::AISystem(entityManager, dt);
-    Systems::GameStateSystem(entityManager, dt);
+    Systems::InputHoverSystem(manager, windowRef);
+    Systems::HudSystem(manager, *gui);
+    Systems::ProductionSystem(manager, dt);
+    Systems::DroneTransferSystem(manager, dt);
+    Systems::MovementSystem(manager, dt);
+    Systems::ShieldSystem(manager, dt);
+    Systems::CombatSystem(manager, dt);
+    Systems::LabelUpdateSystem(manager, dt);
+    Systems::AI::AISystem(manager, dt);
+    Systems::GameStateSystem(manager, dt);
+    Systems::DebugOverlaySystem(manager, dt);
 
     // Wrap Camera Position
     cameraPosition.x = fmod(cameraPosition.x + Config::MAP_WIDTH, Config::MAP_WIDTH);
@@ -111,14 +119,14 @@ void Scene::update(float dt)
 
 void Scene::render()
 {
-    Systems::RenderSystem(entityManager, windowRef);
+    Systems::RenderSystem(manager, windowRef);
     gui->draw();
 }
 
 void Scene::handleInput(sf::Event &event)
 {
     gui->handleEvent(event);
-    Systems::InputSelectionSystem(event, entityManager, windowRef);
+    Systems::InputSelectionSystem(event, manager, windowRef);
 
     // Handle Camera Movement
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) cameraPosition.y -= cameraSpeed * 0.16f;

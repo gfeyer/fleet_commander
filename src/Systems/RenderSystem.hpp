@@ -138,15 +138,13 @@ namespace Systems {
             window.draw(*shape.shape);
         }
 
-        // Layer 3
         // Draw labels (non-gui)
         for (auto&& [id, label] : manager.view<Components::LabelComponent>().each()) {
             window.draw(label.text);
             window.draw(label.text2);
         }
 
-        // Layer 4
-        // 4. Draw Debug Symbols
+        // Draw Debug Symbols
         auto* aiComp = manager.getAIComponent();
         if (aiComp && Config::ENABLE_DEBUG_SYMBOLS) { 
             for (auto& target : aiComp->debug.pinkDebugTargets) {

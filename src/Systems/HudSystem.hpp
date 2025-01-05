@@ -23,6 +23,8 @@ namespace Systems {
         static tgui::Panel::Ptr infoPanel = nullptr;
         static tgui::Panel::Ptr topPanel = nullptr;
         static tgui::Panel::Ptr gameOverPanel = nullptr;
+        static tgui::Label::Ptr fpsLabel = nullptr;
+
 
         // Top screen labels
         static tgui::Label::Ptr player1Label = nullptr;
@@ -262,10 +264,24 @@ namespace Systems {
             gameOverPanel->setVisible(false);
         }
 
-        
+
+        if(!fpsLabel){
+            // Add FPS Label (Lower-Right Corner)
+            fpsLabel = tgui::Label::create();
+            fpsLabel->setRenderer(theme->getRenderer("Label"));
+            fpsLabel->setTextSize(Config::GUI_TEXT_SIZE);
+            fpsLabel->setPosition({"100% - 150", "100% - 40"}); // Offset from bottom-right corner
+            fpsLabel->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Right);
+            fpsLabel->setVerticalAlignment(tgui::Label::VerticalAlignment::Bottom);
+            fpsLabel->setVisible(false);
+            gui.add(fpsLabel);
+        }
+
+        for(auto&& [id, debug] : manager.view<Components::DebugOverlayComponent>().each()) {
+            fpsLabel->setText("FPS: " + std::to_string(debug.fps));
+            fpsLabel->setVisible(true);
+        }
     }
 }
-
-
 
 #endif // HUD_SYSTEM_HPP

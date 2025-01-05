@@ -16,7 +16,6 @@ namespace Config {
 
     // GUI consts
     constexpr float GUI_TEXT_SIZE = 18.f;
-    const bool ENABLE_DEBUG_SYMBOLS = false;
 
     // Game consts
     const float DRONE_SPEED = 100.f;
@@ -27,6 +26,9 @@ namespace Config {
         inline static unsigned int AI_MAX_EXECUTIONS_PER_TURN = 10;
         inline static float AI_MAX_DISTANCE_TO_ATTACK = 500.f;
     };
+
+    // Debug Symbols
+    const bool ENABLE_DEBUG_SYMBOLS = false;
 }
 
 

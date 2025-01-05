@@ -11,7 +11,7 @@
 
 class Scene{
 private:
-    Game::GameEntityManager entityManager;
+    Game::GameEntityManager manager;
     std::unique_ptr<tgui::Gui> gui;
     sf::RenderWindow& windowRef;
     
