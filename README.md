@@ -39,6 +39,7 @@ bootstrap.bat  # windows
 
 ./vcpkg install sfml
 ./vcpkg install tgui
+./vcpkg install entt
 
 ```
 
