@@ -10,22 +10,18 @@
 namespace Systems {
     void ShieldSystem(Game::GameEntityManager& manager, float dt) {
 
-        auto entities = manager.getAllEntityIDs();
-        for (auto id : entities) {
-            auto* shield = manager.getComponent<Components::ShieldComponent>(id);
-            if (shield) {
-                // Skip if shield is already full
-                if(shield->maxShield == shield->currentShield){
-                    continue;
-                }
+        for (auto&& [id, shield] : manager.view<Components::ShieldComponent>().each()) {
+            // Skip if shield is already full
+            if(shield.maxShield == shield.currentShield){
+                continue;
+            }
 
-                // Regenerate shield smoothly based on regenRate and delta time (dt)
-                shield->currentShield += shield->regenRate * dt;
+            // Regenerate shield smoothly based on regenRate and delta time (dt)
+            shield.currentShield += shield.regenRate * dt;
 
-                // Clamp shield to maxShield to avoid overshooting
-                if (shield->currentShield > shield->maxShield) {
-                    shield->currentShield = shield->maxShield;
-                }
+            // Clamp shield to maxShield to avoid overshooting
+            if (shield.currentShield > shield.maxShield) {
+                shield.currentShield = shield.maxShield;
             }
         }
     }
