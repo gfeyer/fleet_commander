@@ -30,7 +30,7 @@
 #include "Systems/HudSystem.hpp"
 #include "Systems/ProductionSystem.hpp"
 #include "Systems/CombatSystem.hpp"
-// #include "Systems/ShieldSystem.hpp"
+#include "Systems/ShieldSystem.hpp"
 // #include "Systems/AI/AISystem.hpp"
 // #include "Systems/GameStateSystem.hpp"
 #include "Systems/DroneTransferSystem.hpp"
@@ -97,7 +97,7 @@ void Scene::update(float dt)
     Systems::ProductionSystem(entityManager, dt);
     Systems::DroneTransferSystem(entityManager, dt);
     Systems::MovementSystem(entityManager, dt);
-    // Systems::ShieldSystem(entityManager, dt);
+    Systems::ShieldSystem(entityManager, dt);
     Systems::CombatSystem(entityManager, dt);
     Systems::LabelUpdateSystem(entityManager, dt);
     // Systems::AI::AISystem(entityManager, dt);
