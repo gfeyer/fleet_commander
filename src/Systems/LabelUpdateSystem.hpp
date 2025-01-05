@@ -13,11 +13,11 @@
 #include "Game/GameEntityManager.hpp"
 
 namespace Systems {
-    void LabelUpdateSystem(Game::GameEntityManager& entityManager, float dt) {
-        auto& entities = entityManager.getAllEntities();
-        for (auto& [id, entity] : entities) {
-            auto* transform = entity.getComponent<Components::TransformComponent>();
-            auto* labelComp = entity.getComponent<Components::LabelComponent>();
+    void LabelUpdateSystem(Game::GameEntityManager& manager, float dt) {
+        auto entities = manager.getAllEntityIDs();
+        for (auto id : entities) {
+            auto* transform = manager.getComponent<Components::TransformComponent>(id);
+            auto* labelComp = manager.getComponent<Components::LabelComponent>(id);
 
             if (labelComp && transform) {
                 // Update the text position based on parent position + offset
@@ -25,10 +25,10 @@ namespace Systems {
                 labelComp->text2.setPosition(transform->getPosition());
 
                 // Update the text on the label:
-                auto* factory = entity.getComponent<Components::FactoryComponent>();
-                auto* powerPlant = entity.getComponent<Components::PowerPlantComponent>();
-                auto* drone = entity.getComponent<Components::DroneComponent>();
-                auto* garisson = entity.getComponent<Components::GarissonComponent>();
+                auto* factory = manager.getComponent<Components::FactoryComponent>(id);
+                auto* powerPlant = manager.getComponent<Components::PowerPlantComponent>(id);
+                auto* drone = manager.getComponent<Components::DroneComponent>(id);
+                auto* garisson = manager.getComponent<Components::GarissonComponent>(id);
 
                 std::stringstream ss;
                 if(factory){
@@ -57,7 +57,7 @@ namespace Systems {
                     }
                 }
 
-                // auto* shield = entity.getComponent<Components::ShieldComponent>();
+                // auto* shield = manager.getComponent<Components::ShieldComponent>();
                 // if(shield){
                 //     ss << "\nShield: " << shield->getShield() << "/" << shield->maxShield;
                 // }
