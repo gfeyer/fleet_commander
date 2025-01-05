@@ -13,6 +13,7 @@
 #include "Components/GameStateComponent.hpp"
 #include "Components/AIComponent.hpp"
 
+#define NullEntityID entt::null
 using EntityID = entt::entity;
 
 namespace Game {
@@ -63,6 +64,21 @@ namespace Game {
 
             return component;
         }
+
+        template<typename T, typename... Args>
+        T& addOrReplaceComponent(EntityID id, Args&&... args) {
+            T& component = registry.emplace_or_replace<T>(id, std::forward<Args>(args)...);
+
+            if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
+                gameStateEntityID = id;
+            }
+            if constexpr (std::is_same<T, Components::AIComponent>::value) {
+                AIEntityID = id;
+            }
+
+            return component;
+        }
+
 
         // Remove Component
         template<typename T>

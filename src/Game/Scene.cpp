@@ -25,7 +25,7 @@
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
 // #include "Systems/LabelUpdateSystem.hpp"
-// #include "Systems/InputSelectionSystem.hpp"
+#include "Systems/InputSelectionSystem.hpp"
 #include "Systems/InputHoverSystem.hpp"
 #include "Systems/HudSystem.hpp"
 #include "Systems/ProductionSystem.hpp"
@@ -120,7 +120,7 @@ void Scene::render()
 void Scene::handleInput(sf::Event &event)
 {
     gui->handleEvent(event);
-    // Systems::InputSelectionSystem(event, entityManager, windowRef);
+    Systems::InputSelectionSystem(event, entityManager, windowRef);
 
     // Handle Camera Movement
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) cameraPosition.y -= cameraSpeed * 0.16f;
