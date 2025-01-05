@@ -13,10 +13,6 @@
     - right click anywhere (not on target) to cancel existing route
 - W A S D to move around the world
 
-### TODO
-- Skin the game (sprites+animations)
-- Improve map generation
-
 ### Screenshots
 
 ![Screenshot1](docs/images/screenshot_010.png)
@@ -54,3 +50,10 @@ cd build
 cmake .. "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake"
 cmake --build . --parallel 4
 ```
+
+### TODO
+
+- Skin the game (sprites+animations)
+- Improve map generation
+- Increase map size
+- Allow routing even if unit is not owned by player (eg. potential routing between structures if they become conquered)
