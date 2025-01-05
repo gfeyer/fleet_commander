@@ -22,11 +22,11 @@ namespace Systems::AI {
         DISTANCE = 5,
     };
 
-    float computeAttackCost(Game::GameEntityManager& entityManager, EntityID targetEntityID, float distance) {
+    float computeAttackCost(Game::GameEntityManager& manager, EntityID targetEntityID, float distance) {
         // returns how many drones it would take to conquer the target
 
-        auto* targetGarisson = entityManager.getEntity(targetEntityID).getComponent<Components::GarissonComponent>();
-        auto* targetShield = entityManager.getEntity(targetEntityID).getComponent<Components::ShieldComponent>();
+        auto* targetGarisson = manager.getComponent<Components::GarissonComponent>(targetEntityID);
+        auto* targetShield = manager.getComponent<Components::ShieldComponent>(targetEntityID);
 
         // compute drone cost
         auto droneCost = targetGarisson->getDroneCount();
@@ -42,7 +42,7 @@ namespace Systems::AI {
         return droneCost + currentShield + shieldRegenCost;
     }
 
-    std::unordered_map<Strategy, float> computeStrategyPriorities(Game::GameEntityManager& entityManager) {
+    std::unordered_map<Strategy, float> computeStrategyPriorities(Game::GameEntityManager& manager) {
         std::unordered_map<Strategy, float> priorities = {
             {Strategy::ENERGY, 0.f},
             {Strategy::PRODUCTION, 0.f},
@@ -50,8 +50,7 @@ namespace Systems::AI {
             {Strategy::ATTACK, 0.f},
         };
         
-        Entity& aiEntity = entityManager.getAIEntity();
-        auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
+        auto* aiComp = manager.getAIComponent();
 
         // Compute total droens in 5 seconds if no attack planned
         float totalDrones = 0.f;
@@ -105,9 +104,8 @@ namespace Systems::AI {
         };
     }
 
-    void PlanSystem(Game::GameEntityManager& entityManager, float dt){
-        Entity& aiEntity = entityManager.getAIEntity();
-        auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
+    void PlanSystem(Game::GameEntityManager& manager, float dt){
+        auto* aiComp = manager.getAIComponent();
 
         if(!aiComp){
             log_err << "Failed to get aiComponent";
@@ -119,7 +117,7 @@ namespace Systems::AI {
         std::set<Components::AI::AttackPair, Components::AI::ComparatorPairByCost> potentialFailedSingleAttackTargetsByCost;
 
         // Strategy: need energy or more factories?
-        auto priorities = computeStrategyPriorities(entityManager);
+        auto priorities = computeStrategyPriorities(manager);
         auto strategy = std::max_element(priorities.begin(), priorities.end(), [](const std::pair<Strategy, float>& a, const std::pair<Strategy, float>& b) { return a.second < b.second; })->first;
 
         // logStrategy(strategy);
@@ -130,13 +128,13 @@ namespace Systems::AI {
             auto originGarissonID = it->first;
 
             for(auto [distance, targetEntityID] : it->second){
-                float costForSuccesfulAttack = computeAttackCost(entityManager, targetEntityID, distance);
+                float costForSuccesfulAttack = computeAttackCost(manager, targetEntityID, distance);
                 costForSuccesfulAttack += 1.f; // add some buffer
 
                 auto droneCountAtThisGarisson = aiComp->perception.garissonByDroneCount.at(originGarissonID);
 
-                auto* originTransform = entityManager.getEntity(originGarissonID).getComponent<Components::TransformComponent>();
-                auto* targetTransform = entityManager.getEntity(targetEntityID).getComponent<Components::TransformComponent>();
+                auto* originTransform = manager.getComponent<Components::TransformComponent>(originGarissonID);
+                auto* targetTransform = manager.getComponent<Components::TransformComponent>(targetEntityID);
 
                 auto pair = Components::AI::AttackPair(originGarissonID, targetEntityID, distance, costForSuccesfulAttack);
                 if(droneCountAtThisGarisson > costForSuccesfulAttack){
@@ -159,8 +157,8 @@ namespace Systems::AI {
 
                 // log_info << "dist: " << distance << " source: " << source << " target: " << target;
 
-                auto* targetPowerPlantComp = entityManager.getComponent<Components::PowerPlantComponent>(target);
-                auto* targetFactoryComp = entityManager.getComponent<Components::FactoryComponent>(target);
+                auto* targetPowerPlantComp = manager.getComponent<Components::PowerPlantComponent>(target);
+                auto* targetFactoryComp = manager.getComponent<Components::FactoryComponent>(target);
 
                 // Explicit local variable (macOS compiler workaround)
                 EntityID targetID = target; 
@@ -225,7 +223,7 @@ namespace Systems::AI {
                 }
                 for(auto& pair : potentialSuccesfulSingleAttackTargetsByDistance){
                     auto [source, target, distance, cost] = pair;
-                    auto* garissonComp = entityManager.getComponent<Components::GarissonComponent>(target);
+                    auto* garissonComp = manager.getComponent<Components::GarissonComponent>(target);
 
                     if(distance > Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK){
                         continue;

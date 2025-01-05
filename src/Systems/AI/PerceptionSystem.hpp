@@ -11,26 +11,25 @@
 
 namespace Systems::AI {
 
-    float getDistanceBetweenEntities(Game::GameEntityManager& entityManager, EntityID entity1, EntityID entity2){
-        auto* entity1Transform = entityManager.getEntity(entity1).getComponent<Components::TransformComponent>();
-        auto* entity2Transform = entityManager.getEntity(entity2).getComponent<Components::TransformComponent>();
+    float getDistanceBetweenEntities(Game::GameEntityManager& manager, EntityID entity1, EntityID entity2){
+        auto* entity1Transform = manager.getComponent<Components::TransformComponent>(entity1);
+        auto* entity2Transform = manager.getComponent<Components::TransformComponent>(entity2);
 
         return sqrtf(powf(entity1Transform->getPosition().x - entity2Transform->getPosition().x, 2) + powf(entity1Transform->getPosition().y - entity2Transform->getPosition().y, 2));
     }
     
-    void PerceptionSystem(Game::GameEntityManager& entityManager, float dt){
-        Entity& aiEntity = entityManager.getAIEntity();
-        auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
+    void PerceptionSystem(Game::GameEntityManager& manager, float dt){
+        auto* aiComp = manager.getAIComponent();
 
         if(!aiComp){
             log_err << "Failed to get aiComponent";
         }
 
-        auto& entities = entityManager.getAllEntities();
+        auto entities = manager.getAllEntityIDs();
 
-        for(auto& [id, entity] : entities){
-            auto* garisson = entity.getComponent<Components::GarissonComponent>();
-            auto* faction = entity.getComponent<Components::FactionComponent>();
+        for(auto id : entities){
+            auto* garisson = manager.getComponent<Components::GarissonComponent>(id);
+            auto* faction = manager.getComponent<Components::FactionComponent>(id);
 
             // Get drone counts in garrisons for faction
             if(garisson && garisson->getDroneCount() > 0 && faction && faction->faction != Components::Faction::NEUTRAL){
@@ -48,7 +47,7 @@ namespace Systems::AI {
             }
 
             // Add in flight drones
-            auto* droneComp = entity.getComponent<Components::DroneComponent>();
+            auto* droneComp = manager.getComponent<Components::DroneComponent>(id);
             if(droneComp && faction && faction->faction != Components::Faction::NEUTRAL){
 
                 if( faction->faction == Components::Faction::PLAYER_1){
@@ -60,7 +59,7 @@ namespace Systems::AI {
             }
 
             // Get total production rate
-            auto* factory = entity.getComponent<Components::FactoryComponent>();
+            auto* factory = manager.getComponent<Components::FactoryComponent>(id);
             if(factory && factory->droneProductionRate > 0 && faction && faction->faction != Components::Faction::NEUTRAL){
 
                 if( faction->faction == Components::Faction::PLAYER_1){
@@ -71,7 +70,7 @@ namespace Systems::AI {
                 }
             }
 
-            auto* powerPlant = entity.getComponent<Components::PowerPlantComponent>();
+            auto* powerPlant = manager.getComponent<Components::PowerPlantComponent>(id);
             if(powerPlant && powerPlant->capacity > 0 && faction && faction->faction != Components::Faction::NEUTRAL){
 
                 if( faction->faction == Components::Faction::PLAYER_1){
@@ -85,11 +84,10 @@ namespace Systems::AI {
 
         // Compute the garissonByDistance for ai garissons
         for(auto aiGarissonID : aiComp->perception.aiGarissons){
-            auto& aiGarisson = entityManager.getEntity(aiGarissonID);
 
-            for(auto& [targetEntityID, targetEntity] : entities){
-                auto* targetGarissonComp = targetEntity.getComponent<Components::GarissonComponent>();
-                auto* targetFaction = targetEntity.getComponent<Components::FactionComponent>();
+            for(auto targetEntityID : entities){
+                auto* targetGarissonComp = manager.getComponent<Components::GarissonComponent>(targetEntityID);
+                auto* targetFaction = manager.getComponent<Components::FactionComponent>(targetEntityID);
 
                 if(!targetGarissonComp || aiGarissonID == targetEntityID){
                     // consider garissons only
@@ -101,16 +99,16 @@ namespace Systems::AI {
                     continue;
                 }
 
-                auto distance = getDistanceBetweenEntities(entityManager, aiGarissonID, targetEntityID);
+                auto distance = getDistanceBetweenEntities(manager, aiGarissonID, targetEntityID);
                 aiComp->perception.garissonsByDistance[aiGarissonID][distance] = targetEntityID;
                 // log_info << "Garisson:" << aiGarissonID << " -> " << targetEntityID << " : " << distance;
             }
         }
 
         // Get all attack orders
-        for(auto& [id, entity] : entities){
-            auto *attackOrder = entity.getComponent<Components::AttackOrderComponent>();
-            auto* faction = entity.getComponent<Components::FactionComponent>();
+        for(auto id : entities){
+            auto *attackOrder = manager.getComponent<Components::AttackOrderComponent>(id);
+            auto* faction = manager.getComponent<Components::FactionComponent>(id);
             if(attackOrder && faction){
                 if(faction->faction == Components::Faction::PLAYER_1){
                     aiComp->perception.playerAttackOrders.insert({attackOrder->origin, attackOrder->target,0.f ,0.f});

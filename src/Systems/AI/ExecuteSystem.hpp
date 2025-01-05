@@ -7,20 +7,19 @@
 
 namespace Systems::AI {
 
-    void ExecuteSystem(Game::GameEntityManager& entityManager, float dt){
-        Entity& aiEntity = entityManager.getAIEntity();
-        auto* aiComp = aiEntity.getComponent<Components::AIComponent>();
+    void ExecuteSystem(Game::GameEntityManager& manager, float dt){
+        auto* aiComp = manager.getAIComponent();
     
         unsigned int attackOrdersExecuted = 0;
 
         for(auto& [source, target, distance, cost] : aiComp->execute.finalTargets){
             // log_info << "Attack: "<< source << " -> " << target;
-            entityManager.addComponent(source, Components::AttackOrderComponent{source, target});
+            manager.addOrReplaceComponent<Components::AttackOrderComponent>(source, source, target);
             attackOrdersExecuted++;
 
             if(Config::ENABLE_DEBUG_SYMBOLS){
-                auto* originTransform = entityManager.getEntity(source).getComponent<Components::TransformComponent>();
-                auto* targetTransform = entityManager.getEntity(target).getComponent<Components::TransformComponent>();
+                auto* originTransform = manager.getComponent<Components::TransformComponent>(source);
+                auto* targetTransform = manager.getComponent<Components::TransformComponent>(target);
                 aiComp->debug.yellowDebugTargets.push_back(originTransform->getPosition());
                 aiComp->debug.pinkDebugTargets.push_back(targetTransform->getPosition());
             }

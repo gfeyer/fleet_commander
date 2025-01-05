@@ -50,7 +50,7 @@ namespace Systems {
                     for(auto i=0; i < dronesUsedForAttack; i++){
                         EntityID droneID = Game::createDrone(manager, std::to_string(i), originFaction->faction);
 
-                        manager.addComponent<Components::AttackOrderComponent>(droneID,attackOrder->origin, attackOrder->target);
+                        manager.addOrReplaceComponent<Components::AttackOrderComponent>(droneID,attackOrder->origin, attackOrder->target);
 
                         sf::Vector2f originPosition = manager.getComponent<Components::TransformComponent>(originEntity)->transform.getPosition();
                         int spread = 25 + (dronesUsedForAttack * 5);

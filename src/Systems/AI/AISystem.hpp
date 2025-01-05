@@ -17,7 +17,7 @@
 #include "Config.hpp"
 
 namespace Systems::AI {
-        void AISystem(Game::GameEntityManager& entityManager, float dt) {
+        void AISystem(Game::GameEntityManager& manager, float dt) {
 
             // Run AI every few seconds
             static float decisionTimer = 0.f;
@@ -29,14 +29,13 @@ namespace Systems::AI {
             decisionTimer = 0.f;
 
             // Reset last plan
-            Entity& aiEntity = entityManager.getAIEntity();
-            auto* aiComponent = aiEntity.getComponent<Components::AIComponent>();
+            auto* aiComponent = manager.getAIComponent();
             aiComponent->reset();
 
             // Run AI
-            Systems::AI::PerceptionSystem(entityManager, dt);
-            Systems::AI::PlanSystem(entityManager, dt);
-            Systems::AI::ExecuteSystem(entityManager, dt);
+            Systems::AI::PerceptionSystem(manager, dt);
+            Systems::AI::PlanSystem(manager, dt);
+            Systems::AI::ExecuteSystem(manager, dt);
 
             return;
         }

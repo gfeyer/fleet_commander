@@ -72,7 +72,7 @@ namespace Systems {
                 // log_info << "Attack entity " << selectedEntityID << " from " << previouslySelectedEntityID;              
                 auto* factionComp = manager.getComponent<Components::FactionComponent>(previouslySelectedEntityID);
                 if(factionComp->faction == Components::Faction::PLAYER_1){
-                    manager.addComponent<Components::AttackOrderComponent>(previouslySelectedEntityID, previouslySelectedEntityID, selectedEntityID);
+                    manager.addOrReplaceComponent<Components::AttackOrderComponent>(previouslySelectedEntityID, previouslySelectedEntityID, selectedEntityID);
                 }               
                 // deselect targets after attack order
                 manager.getComponent<Components::SelectableComponent>(previouslySelectedEntityID)->isSelected = false;
