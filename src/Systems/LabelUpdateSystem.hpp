@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <sstream>
 
-#include "Core/Entity.hpp"
+
 #include "Components/TransformComponent.hpp"
 #include "Components/LabelComponent.hpp"
 #include "Components/ShieldComponent.hpp"

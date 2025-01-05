@@ -1,7 +1,7 @@
 #ifndef ATTACK_ORDER_COMPONENT_HPP
 #define ATTACK_ORDER_COMPONENT_HPP
 
-#include "Core/Entity.hpp"
+
 namespace Components {
 
     struct AttackOrderComponent {

@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
-#include "Core/Entity.hpp"
+
 #include "Config.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Components/SelectableComponent.hpp"

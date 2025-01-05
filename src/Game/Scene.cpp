@@ -7,8 +7,6 @@
 #include "Resources/ResourceManager.hpp"
 #include "Config.hpp"
 
-#include "Core/Entity.hpp"
-
 #include "Components/FactionComponent.hpp"
 #include "Components/FactoryComponent.hpp"
 #include "Components/PowerPlantComponent.hpp"

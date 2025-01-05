@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <cmath>
 
-#include "Core/Entity.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Config.hpp"

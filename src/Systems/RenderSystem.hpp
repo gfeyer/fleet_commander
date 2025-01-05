@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 
-#include "Core/Entity.hpp"
 #include "Components/TransformComponent.hpp"
 #include "Components/SpriteComponent.hpp"
 #include "Components/ShapeComponent.hpp"

@@ -6,7 +6,7 @@
 #include <TGUI/TGUI.hpp>
 #include <cstdio>
 
-#include "Core/Entity.hpp"
+
 #include "Components/HoverComponent.hpp"
 #include "Components/TagComponent.hpp"
 #include "Components/GarissonComponent.hpp"
