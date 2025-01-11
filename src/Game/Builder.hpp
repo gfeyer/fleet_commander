@@ -49,6 +49,7 @@ namespace Game {
         entityManager.addComponent<Components::SelectableComponent>(factoryID);
         entityManager.addComponent<Components::FactionComponent>(factoryID, faction);
         entityManager.addComponent<Components::GarissonComponent>(factoryID);
+        entityManager.addComponent<Components::AttackOrderComponent>(factoryID);
         entityManager.addComponent<Components::ShieldComponent>(factoryID, 0, 10, shieldRegenRate);
         return factoryID;
     }
@@ -72,6 +73,7 @@ namespace Game {
         entityManager.addComponent<Components::SelectableComponent>(powerPlantID );
         entityManager.addComponent<Components::FactionComponent>(powerPlantID, faction);
         entityManager.addComponent<Components::GarissonComponent>(powerPlantID);
+        entityManager.addComponent<Components::AttackOrderComponent>(powerPlantID);
 
         float maxShield = energyCapacity;
         entityManager.addComponent<Components::ShieldComponent>(powerPlantID, 0, maxShield, shieldRegenRate);
@@ -101,6 +103,7 @@ namespace Game {
 
         entityManager.addComponent<Components::MoveComponent>(droneID, Config::DRONE_SPEED, 0.f);
         entityManager.addComponent<Components::FactionComponent>(droneID, faction);
+        entityManager.addComponent<Components::AttackOrderComponent>(droneID);
 
         return droneID;
     }

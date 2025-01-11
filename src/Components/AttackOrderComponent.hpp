@@ -7,9 +7,11 @@ namespace Components {
     struct AttackOrderComponent {
         EntityID origin;
         EntityID target;
-        bool isActivated = false;
+        bool isActivated;
+        Faction faction = Faction::NEUTRAL; // Who placed this attack order
 
-        AttackOrderComponent(EntityID origin, EntityID target) : origin(origin), target(target), isActivated(false) {}
+        AttackOrderComponent() : isActivated(false) {}
+        AttackOrderComponent(EntityID origin, EntityID target) : origin(origin), target(target), isActivated(true) {}
     };
 }
 

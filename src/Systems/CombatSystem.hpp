@@ -17,24 +17,25 @@
 namespace Systems {
         void CombatSystem(Game::GameEntityManager& manager, float dt) {
 
-            std::vector<EntityID> toRemoveAttackOrders;
             std::vector<EntityID> toRemoveEntities;
 
             for(auto&& [id, attackOrder, originGarisson, faction] : manager.view<
                 Components::AttackOrderComponent, 
                 Components::GarissonComponent,
                 Components::FactionComponent>().each()){
-
+                
+                if(attackOrder.isActivated == false){
+                    continue;
+                }
                 
                 if(attackOrder.origin != id){
                     log_err << "AttackOrder origin ID does not match current entity ID, skipping...";
                     continue;
                 }
-                
+
                 if (originGarisson.getDroneCount() < 2) {
-                    // log_info << "EntityID: " << id << " has no drones, removing attack order";
-                    // manager.removeComponent<Components::AttackOrderComponent>(id);
-                    toRemoveAttackOrders.push_back(id);
+                    log_info << "EntityID has no drones, removing attack order";
+                    attackOrder.isActivated = false;
                     continue;
                 }
 
@@ -43,8 +44,9 @@ namespace Systems {
                 auto dronesUsedForAttack = originGarisson.getDroneCount() - 1;
 
                 for(auto i=0; i < dronesUsedForAttack; i++){
+                    // Creating drones
                     EntityID droneID = Game::createDrone(manager, std::to_string(i), faction.faction);
-                    manager.addComponent<Components::AttackOrderComponent>(droneID, attackOrder.origin, attackOrder.target);
+                    manager.addOrReplaceComponent<Components::AttackOrderComponent>(droneID, attackOrder.origin, attackOrder.target);
 
                         sf::Vector2f originPosition = manager.getComponent<Components::TransformComponent>(id)->transform.getPosition();
                         int spread = 25 + (dronesUsedForAttack * 5);
@@ -62,8 +64,7 @@ namespace Systems {
                         droneMove->moveToTarget = true;
                 }
                 originGarisson.setDroneCount(1);
-                // manager.removeComponent<Components::AttackOrderComponent>(id);
-                toRemoveAttackOrders.push_back(id);
+                attackOrder.isActivated = false;
             }
 
             for(auto&& [id, drone, faction, attackOrder, move] : manager.view<
@@ -133,10 +134,6 @@ namespace Systems {
 
             for (auto id : toRemoveEntities) {
                 manager.removeEntity(id);
-            }
-
-            for(auto id : toRemoveAttackOrders){
-                manager.removeComponent<Components::AttackOrderComponent>(id);
             }
         }
 }

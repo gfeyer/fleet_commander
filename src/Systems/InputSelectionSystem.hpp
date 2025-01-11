@@ -120,7 +120,7 @@ namespace Systems {
                     auto* factionComp = manager.getComponent<Components::FactionComponent>(previouslySelectedEntityID);
 
                     if(factionComp->faction == Components::Faction::PLAYER_1){
-                        log_info << "adding trasnfer component";
+                        // log_info << "adding transfer component...";
                         manager.addOrReplaceComponent<Components::DroneTransferComponent>(previouslySelectedEntityID, previouslySelectedEntityID, selectedEntityID, factionComp->faction);
                     }
                 }

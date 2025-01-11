@@ -12,18 +12,22 @@ namespace Systems {
 
     void DroneTransferSystem(Game::GameEntityManager& manager, float dt) {
 
-        for(auto&& [id, transfer, faction, garisson] : manager.view<
+        for(auto&& [id, transfer, faction, garisson, attackOrder] : manager.view<
             Components::DroneTransferComponent,
             Components::FactionComponent,
-            Components::GarissonComponent>().each()) {
+            Components::GarissonComponent,
+            Components::AttackOrderComponent>().each()) {
                 
             if(faction.faction != transfer.faction){
                 // if the factions changed, remove the order
                 manager.removeComponent<Components::DroneTransferComponent>(id);
             }
 
-            if(garisson.getDroneCount() > 0){
-                manager.addOrReplaceComponent<Components::AttackOrderComponent>(transfer.source, transfer.source, transfer.target);
+            if(garisson.getDroneCount() > 1){
+                // log_info << "enable attack order";
+                attackOrder.isActivated = true;
+                attackOrder.origin = transfer.source;
+                attackOrder.target = transfer.target;
             }
         }
     }
