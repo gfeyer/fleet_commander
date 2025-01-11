@@ -1,8 +1,6 @@
 #ifndef DRONE_TRANSFER_SYSTEM_HPP
 #define DRONE_TRANSFER_SYSTEM_HPP    
 
-#include <execution>
-
 #include "Game/GameEntityManager.hpp"
 
 #include "Components/DroneTransferComponent.hpp"

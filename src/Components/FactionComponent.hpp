@@ -3,8 +3,6 @@
 
 #include <string> 
 
-#include <sfml/Graphics.hpp>
-
 namespace Components {
     enum class Faction : unsigned int {
         NEUTRAL = 0,

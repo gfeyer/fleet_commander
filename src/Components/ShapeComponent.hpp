@@ -1,7 +1,7 @@
 #ifndef SHAPE_COMPONENT_HPP
 #define SHAPE_COMPONENT_HPP
 
-#include <sfml/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <memory>
 
 namespace Components {

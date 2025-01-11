@@ -1,7 +1,7 @@
 #ifndef TRANSFORM_COMPONENT_HPP
 #define TRANSFORM_COMPONENT_HPP
 
-#include <sfml/System.hpp>
+#include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
 namespace Components {
