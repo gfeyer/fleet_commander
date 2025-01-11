@@ -1,27 +1,35 @@
-# Fleet Commander
+# Fleet Commander - A Space RTS Game
 
-### Space strategy game
+# Game Instructions
 
-### How to play
+## Setup
+- Download the game from Releases (Windows, Linux, OSX) and unzip it.
+- Alternatively, build from source.
 
-- Factories produce drones up to the maximum enery capacity
-- Power plants increase the maximum capacity
-- Use drones to conquer other structures
-- Select structure and:
-    - left click to attack another target
-    - right click to create drone transfer route
-    - right click anywhere (not on target) to cancel existing route
-- W A S D to move around the world
+## Gameplay Basics
+- **Factories**: Produce drones up to the maximum energy capacity.
+- **Power Plants**: Increase maximum energy capacity.
+- **Drones**: Use them to conquer other structures.
 
-### Screenshots
+## Controls
+- **Select a Structure**:
+  - **Left Click**: Attack another target.
+  - **Right Click**: Create a drone transfer route.
+  - **Right Click Anywhere (not on a target)**: Cancel an existing route.
+- **Movement**:
+  - Use **W, A, S, D** to move around the world.
+
+
+
+# Screenshots
+
 
 ![Screenshot1](docs/images/screenshot_010.png)
 ![Screenshot2](docs/images/screenshot_011.png)
 
-### Build from source
+# Build from source
 
-
-#### Dependencies
+## Dependencies
 
 ```
 # get the package manager
@@ -39,7 +47,7 @@ bootstrap.bat  # windows
 
 ```
 
-#### Build
+## Build
 
 Go to the root folder where the repository was cloned
 
@@ -51,9 +59,8 @@ cmake .. "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts
 cmake --build . --parallel 4
 ```
 
-### TODO
+# TODO (soon)
 
 - Skin the game (sprites+animations)
 - Improve map generation
 - Increase map size
-- Allow routing even if unit is not owned by player (eg. potential routing between structures if they become conquered)
