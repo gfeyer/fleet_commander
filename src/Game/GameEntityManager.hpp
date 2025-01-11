@@ -12,6 +12,8 @@
 #include "Components/ShieldComponent.hpp"
 #include "Components/GameStateComponent.hpp"
 #include "Components/AIComponent.hpp"
+#include "Components/AttackOrderComponent.hpp"
+#include "Game/SignalHandlers.hpp"
 
 #define NullEntityID entt::null
 using EntityID = entt::entity;
@@ -106,6 +108,23 @@ namespace Game {
             return registry.view<Components...>();
         }
 
+        // Register on_update Listener
+        template<typename T, typename Func>
+        void onUpdate(Func&& func) {
+            registry.on_update<T>().connect(std::forward<Func>(func));
+        }
+
+        // Patch Component
+        template<typename T, typename Func>
+        void patchComponent(EntityID id, Func&& func) {
+            if (registry.all_of<T>(id)) {
+                registry.patch<T>(id, std::forward<Func>(func));
+                // log_info << "Component patched for entity: " << static_cast<std::uint32_t>(id) << "\n";
+            } else {
+                log_err << "Cannot patch component: Entity does not have the specified component.\n";
+            }
+        }
+
         // Get All Entity IDs
         std::vector<EntityID> getAllEntityIDs() {
             // TODO: temporary until project fully migrated to entt::view 
@@ -137,6 +156,11 @@ namespace Game {
                 return &registry.get<Components::AIComponent>(AIEntityID);
             }
             return nullptr;
+        }
+
+        void registerSignalHandlers() {
+            registry.on_update<Components::AttackOrderComponent>().connect<&SignalHandlers::onAttackOrderUpdate>();
+            // Add connections for other components and handlers here
         }
     };
 }

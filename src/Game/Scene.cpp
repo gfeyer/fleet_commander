@@ -86,6 +86,9 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 
     // Generate Map
     Game::GenerateRandomMap(manager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 30, 100);
+
+    // Signal Handlers
+    // manager.registerSignalHandlers();
 }
 
 Scene::~Scene()
