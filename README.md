@@ -1,4 +1,4 @@
-# Fleet Dominion
+# Fleet Commander
 
 ### Space strategy game
 

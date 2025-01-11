@@ -12,7 +12,7 @@ int main() {
     srand(time(NULL));
 
     // Create Window
-    sf::RenderWindow window(sf::VideoMode(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT), "Fleet Dominion");
+    sf::RenderWindow window(sf::VideoMode(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT), "Fleet Commander");
     window.setFramerateLimit(60);
 
     Scene scene(window);
