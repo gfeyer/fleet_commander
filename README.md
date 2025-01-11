@@ -3,7 +3,7 @@
 # Game Instructions
 
 ## Setup
-- Download the game from Releases (Windows, Linux, OSX) and unzip it.
+- Download the game from Releases tab (Windows, Linux, OSX) and unzip it.
 - Alternatively, build from source.
 
 ## Gameplay Basics
