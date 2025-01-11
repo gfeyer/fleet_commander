@@ -56,7 +56,7 @@ namespace GUI {
     }
 
     tgui::ChildWindow::Ptr ResourceManager::buildPopupShowcase(){
-        
+    // Test window / ignore
     // Create Popup Window (ChildWindow)
     auto popup = tgui::ChildWindow::create("Widgets Popup");
     popup->setRenderer(theme->getRenderer("ChildWindow"));
