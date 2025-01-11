@@ -29,7 +29,7 @@ namespace Systems {
                 }
                 
                 if(attackOrder.origin != id){
-                    log_err << "AttackOrder origin ID does not match current entity ID, skipping...";
+                    // log_err << "AttackOrder origin ID does not match current entity ID, skipping...";
                     continue;
                 }
 
