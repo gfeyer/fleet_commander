@@ -34,7 +34,7 @@ namespace Systems {
                 }
 
                 if (originGarisson.getDroneCount() < 2) {
-                    log_info << "EntityID has no drones, removing attack order";
+                    // log_info << "EntityID has no drones, removing attack order";
                     attackOrder.isActivated = false;
                     continue;
                 }
