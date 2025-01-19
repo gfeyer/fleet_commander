@@ -5,7 +5,7 @@
 ## Setup
 ### Download the Game
 - [Itch.io](https://gfeyer.itch.io/fleet-commander): Download the latest version for your platform.
-- [Releases](./releases): Download pre-built binaries for **Windows**, **Linux**, and **macOS**. Simply unzip the file for your platform.
+- [Releases](https://github.com/gfeyer/fleet_commander/releases): Download pre-built binaries for **Windows**, **Linux**, and **macOS**. Simply unzip the file for your platform.
 
 ### Build from Source
 - If you'd prefer to compile the game yourself, follow the [Build Instructions](#build-instructions) below.
