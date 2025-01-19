@@ -3,8 +3,12 @@
 # Game Instructions
 
 ## Setup
-- Download the game from Releases tab (Windows, Linux, OSX) and unzip it.
-- Alternatively, build from source.
+### Download the Game
+- [Itch.io](https://gfeyer.itch.io/fleet-commander): Download the latest version for your platform.
+- [Releases](./releases): Download pre-built binaries for **Windows**, **Linux**, and **macOS**. Simply unzip the file for your platform.
+
+### Build from Source
+- If you'd prefer to compile the game yourself, follow the [Build Instructions](#build-instructions) below.
 
 ## Gameplay Basics
 - **Factories**: Produce drones up to the maximum energy capacity.
@@ -27,7 +31,7 @@
 ![Screenshot1](docs/images/screenshot_010.png)
 ![Screenshot2](docs/images/screenshot_011.png)
 
-# Build from source
+# Build instructions
 
 ## Dependencies
 
