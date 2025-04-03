@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(ColonySimulator LANGUAGES CXX)
+project(FleetCommander LANGUAGES CXX)
 
 # Set output directory for executables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -30,6 +30,10 @@ target_link_libraries(FleetCommander PRIVATE
 #    sfml-audio 
     TGUI::TGUI
 )
+
+# TinyXML
+find_package(tinyxml2 CONFIG REQUIRED)
+target_link_libraries(FleetCommander PRIVATE tinyxml2::tinyxml2)
 
 # Set the C++ standard
 target_compile_features(FleetCommander PRIVATE cxx_std_17)

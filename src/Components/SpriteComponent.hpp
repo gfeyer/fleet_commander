@@ -6,16 +6,6 @@
 namespace Components{
     struct SpriteComponent {
         sf::Sprite sprite;
-
-        SpriteComponent() = default;
-
-        SpriteComponent(const sf::Texture& texture) {
-            sprite.setTexture(texture);
-        }
-
-        void setTexture(const sf::Texture& texture) {
-            sprite.setTexture(texture);
-        }
     };
 }
 

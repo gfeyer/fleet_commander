@@ -1,6 +1,8 @@
 #include "ResourceManager.hpp"
 
 #include <memory>
+#include <cassert>
+#include "Atlas.hpp"
 #include "Utils/Logger.hpp"
 
 namespace Resource{
@@ -10,6 +12,8 @@ ResourceManager::ResourceManager() {
     // loadTexture(Paths::BACKGROUND_4);
     loadTheme(Paths::DARK_THEME);
     loadFont(Paths::FONT_TOXIGENESIS);
+    loadTexture(Paths::TEXTURE_SPACE_EXTENSION);
+    loadAtlas(Paths::ATLAS_SPACE_EXTENSION);
 }
 
 ResourceManager::~ResourceManager() {
@@ -23,6 +27,11 @@ void ResourceManager::loadTexture(const char *path)
         log_err << "Failed to load texture: " << path << std::endl;
     }
     textures.insert_or_assign(path, std::move(texture));
+}
+
+void ResourceManager::loadAtlas(const char *path) {
+    auto atlas = std::make_unique<Atlas>(path);
+    atlases.insert_or_assign(path, std::move(atlas));
 }
 
 void ResourceManager::loadTheme(const char *path)
@@ -47,7 +56,14 @@ ResourceManager& ResourceManager::getInstance() {
 
 const sf::Texture& ResourceManager::getTexture(const char *path) const
 {
+    assert(path && *path != '\0' && textures.find(path) != textures.end() && "Texture not found");
     return *textures.at(path);
+}
+
+const Atlas &ResourceManager::getAtlas(const char *path) const 
+{
+    assert(path && *path != '\0' && atlases.find(path) != atlases.end() && "Atlas not found");
+    return *atlases.at(path);
 }
 
 const tgui::Theme::Ptr ResourceManager::getTheme(const char *path) const
