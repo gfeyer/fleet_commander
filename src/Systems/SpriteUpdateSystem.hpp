@@ -69,6 +69,14 @@ namespace Systems {
                 break;
             }
         }
+
+        // TODO:
+        // for (auto&& [id, spriteComp, selectable] : manager.view<Components::SpriteComponent, Components::SelectableComponent>().each()) {
+        //     if (selectable.isSelected) {
+                
+        //     }
+        // }
+
     }
 }
 
