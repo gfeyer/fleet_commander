@@ -11,7 +11,7 @@
 
 namespace Resource::Paths{
     // Textures
-    constexpr const char* BACKGROUND_4 = "assets/background/Background-4.png";
+    constexpr const char* BACKGROUND = "assets/texture/background.png";
 
     // Themes
     constexpr const char* DARK_THEME = "assets/themes/Dark.txt";

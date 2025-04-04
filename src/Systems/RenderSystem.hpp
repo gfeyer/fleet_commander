@@ -24,6 +24,20 @@ namespace Systems {
 
         // Layer 0
         // Background
+        // Save current view
+        sf::View originalView = window.getView();
+        // Set to default view (fixed background)
+        window.setView(window.getDefaultView());
+        // Draw background (won't move with game camera)
+        const auto& backgroundTexture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::BACKGROUND);
+        sf::Sprite background(backgroundTexture);
+        background.setScale(2.f, 2.f);
+        window.draw(background);
+
+        // Restore game view
+        window.setView(originalView);
+
+        // Layer 1
 
         // Draw transfer lines
         for(auto&& [entityID, transform, transfer] : 
