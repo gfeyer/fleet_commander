@@ -27,9 +27,10 @@
 
 namespace Game {
 
-    inline void assignSprite(Components::SpriteComponent* spriteComp, const std::string& name) {
-        const auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_SPACE_EXTENSION);
-        const auto& atlas = Resource::ResourceManager::getInstance().getAtlas(Resource::Paths::ATLAS_SPACE_EXTENSION);
+
+    inline void assignSprite(Components::SpriteComponent* spriteComp, const std::string& texturePath, const std::string& atlasPath, const std::string& name) {
+        const auto& texture = Resource::ResourceManager::getInstance().getTexture(texturePath);
+        const auto& atlas = Resource::ResourceManager::getInstance().getAtlas(atlasPath);
 
         spriteComp->sprite.setTexture(texture);
         auto rect = atlas.getRect(name);
@@ -59,7 +60,8 @@ namespace Game {
         // Sprite
         entityManager.addComponent<Components::SpriteComponent>(factoryID);
         auto spriteComp = entityManager.getComponent<Components::SpriteComponent>(factoryID);
-        assignSprite(spriteComp, "spaceStation_020.png");
+        // TODO: need some sort of color for the faction
+        assignSprite(spriteComp, Resource::Paths::TEXTURE_SPACE_EXTENSION, Resource::Paths::ATLAS_SPACE_EXTENSION, "spaceStation_020.png");
         auto transformComp = entityManager.getComponent<Components::TransformComponent>(factoryID);
         transformComp->transform.setScale(sf::Vector2f(0.25f, 0.25f));
 
@@ -88,7 +90,8 @@ namespace Game {
         // Sprite
         entityManager.addComponent<Components::SpriteComponent>(powerPlantID);
         auto spriteComp = entityManager.getComponent<Components::SpriteComponent>(powerPlantID);
-        assignSprite(spriteComp, "spaceBuilding_015.png");
+        assignSprite(spriteComp, Resource::Paths::TEXTURE_SPACE_EXTENSION, Resource::Paths::ATLAS_SPACE_EXTENSION, "spaceStation_023.png");
+
         auto transformComp = entityManager.getComponent<Components::TransformComponent>(powerPlantID);
         transformComp->transform.setScale(sf::Vector2f(0.5f, 0.5f));
 
@@ -104,26 +107,11 @@ namespace Game {
         entityManager.addComponent<Components::FactionComponent>(droneID, faction);
         entityManager.addComponent<Components::AttackOrderComponent>(droneID);
 
-        // auto shape = std::make_shared<sf::ConvexShape>();
-        // shape->setPointCount(3);
-        // shape->setOrigin(sf::Vector2f(0.f, 0.f));
-        // shape->setPoint(0, sf::Vector2f(0.f, -Config::DRONE_LENGTH));  // Top point
-        // shape->setPoint(1, sf::Vector2f(-Config::DRONE_LENGTH, Config::DRONE_LENGTH)); // Bottom-left point
-        // shape->setPoint(2, sf::Vector2f(Config::DRONE_LENGTH, Config::DRONE_LENGTH));  // Bottom-right point
-        // sf::Color color{100,100,100};
-        // shape->setFillColor(color);
-        // entityManager.addComponent<Components::ShapeComponent>(droneID, shape);
-        // entityManager.addComponent<Components::LabelComponent>(droneID, name, 
-        //     Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
-        //     18, 
-        //     sf::Color::White, 
-        //     sf::Vector2f(Config::DRONE_LENGTH*2, 5)
-        // );
-
         // Sprite
         entityManager.addComponent<Components::SpriteComponent>(droneID);
         auto spriteComp = entityManager.getComponent<Components::SpriteComponent>(droneID);
-        assignSprite(spriteComp, "spaceShips_001.png");
+        assignSprite(spriteComp, Resource::Paths::TEXTURE_SPACE, Resource::Paths::ATLAS_SPACE, "playerShip3_red.png");
+         
         auto transformComp = entityManager.getComponent<Components::TransformComponent>(droneID);
         transformComp->transform.setScale(sf::Vector2f(0.35f, 0.35f));
 

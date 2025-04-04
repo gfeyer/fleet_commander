@@ -20,9 +20,11 @@ namespace Resource::Paths{
     constexpr const char* FONT_TOXIGENESIS = "assets/fonts/toxigenesis.otf";
 
     // Textures
+    constexpr const char* TEXTURE_SPACE = "assets/texture/space.png";
     constexpr const char* TEXTURE_SPACE_EXTENSION = "assets/texture/extension.png";
 
     // Atlas
+    constexpr const char* ATLAS_SPACE = "assets/texture/space.xml";
     constexpr const char* ATLAS_SPACE_EXTENSION = "assets/texture/extension.xml";
 }
 
@@ -49,8 +51,8 @@ public:
     // Get the singleton instance
     static ResourceManager& getInstance();
 
-    const sf::Texture& getTexture(const char* path) const;
-    const Atlas& getAtlas(const char* path) const;
+    const sf::Texture& getTexture(const std::string& path) const;
+    const Atlas& getAtlas(const std::string& path) const;
     const tgui::Theme::Ptr getTheme(const char* path) const;
     const sf::Font& getFont(const char* path) const;
 };

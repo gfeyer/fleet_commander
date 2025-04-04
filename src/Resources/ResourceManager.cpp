@@ -12,7 +12,11 @@ ResourceManager::ResourceManager() {
     // loadTexture(Paths::BACKGROUND_4);
     loadTheme(Paths::DARK_THEME);
     loadFont(Paths::FONT_TOXIGENESIS);
+
+    // Textures & Atlas
+    loadTexture(Paths::TEXTURE_SPACE);
     loadTexture(Paths::TEXTURE_SPACE_EXTENSION);
+    loadAtlas(Paths::ATLAS_SPACE);
     loadAtlas(Paths::ATLAS_SPACE_EXTENSION);
 }
 
@@ -54,15 +58,15 @@ ResourceManager& ResourceManager::getInstance() {
     return instance;
 }
 
-const sf::Texture& ResourceManager::getTexture(const char *path) const
+const sf::Texture& ResourceManager::getTexture(const std::string& path) const
 {
-    assert(path && *path != '\0' && textures.find(path) != textures.end() && "Texture not found");
+    assert(!path.empty() && textures.find(path) != textures.end() && "Texture not found");
     return *textures.at(path);
 }
 
-const Atlas &ResourceManager::getAtlas(const char *path) const 
+const Atlas &ResourceManager::getAtlas(const std::string& path) const 
 {
-    assert(path && *path != '\0' && atlases.find(path) != atlases.end() && "Atlas not found");
+    assert(!path.empty() && atlases.find(path) != atlases.end() && "Atlas not found");
     return *atlases.at(path);
 }
 
