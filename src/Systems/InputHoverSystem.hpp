@@ -6,7 +6,7 @@
 
 
 #include "Components/TransformComponent.hpp"
-#include "Components/ShapeComponent.hpp"
+#include "Components/SpriteComponent.hpp"
 #include "Components/HoverComponent.hpp"
 
 #include "Utils/Logger.hpp"
@@ -18,9 +18,9 @@ namespace Systems {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
-        for (auto&& [id, transform, shape, hover]: manager.view<Components::TransformComponent, Components::ShapeComponent, Components::HoverComponent>().each()) {
+        for (auto&& [id, transform, sprite, hover]: manager.view<Components::TransformComponent, Components::SpriteComponent, Components::HoverComponent>().each()) {
             // Check if mouse is within entity bounds
-            if (shape.shape->getGlobalBounds().contains(worldPos)) {
+            if (sprite.sprite.getGlobalBounds().contains(worldPos)) {
                 hover.isHovered = true;
                 // hoverComp->position = worldPos;
                 hover.position = static_cast<sf::Vector2f>(mousePos);

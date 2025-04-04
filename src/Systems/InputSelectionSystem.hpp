@@ -8,6 +8,7 @@
 
 #include "Config.hpp"
 #include "Components/MoveComponent.hpp"
+#include "Components/SpriteComponent.hpp"
 #include "Components/SelectableComponent.hpp"
 #include "Components/AttackOrderComponent.hpp"
 #include "Components/DroneTransferComponent.hpp"
@@ -38,12 +39,12 @@ namespace Systems {
         // Determine if a new selection was made
         for (auto targetID : entities) {
             auto* targetTransform = manager.getComponent<Components::TransformComponent>(targetID);
-            auto* targetShapeComp = manager.getComponent<Components::ShapeComponent>(targetID);
+            auto* targetSpriteComp = manager.getComponent<Components::SpriteComponent>(targetID);
             auto* targetSelectableComp = manager.getComponent<Components::SelectableComponent>(targetID);
 
-            if (targetTransform && targetShapeComp && targetSelectableComp) {
+            if (targetTransform && targetSpriteComp && targetSelectableComp) {
                     // Check if mouse is within entity bounds (eg. click on entity)
-                if (targetShapeComp->shape->getGlobalBounds().contains(worldPos)){
+                if (targetSpriteComp->sprite.getGlobalBounds().contains(worldPos)){
                     return targetID;
                 }
             }
