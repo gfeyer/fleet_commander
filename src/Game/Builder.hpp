@@ -5,7 +5,7 @@
 #include <string>
 
 
-
+#include "Components/UnitTypeComponent.hpp"
 #include "Components/DroneComponent.hpp"
 #include "Components/ShieldComponent.hpp"
 #include "Components/FactoryComponent.hpp"
@@ -27,22 +27,12 @@
 
 namespace Game {
 
-
-    inline void assignSprite(Components::SpriteComponent* spriteComp, const std::string& texturePath, const std::string& atlasPath, const std::string& name) {
-        const auto& texture = Resource::ResourceManager::getInstance().getTexture(texturePath);
-        const auto& atlas = Resource::ResourceManager::getInstance().getAtlas(atlasPath);
-
-        spriteComp->sprite.setTexture(texture);
-        auto rect = atlas.getRect(name);
-        spriteComp->sprite.setTextureRect(rect);
-        spriteComp->sprite.setOrigin(rect.width/2, rect.height/2);
-    }
-
     EntityID createFactory(GameEntityManager& entityManager, std::string name = "", sf::Vector2f position = sf::Vector2f(0.f, 0.f), Components::Faction faction = Components::Faction::NEUTRAL, float productionRate = 1.f, float shieldRegenRate = 1.f) {
         // Create Factory
         EntityID factoryID = entityManager.createEntity();
 
         entityManager.addComponent<Components::FactoryComponent>(factoryID, name, productionRate);
+        entityManager.addComponent<Components::UnitTypeComponent>(factoryID, Components::UnitType::Factory);
         entityManager.addComponent<Components::TransformComponent>(factoryID, position, 0.f, sf::Vector2f(1, 1));
         entityManager.addComponent<Components::HoverComponent>(factoryID);
         entityManager.addComponent<Components::SelectableComponent>(factoryID);
@@ -59,11 +49,6 @@ namespace Game {
 
         // Sprite
         entityManager.addComponent<Components::SpriteComponent>(factoryID);
-        auto spriteComp = entityManager.getComponent<Components::SpriteComponent>(factoryID);
-        // TODO: need some sort of color for the faction
-        assignSprite(spriteComp, Resource::Paths::TEXTURE_SPACE_EXTENSION, Resource::Paths::ATLAS_SPACE_EXTENSION, "spaceStation_020.png");
-        auto transformComp = entityManager.getComponent<Components::TransformComponent>(factoryID);
-        transformComp->transform.setScale(sf::Vector2f(0.25f, 0.25f));
 
         return factoryID;
     }
@@ -71,6 +56,7 @@ namespace Game {
     EntityID createPowerPlant(GameEntityManager& entityManager, std::string name = "", sf::Vector2f position = sf::Vector2f(0.f, 0.f), Components::Faction faction = Components::Faction::NEUTRAL, float shieldRegenRate = 1.f, unsigned int energyCapacity=10) {
         EntityID powerPlantID = entityManager.createEntity();
         entityManager.addComponent<Components::PowerPlantComponent>(powerPlantID, name,energyCapacity);
+        entityManager.addComponent<Components::UnitTypeComponent>(powerPlantID, Components::UnitType::PowerPlant);
         entityManager.addComponent<Components::TransformComponent>(powerPlantID, position, 0, sf::Vector2f(1, 1));
         entityManager.addComponent<Components::LabelComponent>(powerPlantID, name, 
             Resource::ResourceManager::getInstance().getFont(Resource::Paths::FONT_TOXIGENESIS), 
@@ -89,12 +75,7 @@ namespace Game {
         
         // Sprite
         entityManager.addComponent<Components::SpriteComponent>(powerPlantID);
-        auto spriteComp = entityManager.getComponent<Components::SpriteComponent>(powerPlantID);
-        assignSprite(spriteComp, Resource::Paths::TEXTURE_SPACE_EXTENSION, Resource::Paths::ATLAS_SPACE_EXTENSION, "spaceStation_023.png");
-
-        auto transformComp = entityManager.getComponent<Components::TransformComponent>(powerPlantID);
-        transformComp->transform.setScale(sf::Vector2f(0.5f, 0.5f));
-
+        
         return powerPlantID;
     }
 
@@ -102,6 +83,7 @@ namespace Game {
         EntityID droneID = entityManager.createEntity();
         
         entityManager.addComponent<Components::DroneComponent>(droneID, name);
+        entityManager.addComponent<Components::UnitTypeComponent>(droneID, Components::UnitType::Drone);
         entityManager.addComponent<Components::TransformComponent>(droneID, sf::Vector2f(0.f,0.f), 0.f, sf::Vector2f(1, 1));
         entityManager.addComponent<Components::MoveComponent>(droneID, Config::DRONE_SPEED, 0.f);
         entityManager.addComponent<Components::FactionComponent>(droneID, faction);
@@ -109,11 +91,6 @@ namespace Game {
 
         // Sprite
         entityManager.addComponent<Components::SpriteComponent>(droneID);
-        auto spriteComp = entityManager.getComponent<Components::SpriteComponent>(droneID);
-        assignSprite(spriteComp, Resource::Paths::TEXTURE_SPACE, Resource::Paths::ATLAS_SPACE, "playerShip3_red.png");
-         
-        auto transformComp = entityManager.getComponent<Components::TransformComponent>(droneID);
-        transformComp->transform.setScale(sf::Vector2f(0.35f, 0.35f));
 
         return droneID;
     }

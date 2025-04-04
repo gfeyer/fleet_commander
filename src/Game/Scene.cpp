@@ -34,6 +34,7 @@
 #include "Systems/GameStateSystem.hpp"
 #include "Systems/DroneTransferSystem.hpp"
 #include "Systems/DebugOverlaySystem.hpp"
+#include "Systems/SpriteUpdateSystem.hpp"
 
 #include "Game/Builder.hpp"
 #include "Game/MapGenerator.hpp"
@@ -122,6 +123,7 @@ void Scene::update(float dt)
 
 void Scene::render()
 {
+    Systems::SpriteUpdateSystem(manager);
     Systems::RenderSystem(manager, windowRef);
     gui->draw();
 }
