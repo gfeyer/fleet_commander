@@ -13,18 +13,12 @@ ResourceManager::ResourceManager() {
     loadTheme(Paths::DARK_THEME);
     loadFont(Paths::FONT_TOXIGENESIS);
 
-    // Textures & Atlas
-    loadTexture(Paths::TEXTURE_SPACE);
-    loadTexture(Paths::TEXTURE_SPACE_EXTENSION);
-    loadAtlas(Paths::ATLAS_SPACE);
-    loadAtlas(Paths::ATLAS_SPACE_EXTENSION);
-
     // Individual textures
-    loadTexture(Paths::TEXTURE_FACTORY_BLUE);
+    // loadTexture(Paths::TEXTURE_FACTORY_BLUE);
     loadTexture(Paths::TEXTURE_FACTORY_RED);
-    loadTexture(Paths::TEXTURE_POWER_PLANT_BLUE);
-    loadTexture(Paths::TEXTURE_POWER_PLANT_RED);
-    loadTexture(Paths::TEXTURE_DRONE_BLUE);
+    // loadTexture(Paths::TEXTURE_POWER_PLANT_BLUE);
+    loadTexture(Paths::TEXTURE_POWER_STATION_RED);
+    // loadTexture(Paths::TEXTURE_DRONE_BLUE);
     loadTexture(Paths::TEXTURE_DRONE_RED);
 
 }

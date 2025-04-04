@@ -22,47 +22,49 @@ namespace Systems {
     void SpriteUpdateSystem(Game::GameEntityManager& manager) {
 
         for (auto&& [id, spriteComp, factionComp, typeComp, transformComp] : manager.view<Components::SpriteComponent, Components::FactionComponent, Components::UnitTypeComponent, Components::TransformComponent>().each()) {
-            
+            float scaleFactor = 0.05f;
             switch (typeComp.type)
             {
             case Components::UnitType::PowerPlant:
+            {
+                const auto& textureRed = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POWER_STATION_RED);
                 if(factionComp.faction == Components::Faction::PLAYER_1) {
-                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POWER_PLANT_RED), true);
-                    transformComp.transform.setScale(0.5f, 0.5f);
-
+                    spriteComp.sprite.setTexture(textureRed, true);
                 }else if(factionComp.faction == Components::Faction::PLAYER_2) {
-                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POWER_PLANT_BLUE), true);
-                    transformComp.transform.setScale(0.5f, 0.5f);
-
+                    spriteComp.sprite.setTexture(textureRed, true);
                 }else{
-                    assignSprite(spriteComp, Resource::Paths::TEXTURE_SPACE_EXTENSION, Resource::Paths::ATLAS_SPACE_EXTENSION, "spaceStation_023.png");
-                    transformComp.transform.setScale(0.5f, 0.5f); 
+                    spriteComp.sprite.setTexture(textureRed, true);
                 }
+                transformComp.transform.setScale(scaleFactor,scaleFactor);
+                spriteComp.sprite.setOrigin(textureRed.getSize().x/2, textureRed.getSize().y/2);
                 break;
+            }
             case Components::UnitType::Factory:
+            {
+                const auto& textureRed = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_RED);
                 if(factionComp.faction == Components::Faction::PLAYER_1) {
                     spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_RED), true);
-                    transformComp.transform.setScale(0.5f, 0.5f);
                 }else if(factionComp.faction == Components::Faction::PLAYER_2) {
-                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_BLUE), true);
-                    transformComp.transform.setScale(0.5f, 0.5f);
+                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_RED), true);
                 }else{
-                    assignSprite(spriteComp, Resource::Paths::TEXTURE_SPACE_EXTENSION, Resource::Paths::ATLAS_SPACE_EXTENSION, "spaceStation_015.png");
-                    spriteComp.sprite.setColor(sf::Color::White);
-                    transformComp.transform.setScale(0.25f, 0.25f);
+                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_RED), true);
                 }
+                transformComp.transform.setScale(scaleFactor,scaleFactor);
+                spriteComp.sprite.setOrigin(textureRed.getSize().x/2, textureRed.getSize().y/2);
                 break;
+            }
             case Components::UnitType::Drone:
+            {
+                const auto& textureRed = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_DRONE_RED);
                 if(factionComp.faction == Components::Faction::PLAYER_1) {
                     spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_DRONE_RED));
-                    transformComp.transform.setScale(0.15f, 0.15f);
                 }else if(factionComp.faction == Components::Faction::PLAYER_2) {
-                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_DRONE_BLUE));
-                    transformComp.transform.setScale(0.15f, 0.15f);
-                }else{ 
-
-                }
+                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_DRONE_RED));
+                }else{ }
+                transformComp.transform.setScale(scaleFactor/2,scaleFactor/2);
+                spriteComp.sprite.setOrigin(textureRed.getSize().x/2, textureRed.getSize().y/2);
                 break;
+            }
             default:
                 break;
             }

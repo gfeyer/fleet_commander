@@ -19,23 +19,15 @@ namespace Resource::Paths{
     // Fonts
     constexpr const char* FONT_TOXIGENESIS = "assets/fonts/toxigenesis.otf";
 
-    // Textures
-    constexpr const char* TEXTURE_SPACE = "assets/texture/space.png";
-    constexpr const char* TEXTURE_SPACE_EXTENSION = "assets/texture/extension.png";
-
-    // Atlas
-    constexpr const char* ATLAS_SPACE = "assets/texture/space.xml";
-    constexpr const char* ATLAS_SPACE_EXTENSION = "assets/texture/extension.xml";
-
     // Individual textures
-    constexpr const char* TEXTURE_FACTORY_RED = "assets/texture/factory_red.png";
-    constexpr const char* TEXTURE_FACTORY_BLUE = "assets/texture/factory_blue.png";
+    constexpr const char* TEXTURE_FACTORY_RED = "assets/texture/factory.png";
+    // constexpr const char* TEXTURE_FACTORY_BLUE = "assets/texture/factory.png";
 
-    constexpr const char* TEXTURE_DRONE_RED = "assets/texture/drone_red.png";
-    constexpr const char* TEXTURE_DRONE_BLUE = "assets/texture/drone_blue.png";
+    constexpr const char* TEXTURE_DRONE_RED = "assets/texture/drone.png";
+    // constexpr const char* TEXTURE_DRONE_BLUE = "assets/texture/drone.png";
 
-    constexpr const char* TEXTURE_POWER_PLANT_RED = "assets/texture/power_red.png";
-    constexpr const char* TEXTURE_POWER_PLANT_BLUE = "assets/texture/power_blue.png";
+    constexpr const char* TEXTURE_POWER_STATION_RED = "assets/texture/powerstation.png";
+    // constexpr const char* TEXTURE_POWER_PLANT_BLUE = "assets/texture/power_blue.png";
 }
 
 
