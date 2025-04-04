@@ -26,6 +26,16 @@ namespace Resource::Paths{
     // Atlas
     constexpr const char* ATLAS_SPACE = "assets/texture/space.xml";
     constexpr const char* ATLAS_SPACE_EXTENSION = "assets/texture/extension.xml";
+
+    // Individual textures
+    constexpr const char* TEXTURE_FACTORY_RED = "assets/texture/factory_red.png";
+    constexpr const char* TEXTURE_FACTORY_BLUE = "assets/texture/factory_blue.png";
+
+    constexpr const char* TEXTURE_DRONE_RED = "assets/texture/drone_red.png";
+    constexpr const char* TEXTURE_DRONE_BLUE = "assets/texture/drone_blue.png";
+
+    constexpr const char* TEXTURE_POWER_PLANT_RED = "assets/texture/power_red.png";
+    constexpr const char* TEXTURE_POWER_PLANT_BLUE = "assets/texture/power_blue.png";
 }
 
 
