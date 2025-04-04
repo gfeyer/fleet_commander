@@ -22,7 +22,7 @@ namespace Systems {
     void SpriteUpdateSystem(Game::GameEntityManager& manager) {
 
         for (auto&& [id, spriteComp, factionComp, typeComp, transformComp] : manager.view<Components::SpriteComponent, Components::FactionComponent, Components::UnitTypeComponent, Components::TransformComponent>().each()) {
-            float scaleFactor = 0.05f;
+            float scaleFactor = 0.20f;
             switch (typeComp.type)
             {
             case Components::UnitType::PowerPlant:
