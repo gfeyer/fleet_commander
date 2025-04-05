@@ -17,7 +17,6 @@ private:
     
     // Camera
     sf::View camera;
-    sf::Vector2f cameraPosition;
     float cameraSpeed = 200.f;
 
 public:

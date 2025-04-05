@@ -46,7 +46,8 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     log_info << "Creating Scene";
 
     camera = sf::View(sf::FloatRect(0, 0, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT));
-    cameraPosition = sf::Vector2f(Config::SCREEN_WIDTH/2, Config::SCREEN_HEIGHT/2); // Start at center
+    auto cameraPosition = sf::Vector2f(Config::SCREEN_WIDTH/2, Config::SCREEN_HEIGHT/2); // Start at center
+    camera.setCenter(cameraPosition);
 
     // Initialize GUI
     gui = std::make_unique<tgui::Gui>(window);
@@ -115,13 +116,17 @@ void Scene::update(float dt)
 
     // Handle Camera Movement
     // Needs to be in the update loop
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) cameraPosition.y -= cameraSpeed * 0.16f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) cameraPosition.y += cameraSpeed * 0.16f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) cameraPosition.x -= cameraSpeed * 0.16f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) cameraPosition.x += cameraSpeed * 0.16f;
+    float moveStep = cameraSpeed * 0.16f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) camera.move(0.f, -moveStep);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) camera.move(0.f,  moveStep);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) camera.move(-moveStep, 0.f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) camera.move( moveStep, 0.f);
+
+    // Set the updated view
+    windowRef.setView(camera);
 
     // Update Camera
-    camera.setCenter(cameraPosition);
+    // camera.setCenter(cameraPosition);
     this->windowRef.setView(camera);
 }
 
@@ -138,8 +143,44 @@ void Scene::handleInput(sf::Event &event)
     Systems::InputSelectionSystem(event, manager, windowRef);
 
     // Handle Camera Zoom
+    // if (event.type == sf::Event::MouseWheelScrolled) {
+    //     // zoom towards where the mouse is pointed
+    //     sf::Vector2i mousePos = sf::Mouse::getPosition(windowRef);
+        
+    //     if (event.mouseWheelScroll.delta < 0) camera.zoom(1.1f);
+    //     if (event.mouseWheelScroll.delta > 0) camera.zoom(0.9f);
+    // }
+
     if (event.type == sf::Event::MouseWheelScrolled) {
-        if (event.mouseWheelScroll.delta < 0) camera.zoom(1.1f);
-        if (event.mouseWheelScroll.delta > 0) camera.zoom(0.9f);
+        if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
+            float delta = event.mouseWheelScroll.delta;
+            float zoomFactor = (delta > 0) ? 0.9f : 1.1f;
+    
+            // Step 1: Zoom the camera
+            camera.zoom(zoomFactor);
+            
+            if(delta > 0){
+                // Only move on zoom in
+                // Get the center of the camera
+                sf::Vector2f viewCenter = camera.getCenter();
+                sf::Vector2f viewSize = camera.getSize();
+        
+                // Get mouse position in window (in pixels)
+                sf::Vector2i mousePixelPos = sf::Mouse::getPosition(windowRef);
+                sf::Vector2f mouseWorldPos = windowRef.mapPixelToCoords(mousePixelPos, camera);
+        
+                // Compute direction from center to mouse
+                sf::Vector2f direction = mouseWorldPos - viewCenter;
+        
+                // Move a bit (e.g., 10%) toward mouse
+                camera.move(direction * 0.15f);
+            }
+            
+            // Apply the new view
+            windowRef.setView(camera);
+        }
     }
+    
+    
+    
 }

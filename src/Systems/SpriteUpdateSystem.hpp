@@ -72,7 +72,7 @@ namespace Systems {
             }
         }
 
-        // TODO:
+        // TODO for Hover system
         // for (auto&& [id, spriteComp, selectable] : manager.view<Components::SpriteComponent, Components::SelectableComponent>().each()) {
         //     if (selectable.isSelected) {
                 
