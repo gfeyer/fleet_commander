@@ -90,19 +90,19 @@ namespace Systems {
                 if(difficulty == "Easy"){
                     Config::Difficulty::AI_DECISION_INTERVAL_SEC = 10.f;
                     Config::Difficulty::AI_MAX_EXECUTIONS_PER_TURN = 2;
-                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 500.f;
+                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 1000.f;
                 }else if(difficulty == "Medium"){
                     Config::Difficulty::AI_DECISION_INTERVAL_SEC = 5.f;
                     Config::Difficulty::AI_MAX_EXECUTIONS_PER_TURN = 10;
-                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 1000.f;
+                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 2000.f;
                 }else if(difficulty == "Hard"){
                     Config::Difficulty::AI_DECISION_INTERVAL_SEC = 3.f;
                     Config::Difficulty::AI_MAX_EXECUTIONS_PER_TURN = 15;
-                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 2000.f;
+                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 4000.f;
                 }else if(difficulty == "Impossible"){
                     Config::Difficulty::AI_DECISION_INTERVAL_SEC = 1.f;
                     Config::Difficulty::AI_MAX_EXECUTIONS_PER_TURN = 30;
-                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 5000.f;
+                    Config::Difficulty::AI_MAX_DISTANCE_TO_ATTACK = 10000.f;
                 }
             });
 

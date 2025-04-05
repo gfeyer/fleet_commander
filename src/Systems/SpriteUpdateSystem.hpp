@@ -7,6 +7,8 @@
 #include "Components/FactionComponent.hpp"
 #include "Components/PowerPlantComponent.hpp"
 
+#include "Config.hpp"
+
 namespace Systems {
 
     inline void assignSprite(Components::SpriteComponent& spriteComp, const std::string& texturePath, const std::string& atlasPath, const std::string& name) {
@@ -22,7 +24,7 @@ namespace Systems {
     void SpriteUpdateSystem(Game::GameEntityManager& manager) {
 
         for (auto&& [id, spriteComp, factionComp, typeComp, transformComp] : manager.view<Components::SpriteComponent, Components::FactionComponent, Components::UnitTypeComponent, Components::TransformComponent>().each()) {
-            float scaleFactor = 0.20f;
+            float scaleFactor = Config::SCALE_FACTOR;
             switch (typeComp.type)
             {
             case Components::UnitType::PowerPlant:

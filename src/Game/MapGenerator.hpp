@@ -82,7 +82,7 @@ namespace Game {
 
         // Place Player 1 Structures (Factory + Power Plant)
         sf::Vector2f player1FactoryPos = player1Start;
-        sf::Vector2f player1PowerPlantPos = {player1Start.x + Utils::getRandomFloat(50.f, 150.f), player1Start.y + Utils::getRandomFloat(50.f, 150.f)};
+        sf::Vector2f player1PowerPlantPos = {player1Start.x + Utils::getRandomFloat(250.f, 450.f), player1Start.y + Utils::getRandomFloat(50.f, 150.f)};
 
         auto player1Faction = Components::Faction::PLAYER_1;
         float productionRate = 1.f;
@@ -94,7 +94,7 @@ namespace Game {
 
         // Place Player 2 Structures (Factory + Power Plant)
         sf::Vector2f player2FactoryPos = player2Start;
-        sf::Vector2f player2PowerPlantPos = {player2Start.x + Utils::getRandomFloat(50.f, 150.f), player2Start.y + Utils::getRandomFloat(50.f, 150.f)};
+        sf::Vector2f player2PowerPlantPos = {player2Start.x + Utils::getRandomFloat(250.f, 450.f), player2Start.y + Utils::getRandomFloat(50.f, 150.f)};
 
         auto player2Faction = Components::Faction::PLAYER_2;
 

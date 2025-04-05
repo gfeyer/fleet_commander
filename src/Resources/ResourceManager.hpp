@@ -28,9 +28,10 @@ namespace Resource::Paths{
     constexpr const char* TEXTURE_POWER_STATION_RED = "assets/texture/powerstation_red.png";
     constexpr const char* TEXTURE_POWER_STATION_BLUE = "assets/texture/powerstation_blue.png";
 
-    // constexpr const char* TEXTURE_DRONE = "assets/texture/drone.png";
     constexpr const char* TEXTURE_DRONE_RED = "assets/texture/drone_red.png";
     constexpr const char* TEXTURE_DRONE_BLUE = "assets/texture/drone_blue.png";
+
+    constexpr const char* TEXTURE_SHIELD = "assets/texture/shield.png";
 
 }
 

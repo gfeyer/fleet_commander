@@ -15,6 +15,7 @@
 #include "Components/DroneTransferComponent.hpp"
 
 #include "Utils/Graphics.hpp"
+#include "Config.hpp"
 
 namespace Systems {
 
@@ -64,6 +65,14 @@ namespace Systems {
                 selectionShape.setFillColor(sf::Color(255,255,0,200));
                 selectionShape.setPosition(transform.getPosition());
                 window.draw(selectionShape);
+
+                // sf::Sprite sprite;
+                // const auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_SHIELD);
+                // sprite.setTexture(texture, true);
+                // sprite.setScale(Config::SCALE_FACTOR*1.5, Config::SCALE_FACTOR*1.5);
+                // sprite.setPosition(transform.getPosition());
+                // sprite.setOrigin(texture.getSize().x/2, texture.getSize().y/2);
+                // window.draw(sprite);
             }
         }
 
@@ -85,48 +94,57 @@ namespace Systems {
                     Components::ShieldComponent
                 >().each()) {
             
-            sf::Vector2f center(transform.getPosition().x, transform.getPosition().y);
-            float baseRadius = 50.f;       // Base radius for the first circle
-            float radiusStep = 7.f;       // Space between concentric circles
-            float thickness = 7.f;         // Circle thickness
-            int pointCount = 50;           // Smoothness of the arc
+            float multiplier = 0.5f + shield.currentShield/7.f;
+            sf::Sprite sprite;
+            const auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_SHIELD);
+            sprite.setTexture(texture, true);
+            sprite.setScale(Config::SCALE_FACTOR*multiplier, Config::SCALE_FACTOR*multiplier);
+            sprite.setPosition(transform.getPosition());
+            sprite.setOrigin(texture.getSize().x/2, texture.getSize().y/2);
+            window.draw(sprite);
+            
+            // sf::Vector2f center(transform.getPosition().x, transform.getPosition().y);
+            // float baseRadius = 128.f;       // Base radius for the first circle
+            // float radiusStep = 15.f;       // Space between concentric circles
+            // float thickness = 5.f;         // Circle thickness
+            // int pointCount = 50;           // Smoothness of the arc
 
-            // Calculate full circles and remainder (using float logic for smooth rendering)
-            float shieldValue = shield.currentShield;
-            int fullCircles = static_cast<int>(shieldValue / 10.f); // Number of full circles
-            float remainder = std::fmod(shieldValue, 10.f);         // Remaining fractional shield value
+            // // Calculate full circles and remainder (using float logic for smooth rendering)
+            // float shieldValue = shield.currentShield;
+            // int fullCircles = static_cast<int>(shieldValue / 10.f); // Number of full circles
+            // float remainder = std::fmod(shieldValue, 10.f);         // Remaining fractional shield value
 
-            // Draw Full Circles
-            for (int i = 0; i < fullCircles; ++i) {
-                float currentRadius = baseRadius + (i * radiusStep);
+            // // Draw Full Circles
+            // for (int i = 0; i < fullCircles; ++i) {
+            //     float currentRadius = baseRadius + (i * radiusStep);
 
-                sf::VertexArray arc = Utils::CreateArc(
-                    center,
-                    currentRadius,
-                    thickness,
-                    1.0f, // 100% full circle
-                    pointCount,
-                    sf::Color(0, 255, 255, 200)
-                );
+            //     sf::VertexArray arc = Utils::CreateArc(
+            //         center,
+            //         currentRadius,
+            //         thickness,
+            //         1.0f, // 100% full circle
+            //         pointCount,
+            //         sf::Color(0, 255, 255, 200)
+            //     );
 
-                window.draw(arc);
-            }
+            //     window.draw(arc);
+            // }
 
-            // Draw Partial Circle for Remainder
-            if (remainder > 0.f) {
-                float currentRadius = baseRadius + (fullCircles * radiusStep);
-                float percentage = remainder / 10.0f; // Partial fill percentage (0.0 to 1.0)
+            // // Draw Partial Circle for Remainder
+            // if (remainder > 0.f) {
+            //     float currentRadius = baseRadius + (fullCircles * radiusStep);
+            //     float percentage = remainder / 10.0f; // Partial fill percentage (0.0 to 1.0)
 
-                sf::VertexArray arc = Utils::CreateArc(
-                    center,
-                    currentRadius,
-                    thickness,
-                    percentage,
-                    pointCount,
-                    sf::Color(0, 255, 255, 200) // Yellow for the partial arc
-                );
-                window.draw(arc);
-            }
+            //     sf::VertexArray arc = Utils::CreateArc(
+            //         center,
+            //         currentRadius,
+            //         thickness,
+            //         percentage,
+            //         pointCount,
+            //         sf::Color(0, 255, 255, 200) // Yellow for the partial arc
+            //     );
+            //     window.draw(arc);
+            // }
         }
 
         // Draw Shapes

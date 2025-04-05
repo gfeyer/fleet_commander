@@ -22,9 +22,10 @@ ResourceManager::ResourceManager() {
     loadTexture(Paths::TEXTURE_POWER_STATION_RED);
     loadTexture(Paths::TEXTURE_POWER_STATION_BLUE);
 
-    // loadTexture(Paths::TEXTURE_DRONE);
     loadTexture(Paths::TEXTURE_DRONE_RED);
     loadTexture(Paths::TEXTURE_DRONE_BLUE);
+
+    loadTexture(Paths::TEXTURE_SHIELD);
 }
 
 ResourceManager::~ResourceManager() {

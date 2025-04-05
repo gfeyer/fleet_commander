@@ -8,9 +8,10 @@ namespace Config {
     const unsigned int MAP_WIDTH = 1920;
     const unsigned int MAP_HEIGHT = 1080;
 
-    const unsigned int FACTORY_SIZE = 50;
-    const unsigned int POWER_PLANT_RADIUS = 25;
+    const unsigned int FACTORY_SIZE = 95;
+    const unsigned int POWER_PLANT_RADIUS = 50;
     const float DRONE_LENGTH = 10.f;
+    const float SCALE_FACTOR = 0.20f;
 
     constexpr float RAD_TO_DEG = 180.f / 3.14159265358979323846f;
 
@@ -24,7 +25,7 @@ namespace Config {
     struct Difficulty {
         inline static float AI_DECISION_INTERVAL_SEC = 5.f;
         inline static unsigned int AI_MAX_EXECUTIONS_PER_TURN = 10;
-        inline static float AI_MAX_DISTANCE_TO_ATTACK = 500.f;
+        inline static float AI_MAX_DISTANCE_TO_ATTACK = 2000.f;
     };
 
     // Debug Symbols
