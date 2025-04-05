@@ -82,6 +82,8 @@ namespace Systems {
                     Components::SpriteComponent
                 >().each()) {
             
+            if(sprite.isVisible == false) continue;
+            
             sprite.sprite.setPosition(transform.getPosition());
             sprite.sprite.setRotation(transform.getRotation());
             sprite.sprite.setScale(transform.getScale());

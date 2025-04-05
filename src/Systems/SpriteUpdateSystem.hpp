@@ -73,9 +73,10 @@ namespace Systems {
         }
 
         // TODO for Hover system
-        // for (auto&& [id, spriteComp, selectable] : manager.view<Components::SpriteComponent, Components::SelectableComponent>().each()) {
-        //     if (selectable.isSelected) {
-                
+        // add HoverSpriteComponent
+        // for (auto&& [id, hoverComp] : manager.view<Components::HoverComponent>().each()) {
+        //     if(hoverComp.isHovered){
+        //         log_info << "Hovering entity: " << static_cast<std::uint32_t>(id);
         //     }
         // }
 

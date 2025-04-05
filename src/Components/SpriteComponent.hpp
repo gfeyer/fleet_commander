@@ -6,6 +6,7 @@
 namespace Components{
     struct SpriteComponent {
         sf::Sprite sprite;
+        bool isVisible = true;
     };
 }
 

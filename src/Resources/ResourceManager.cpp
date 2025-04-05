@@ -26,6 +26,8 @@ ResourceManager::ResourceManager() {
     loadTexture(Paths::TEXTURE_DRONE_BLUE);
 
     loadTexture(Paths::TEXTURE_SHIELD);
+
+    loadTexture(Paths::TEXTURE_POINTER);
 }
 
 ResourceManager::~ResourceManager() {

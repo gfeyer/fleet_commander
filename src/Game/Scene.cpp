@@ -19,7 +19,8 @@
 #include "Components/HoverComponent.hpp"
 #include "Components/GameStateComponent.hpp"
 #include "Components/AIComponent.hpp"
-#include <Components/DebugOverlayComponent.hpp>
+#include "Components/DebugOverlayComponent.hpp"
+#include "Components/CursorComponent.hpp"
 
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
@@ -80,6 +81,11 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 
     EntityID enemyAI = manager.createEntity();
     manager.addComponent<Components::AIComponent>(enemyAI);
+
+    EntityID cursor = manager.createEntity();
+    manager.addComponent<Components::CursorComponent>(cursor);
+    manager.addComponent<Components::TransformComponent>(cursor, sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(1, 1));
+    manager.addComponent<Components::SpriteComponent>(cursor);
 
     if (Config::ENABLE_DEBUG_SYMBOLS) {
         EntityID debugID = manager.createEntity();
