@@ -86,7 +86,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     }
 
     // Generate Map
-    Game::GenerateRandomMap(manager, Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, 30, 100);
+    Game::GenerateRandomMap(manager, Config::SCREEN_WIDTH*4, Config::SCREEN_HEIGHT*4, 30, 500);
 
     // Signal Handlers
     // manager.registerSignalHandlers();
@@ -113,9 +113,16 @@ void Scene::update(float dt)
     Systems::GameStateSystem(manager, dt);
     Systems::DebugOverlaySystem(manager, dt);
 
+    // Handle Camera Movement
+    // Needs to be in the update loop
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) cameraPosition.y -= cameraSpeed * 0.16f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) cameraPosition.y += cameraSpeed * 0.16f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) cameraPosition.x -= cameraSpeed * 0.16f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) cameraPosition.x += cameraSpeed * 0.16f;
+
     // Wrap Camera Position
-    cameraPosition.x = fmod(cameraPosition.x + Config::MAP_WIDTH, Config::MAP_WIDTH);
-    cameraPosition.y = fmod(cameraPosition.y + Config::MAP_HEIGHT, Config::MAP_HEIGHT);
+    // cameraPosition.x = fmod(cameraPosition.x + Config::MAP_WIDTH, Config::MAP_WIDTH);
+    // cameraPosition.y = fmod(cameraPosition.y + Config::MAP_HEIGHT, Config::MAP_HEIGHT);
     // Update Camera
     camera.setCenter(cameraPosition);
     this->windowRef.setView(camera);
@@ -132,12 +139,6 @@ void Scene::handleInput(sf::Event &event)
 {
     gui->handleEvent(event);
     Systems::InputSelectionSystem(event, manager, windowRef);
-
-    // Handle Camera Movement
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) cameraPosition.y -= cameraSpeed * 0.16f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) cameraPosition.y += cameraSpeed * 0.16f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) cameraPosition.x -= cameraSpeed * 0.16f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) cameraPosition.x += cameraSpeed * 0.16f;
 
     // Handle Camera Zoom
     if (event.type == sf::Event::MouseWheelScrolled) {
