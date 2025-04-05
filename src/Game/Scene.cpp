@@ -86,7 +86,7 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     }
 
     // Generate Map
-    Game::GenerateRandomMap(manager, Config::SCREEN_WIDTH*4, Config::SCREEN_HEIGHT*4, 30, 500);
+    Game::GenerateRandomMap(manager, Config::SCREEN_WIDTH*4, Config::SCREEN_HEIGHT*4, 40, 500);
 
     // Signal Handlers
     // manager.registerSignalHandlers();
@@ -120,9 +120,6 @@ void Scene::update(float dt)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) cameraPosition.x -= cameraSpeed * 0.16f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) cameraPosition.x += cameraSpeed * 0.16f;
 
-    // Wrap Camera Position
-    // cameraPosition.x = fmod(cameraPosition.x + Config::MAP_WIDTH, Config::MAP_WIDTH);
-    // cameraPosition.y = fmod(cameraPosition.y + Config::MAP_HEIGHT, Config::MAP_HEIGHT);
     // Update Camera
     camera.setCenter(cameraPosition);
     this->windowRef.setView(camera);

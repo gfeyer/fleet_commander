@@ -87,7 +87,7 @@ namespace Game {
         auto player1Faction = Components::Faction::PLAYER_1;
         float productionRate = 1.f;
         float shieldRegenRate = Utils::getRandomFloat(0.75f, 1.f);
-        unsigned int capacity = Utils::getRandomFloat(13.f, 20.f);
+        unsigned int capacity = Utils::getRandomFloat(20.f, 30.f);
 
         Game::createFactory(entityManager, "Factory #0", player1FactoryPos, player1Faction, productionRate, shieldRegenRate);
         Game::createPowerPlant(entityManager, "Power Plant #0", player1PowerPlantPos, player1Faction, shieldRegenRate, capacity);
@@ -99,7 +99,7 @@ namespace Game {
         auto player2Faction = Components::Faction::PLAYER_2;
 
         Game::createFactory(entityManager, "Factory #0", player2FactoryPos, player2Faction, productionRate, shieldRegenRate);
-        Game::createPowerPlant(entityManager, "Power Plant #0", player2PowerPlantPos, player2Faction, shieldRegenRate, capacity);
+        Game::createPowerPlant(entityManager, "Power Plant #0", player2PowerPlantPos, player2Faction, shieldRegenRate, capacity+10);
 
         // Generate Remaining Units Randomly
         Game::RandomPositionGenerator generator(mapWidth, mapHeight, minDistance);
