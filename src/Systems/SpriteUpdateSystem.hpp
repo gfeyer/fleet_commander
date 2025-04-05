@@ -27,45 +27,39 @@ namespace Systems {
             {
             case Components::UnitType::PowerPlant:
             {
-                const auto& textureRed = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POWER_STATION_RED);
+                const auto& textureNeutral = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POWER_STATION);
                 if(factionComp.faction == Components::Faction::PLAYER_1) {
-                    spriteComp.sprite.setTexture(textureRed, true);
-                    spriteComp.sprite.setColor(sf::Color::Red);
+                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POWER_STATION_RED), true);
                 }else if(factionComp.faction == Components::Faction::PLAYER_2) {
-                    spriteComp.sprite.setTexture(textureRed, true);
-                    spriteComp.sprite.setColor(sf::Color::Blue);
+                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POWER_STATION_BLUE), true);
                 }else{
-                    spriteComp.sprite.setTexture(textureRed, true);
+                    spriteComp.sprite.setTexture(textureNeutral, true);
                 }
                 transformComp.transform.setScale(scaleFactor,scaleFactor);
-                spriteComp.sprite.setOrigin(textureRed.getSize().x/2, textureRed.getSize().y/2);
+                spriteComp.sprite.setOrigin(textureNeutral.getSize().x/2, textureNeutral.getSize().y/2);
                 break;
             }
             case Components::UnitType::Factory:
             {
-                const auto& textureRed = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_RED);
+                const auto& textureNeutral = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY);
                 if(factionComp.faction == Components::Faction::PLAYER_1) {
                     spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_RED), true);
-                    spriteComp.sprite.setColor(sf::Color::Red);
                 }else if(factionComp.faction == Components::Faction::PLAYER_2) {
-                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_RED), true);
-                    spriteComp.sprite.setColor(sf::Color::Blue);
+                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_BLUE), true);
                 }else{
-                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_FACTORY_RED), true);
+                    spriteComp.sprite.setTexture(textureNeutral, true);
                 }
                 transformComp.transform.setScale(scaleFactor,scaleFactor);
-                spriteComp.sprite.setOrigin(textureRed.getSize().x/2, textureRed.getSize().y/2);
+                spriteComp.sprite.setOrigin(textureNeutral.getSize().x/2, textureNeutral.getSize().y/2);
                 break;
             }
             case Components::UnitType::Drone:
             {
                 const auto& textureRed = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_DRONE_RED);
                 if(factionComp.faction == Components::Faction::PLAYER_1) {
-                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_DRONE_RED));
-                    spriteComp.sprite.setColor(sf::Color::Red);
+                    spriteComp.sprite.setTexture(textureRed, true);
                 }else if(factionComp.faction == Components::Faction::PLAYER_2) {
-                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_DRONE_RED));
-                    spriteComp.sprite.setColor(sf::Color::Blue);
+                    spriteComp.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_DRONE_BLUE), true);
                 }else{ }
                 transformComp.transform.setScale(scaleFactor/2,scaleFactor/2);
                 spriteComp.sprite.setOrigin(textureRed.getSize().x/2, textureRed.getSize().y/2);
