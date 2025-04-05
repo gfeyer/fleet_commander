@@ -25,7 +25,7 @@ namespace Config {
     struct Difficulty {
         inline static float AI_DECISION_INTERVAL_SEC = 5.f;
         inline static unsigned int AI_MAX_EXECUTIONS_PER_TURN = 10;
-        inline static float AI_MAX_DISTANCE_TO_ATTACK = 2000.f;
+        inline static float AI_MAX_DISTANCE_TO_ATTACK = 1500.f;
     };
 
     // Debug Symbols
