@@ -29,6 +29,9 @@ namespace Systems {
         // Top screen labels
         static tgui::Label::Ptr player1Label = nullptr;
         static tgui::Label::Ptr player2Label = nullptr;
+
+        // Cursor
+        static tgui::Picture::Ptr cursor = tgui::Picture::create();
         
         // Panels Init
         if (!infoPanel) {
@@ -216,12 +219,23 @@ namespace Systems {
                 infoPanel->add(label);
 
                 infoPanel->setPosition({hover.position.x, hover.position.y});
+
+
+                // Update cursor
+                cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER));
+                cursor->setPosition({hover.position.x, hover.position.y}); // screen coordinates
+                cursor->setSize({32, 32});     // optional resize
+                cursor->setVisible(true);
+                gui.add(cursor);
+
                 break; // Show info for the first hovered entity only
-            }
+            } // end hover.isHovered
         }
 
+        // Disable Hover panel
         if (!entityHovered) {
             infoPanel->setVisible(false);
+            cursor->setVisible(false);
         }
 
         // Game Over Panel - initialization

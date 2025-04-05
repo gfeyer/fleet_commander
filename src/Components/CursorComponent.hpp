@@ -9,7 +9,6 @@ namespace Components
     {
         bool visible = false;
     };
-    
 } 
 
 

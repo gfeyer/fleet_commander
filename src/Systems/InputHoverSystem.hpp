@@ -36,20 +36,20 @@ namespace Systems {
             }
         }
 
-        // Update cursor component
-        for(auto&& [id, cursor, transform, sprite] : manager.view<Components::CursorComponent, Components::TransformComponent, Components::SpriteComponent>().each()) {
-            if (isHovered) {
+        // // Update cursor component
+        // for(auto&& [id, cursor, transform, sprite] : manager.view<Components::CursorComponent, Components::TransformComponent, Components::SpriteComponent>().each()) {
+        //     if (isHovered) {
 
-                sprite.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER), true);
-                sprite.sprite.setOrigin(sprite.sprite.getLocalBounds().width/2, sprite.sprite.getLocalBounds().height/2);
-                transform.transform.setPosition(hoverPosition);
-                transform.transform.setScale(0.15f, 0.15f);
+        //         sprite.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER), true);
+        //         sprite.sprite.setOrigin(sprite.sprite.getLocalBounds().width/2, sprite.sprite.getLocalBounds().height/2);
+        //         transform.transform.setPosition(hoverPosition);
+        //         transform.transform.setScale(0.15f, 0.15f);
 
-                sprite.isVisible = true;
-            }else{
-                sprite.isVisible = false;
-            }
-        }
+        //         sprite.isVisible = true;
+        //     }else{
+        //         sprite.isVisible = false;
+        //     }
+        // }
     }
 }
 
