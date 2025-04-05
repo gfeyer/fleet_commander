@@ -139,4 +139,9 @@ void Scene::handleInput(sf::Event &event)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) cameraPosition.x -= cameraSpeed * 0.16f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) cameraPosition.x += cameraSpeed * 0.16f;
 
+    // Handle Camera Zoom
+    if (event.type == sf::Event::MouseWheelScrolled) {
+        if (event.mouseWheelScroll.delta < 0) camera.zoom(1.1f);
+        if (event.mouseWheelScroll.delta > 0) camera.zoom(0.9f);
+    }
 }

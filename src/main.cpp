@@ -36,6 +36,10 @@ int main() {
             if(event.type == sf::Event::KeyPressed) {
                 scene.handleInput(event);
             }
+
+            if(event.type == sf::Event::MouseWheelScrolled){
+                scene.handleInput(event);
+            }
         }
 
         // Update logic
