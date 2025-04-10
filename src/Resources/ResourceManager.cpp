@@ -27,7 +27,8 @@ ResourceManager::ResourceManager() {
 
     loadTexture(Paths::TEXTURE_SHIELD);
 
-    loadTexture(Paths::TEXTURE_POINTER);
+    loadTexture(Paths::TEXTURE_POINTER_SELECT);
+    loadTexture(Paths::TEXTURE_POINTER_TARGET);
 }
 
 ResourceManager::~ResourceManager() {

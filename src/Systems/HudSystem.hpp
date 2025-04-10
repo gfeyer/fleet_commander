@@ -160,71 +160,78 @@ namespace Systems {
         
         // Hover Panel display logic
         bool entityHovered = false;
-        for (auto&& [id, hover] : manager.view<Components::HoverComponent>().each()) {
-
+        for (auto&& [id, hover, faction] : manager.view<Components::HoverComponent, Components::FactionComponent>().each()) {
+            
             if (hover.isHovered) {
                 entityHovered = true;
-                infoPanel->setVisible(true);
-                infoPanel->setRenderer(theme->getRenderer("Panel"));
-                infoPanel->removeAllWidgets();
 
-                auto* factoryComp = manager.getComponent<Components::FactoryComponent>(id);
-                auto* powerPlantComp = manager.getComponent<Components::PowerPlantComponent>(id);
-                auto* garissonComp = manager.getComponent<Components::GarissonComponent>(id);
-                auto* shieldComp = manager.getComponent<Components::ShieldComponent>(id);
+                // Update info panel
+                // infoPanel->setVisible(true);
+                // infoPanel->setRenderer(theme->getRenderer("Panel"));
+                // infoPanel->removeAllWidgets();
 
-                std::stringstream ss;
+                // auto* factoryComp = manager.getComponent<Components::FactoryComponent>(id);
+                // auto* powerPlantComp = manager.getComponent<Components::PowerPlantComponent>(id);
+                // auto* garissonComp = manager.getComponent<Components::GarissonComponent>(id);
+                // auto* shieldComp = manager.getComponent<Components::ShieldComponent>(id);
 
-                if (factoryComp) {
-                    ss << factoryComp->factoryName;
+                // std::stringstream ss;
 
-                    float productionRate = factoryComp->droneProductionRate;
+                // if (factoryComp) {
+                //     ss << factoryComp->factoryName;
 
-                    // Format Production Rate and Time Left
-                    char buffer[100];
-                    std::snprintf(
-                        buffer, 
-                        sizeof(buffer), 
-                        "\nProduction rate: %.1f /s", 
-                        productionRate
-                    );
-                    ss << buffer;
-                }
+                //     float productionRate = factoryComp->droneProductionRate;
 
-                if (powerPlantComp) {
-                    ss << "FusionReactor\nCapacity: " << powerPlantComp->capacity;
-                }
+                //     // Format Production Rate and Time Left
+                //     char buffer[100];
+                //     std::snprintf(
+                //         buffer, 
+                //         sizeof(buffer), 
+                //         "\nProduction rate: %.1f /s", 
+                //         productionRate
+                //     );
+                //     ss << buffer;
+                // }
 
-                if(garissonComp){
-                    ss << "\nDrones stationed: " << garissonComp->getDroneCount();
-                }
+                // if (powerPlantComp) {
+                //     ss << "FusionReactor\nCapacity: " << powerPlantComp->capacity;
+                // }
 
-                if(shieldComp){
-                    // Format Shield values
-                    char buffer[100];
-                    std::snprintf(
-                        buffer, 
-                        sizeof(buffer), 
-                        "\nShield: %.1f/%.1f\nShield Regen: %.1f/s", 
-                        shieldComp->currentShield, 
-                        shieldComp->maxShield, 
-                        shieldComp->regenRate
-                    );
-                    ss << buffer;
-                }
+                // if(garissonComp){
+                //     ss << "\nDrones stationed: " << garissonComp->getDroneCount();
+                // }
 
-                auto label = tgui::Label::create(ss.str());
-                label->setRenderer(theme->getRenderer("Label"));
-                label->setTextSize(Config::GUI_TEXT_SIZE);
-                infoPanel->add(label);
+                // if(shieldComp){
+                //     // Format Shield values
+                //     char buffer[100];
+                //     std::snprintf(
+                //         buffer, 
+                //         sizeof(buffer), 
+                //         "\nShield: %.1f/%.1f\nShield Regen: %.1f/s", 
+                //         shieldComp->currentShield, 
+                //         shieldComp->maxShield, 
+                //         shieldComp->regenRate
+                //     );
+                //     ss << buffer;
+                // }
 
-                infoPanel->setPosition({hover.position.x, hover.position.y});
+                // auto label = tgui::Label::create(ss.str());
+                // label->setRenderer(theme->getRenderer("Label"));
+                // label->setTextSize(Config::GUI_TEXT_SIZE);
+                // infoPanel->add(label);
+
+                // infoPanel->setPosition({hover.position.x, hover.position.y});
 
 
                 // Update cursor
-                cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER));
-                cursor->setPosition({hover.position.x, hover.position.y}); // screen coordinates
-                cursor->setSize({32, 32});     // optional resize
+                if(faction.faction == Components::Faction::PLAYER_1){
+                    cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_SELECT));
+                } else {
+                    cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_TARGET));
+                }
+                
+                cursor->setSize({64, 64});     // optional resize
+                cursor->setPosition({hover.position.x-32, hover.position.y-32}); // screen coordinates
                 cursor->setVisible(true);
                 gui.add(cursor);
 
@@ -236,6 +243,10 @@ namespace Systems {
         if (!entityHovered) {
             infoPanel->setVisible(false);
             cursor->setVisible(false);
+            gui.getWindow()->setMouseCursorVisible(true);
+        }else{
+            infoPanel->setVisible(false);
+            gui.getWindow()->setMouseCursorVisible(false);
         }
 
         // Game Over Panel - initialization

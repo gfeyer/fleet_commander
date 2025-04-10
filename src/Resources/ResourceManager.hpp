@@ -34,8 +34,8 @@ namespace Resource::Paths{
     constexpr const char* TEXTURE_SHIELD = "assets/texture/shield.png";
 
     // Mouse
-    constexpr const char* TEXTURE_POINTER = "assets/texture/pointer.png";
-
+    constexpr const char* TEXTURE_POINTER_SELECT = "assets/texture/select.png";
+    constexpr const char* TEXTURE_POINTER_TARGET = "assets/texture/target.png";
 }
 
 
