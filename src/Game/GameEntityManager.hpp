@@ -53,8 +53,8 @@ namespace Game {
 
         // Add Component
         template<typename T, typename... Args>
-        T& addComponent(EntityID id, Args&&... args) {
-            T& component = registry.emplace<T>(id, std::forward<Args>(args)...);
+        void addComponent(EntityID id, Args&&... args) {
+            registry.emplace<T>(id, std::forward<Args>(args)...);
             // std::cout << "Component added to entity: " << static_cast<std::uint32_t>(id) << "\n";
 
             if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
@@ -63,13 +63,11 @@ namespace Game {
             if constexpr (std::is_same<T, Components::AIComponent>::value) {
                 AIEntityID = id;
             }
-
-            return component;
         }
 
         template<typename T, typename... Args>
-        T& addOrReplaceComponent(EntityID id, Args&&... args) {
-            T& component = registry.emplace_or_replace<T>(id, std::forward<Args>(args)...);
+        void addOrReplaceComponent(EntityID id, Args&&... args) {
+            registry.emplace_or_replace<T>(id, std::forward<Args>(args)...);
 
             if constexpr (std::is_same<T, Components::GameStateComponent>::value) {
                 gameStateEntityID = id;
@@ -77,8 +75,6 @@ namespace Game {
             if constexpr (std::is_same<T, Components::AIComponent>::value) {
                 AIEntityID = id;
             }
-
-            return component;
         }
 
 

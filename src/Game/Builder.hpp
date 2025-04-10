@@ -33,8 +33,8 @@ namespace Game {
 
         entityManager.addComponent<Components::FactoryComponent>(factoryID, name, productionRate);
         entityManager.addComponent<Components::UnitTypeComponent>(factoryID, Components::UnitType::Factory);
-        entityManager.addComponent<Components::TransformComponent>(factoryID, position, 0.f, sf::Vector2f(1, 1));
-        entityManager.addComponent<Components::HoverComponent>(factoryID);
+        entityManager.addComponent<Components::TransformComponent>(factoryID, position, 0.f, sf::Vector2f(1, 1));        
+        entityManager.addComponent<Components::HoverableComponent>(factoryID);
         entityManager.addComponent<Components::SelectableComponent>(factoryID);
         entityManager.addComponent<Components::FactionComponent>(factoryID, faction);
         entityManager.addComponent<Components::GarissonComponent>(factoryID);
@@ -64,7 +64,7 @@ namespace Game {
             sf::Color::White, 
             sf::Vector2f(Config::POWER_PLANT_RADIUS*2, -2*float(Config::POWER_PLANT_RADIUS))
         );
-        entityManager.addComponent<Components::HoverComponent>(powerPlantID);
+        entityManager.addComponent<Components::HoverableComponent>(powerPlantID);
         entityManager.addComponent<Components::SelectableComponent>(powerPlantID );
         entityManager.addComponent<Components::FactionComponent>(powerPlantID, faction);
         entityManager.addComponent<Components::GarissonComponent>(powerPlantID);

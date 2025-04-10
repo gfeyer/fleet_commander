@@ -20,19 +20,18 @@ namespace Systems {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
-        bool isHovered = false;
-        sf::Vector2f hoverPosition;
+        // Remove hovered component
+        for (auto&& [id, sprite, hovered]: manager.view<Components::SpriteComponent, Components::HoveredComponent>().each()) {
+            if (!sprite.sprite.getGlobalBounds().contains(worldPos)) {
+                manager.removeComponent<Components::HoveredComponent>(id);
+            }
+        }
 
-        for (auto&& [id, transform, sprite, hover]: manager.view<Components::TransformComponent, Components::SpriteComponent, Components::HoverComponent>().each()) {
-            // Check if mouse is within entity bounds
+        // Add hovered component
+        for (auto&& [id, sprite]: manager.view<Components::SpriteComponent, Components::HoverableComponent>().each()) {
             if (sprite.sprite.getGlobalBounds().contains(worldPos)) {
-                isHovered = true;
-                hoverPosition = static_cast<sf::Vector2f>(mousePos);
-
-                hover.isHovered = isHovered;
-                hover.position = hoverPosition;
-            } else {
-                hover.isHovered = false;
+                auto hoverPosition = static_cast<sf::Vector2f>(mousePos);
+                manager.addOrReplaceComponent<Components::HoveredComponent>(id, hoverPosition);
             }
         }
 

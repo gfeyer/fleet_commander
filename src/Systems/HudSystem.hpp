@@ -160,9 +160,8 @@ namespace Systems {
         
         // Hover Panel display logic
         bool entityHovered = false;
-        for (auto&& [id, hover, faction] : manager.view<Components::HoverComponent, Components::FactionComponent>().each()) {
+        for (auto&& [id, faction, hovered] : manager.view<Components::FactionComponent, Components::HoveredComponent>().each()) {
             
-            if (hover.isHovered) {
                 entityHovered = true;
 
                 // Update info panel
@@ -222,32 +221,34 @@ namespace Systems {
 
                 // infoPanel->setPosition({hover.position.x, hover.position.y});
 
-
-                // Update cursor
-                if(faction.faction == Components::Faction::PLAYER_1){
-                    cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_SELECT));
-                } else {
-                    cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_TARGET));
-                }
-                
-                cursor->setSize({64, 64});     // optional resize
-                cursor->setPosition({hover.position.x-32, hover.position.y-32}); // screen coordinates
-                cursor->setVisible(true);
-                gui.add(cursor);
-
                 break; // Show info for the first hovered entity only
-            } // end hover.isHovered
         }
 
         // Disable Hover panel
         if (!entityHovered) {
             infoPanel->setVisible(false);
-            cursor->setVisible(false);
-            gui.getWindow()->setMouseCursorVisible(true);
-        }else{
-            infoPanel->setVisible(false);
-            gui.getWindow()->setMouseCursorVisible(false);
         }
+
+        // Default cursor by default
+        gui.getWindow()->setMouseCursorVisible(true);
+        cursor->setVisible(false);
+
+        // Update cursor
+        for(auto&& [id, hover, faction]: manager.view<Components::HoveredComponent, Components::FactionComponent>().each()){
+            if(faction.faction == Components::Faction::PLAYER_1){
+                cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_SELECT));
+            } else {
+                cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_TARGET));
+            }
+            
+            cursor->setSize({64, 64});     // optional resize
+            cursor->setPosition({hover.position.x-32, hover.position.y-32}); // screen coordinates
+            cursor->setVisible(true);
+            gui.add(cursor);
+            gui.getWindow()->setMouseCursorVisible(false);
+            break;
+        }
+
 
         // Game Over Panel - initialization
         if (!gameOverPanel) {
