@@ -6,6 +6,10 @@ namespace Components {
     struct SelectableComponent {
         bool isSelected = false;
     };
+
+    struct SelectedComponent{
+        // TODO
+    };
 }
 
 
