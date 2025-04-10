@@ -1,7 +1,7 @@
 #ifndef CURSOR_COMPONENT_HPP
 #define CURSOR_COMPONENT_HPP
 
-#include <sfml/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 namespace Components
 {
