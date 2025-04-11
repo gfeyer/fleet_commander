@@ -245,12 +245,11 @@ namespace Systems {
             
             cursor->setSize({64, 64});     // optional resize
             cursor->setPosition({hover.position.x-32, hover.position.y-32}); // screen coordinates
-            cursor->setVisible(true);
             
             gui.getWindow()->setMouseCursorVisible(false);
+            cursor->setVisible(true);
             break;
         }
-
 
         // Game Over Panel - initialization
         if (!gameOverPanel) {
