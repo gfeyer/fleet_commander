@@ -55,25 +55,24 @@ namespace Systems {
         }
 
         // Draw Selection
-        for(auto&& [id, transform, selectable] : manager.view<
+        for(auto&& [id, transform] : manager.view<
                     Components::TransformComponent,
-                    Components::SelectableComponent>().each()) {
+                    Components::SelectedComponent>().each()) {
                         
-            if(selectable.isSelected){
-                sf::CircleShape selectionShape(Config::FACTORY_SIZE);
-                selectionShape.setOrigin(Config::FACTORY_SIZE, Config::FACTORY_SIZE);
-                selectionShape.setFillColor(sf::Color(255,255,0,200));
-                selectionShape.setPosition(transform.getPosition());
-                window.draw(selectionShape);
+            sf::CircleShape selectionShape(Config::FACTORY_SIZE);
+            selectionShape.setOrigin(Config::FACTORY_SIZE, Config::FACTORY_SIZE);
+            selectionShape.setFillColor(sf::Color(255,255,0,200));
+            selectionShape.setPosition(transform.getPosition());
+            window.draw(selectionShape);
 
-                // sf::Sprite sprite;
-                // const auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_SHIELD);
-                // sprite.setTexture(texture, true);
-                // sprite.setScale(Config::SCALE_FACTOR*1.5, Config::SCALE_FACTOR*1.5);
-                // sprite.setPosition(transform.getPosition());
-                // sprite.setOrigin(texture.getSize().x/2, texture.getSize().y/2);
-                // window.draw(sprite);
-            }
+            // sf::Sprite sprite;
+            // const auto& texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_SHIELD);
+            // sprite.setTexture(texture, true);
+            // sprite.setScale(Config::SCALE_FACTOR*1.5, Config::SCALE_FACTOR*1.5);
+            // sprite.setPosition(transform.getPosition());
+            // sprite.setOrigin(texture.getSize().x/2, texture.getSize().y/2);
+            // window.draw(sprite);
+            
         }
 
         // Draw Sprites

@@ -33,12 +33,14 @@ namespace Systems {
         // Cursor
         static tgui::Picture::Ptr cursor = tgui::Picture::create();
         
+   
         // Panels Init
         if (!infoPanel) {
             infoPanel = tgui::Panel::create({"230", "180"});
             infoPanel->setVisible(false);
             infoPanel->setRenderer(theme->getRenderer("Panel"));
             gui.add(infoPanel);
+            gui.add(cursor);
         }
 
         if(!topPanel) {
@@ -244,7 +246,7 @@ namespace Systems {
             cursor->setSize({64, 64});     // optional resize
             cursor->setPosition({hover.position.x-32, hover.position.y-32}); // screen coordinates
             cursor->setVisible(true);
-            gui.add(cursor);
+            
             gui.getWindow()->setMouseCursorVisible(false);
             break;
         }

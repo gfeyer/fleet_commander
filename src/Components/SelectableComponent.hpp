@@ -3,13 +3,9 @@
 
 namespace Components {
 
-    struct SelectableComponent {
-        bool isSelected = false;
-    };
+    struct SelectableComponent {};
 
-    struct SelectedComponent{
-        // TODO
-    };
+    struct SelectedComponent{};
 }
 
 
