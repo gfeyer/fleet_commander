@@ -42,18 +42,12 @@ namespace Systems {
 
     void InputSelectionSystem(const sf::Event& event, Game::GameEntityManager& manager, const sf::RenderWindow& window) {
         
-        for(auto&& [id] : manager.view<Components::SelectedComponent>().each()){
-            log_info << "selection: " << entt::to_integral(id);
-        }
-
         if(event.type != sf::Event::MouseButtonPressed){
             return;
         }
 
         EntityID previousSelection = getPreviouslySelectedEntity(manager);
         EntityID currentSelection = getSelectedEntity(event, manager, window);
-
-        log_info << "Previous Selection: " << entt::to_integral(previousSelection) << " Current Selection: " << entt::to_integral(currentSelection);
 
         if(previousSelection == NullEntityID && currentSelection == NullEntityID){
             // No selection, do nothing
