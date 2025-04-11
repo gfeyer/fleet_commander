@@ -9,12 +9,15 @@
 #include "Components/TransformComponent.hpp"
 #include "Components/SpriteComponent.hpp"
 #include "Components/HoverComponent.hpp"
+#include "Components/CursorComponent.hpp"
 
 #include "Utils/Logger.hpp"
 
 #include "Game/GameEntityManager.hpp"
 
 namespace Systems {
+
+
     void InputHoverSystem(Game::GameEntityManager& manager, const sf::RenderWindow& window) {
 
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -26,29 +29,52 @@ namespace Systems {
                 manager.removeComponent<Components::HoveredComponent>(id);
             }
         }
-
+        
+        EntityID hoveredEntity = NullEntityID;
         // Add hovered component
         for (auto&& [id, sprite]: manager.view<Components::SpriteComponent, Components::HoverableComponent>().each()) {
             if (sprite.sprite.getGlobalBounds().contains(worldPos)) {
                 auto hoverPosition = static_cast<sf::Vector2f>(mousePos);
                 manager.addOrReplaceComponent<Components::HoveredComponent>(id, hoverPosition);
+                hoveredEntity = id;
             }
         }
 
-        // // Update cursor component
-        // for(auto&& [id, cursor, transform, sprite] : manager.view<Components::CursorComponent, Components::TransformComponent, Components::SpriteComponent>().each()) {
-        //     if (isHovered) {
+        if(hoveredEntity == NullEntityID){
+            return;
+        }
 
-        //         sprite.sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER), true);
-        //         sprite.sprite.setOrigin(sprite.sprite.getLocalBounds().width/2, sprite.sprite.getLocalBounds().height/2);
-        //         transform.transform.setPosition(hoverPosition);
-        //         transform.transform.setScale(0.15f, 0.15f);
+        // Get selection, cursor and faction
+        EntityID selection = NullEntityID;
+        EntityID cursor = NullEntityID;
 
-        //         sprite.isVisible = true;
-        //     }else{
-        //         sprite.isVisible = false;
-        //     }
-        // }
+        for(auto&& [id] : manager.view<Components::SelectedComponent>().each()){
+            selection = id;
+        }
+        
+        for(auto&& [id, c] : manager.view<Components::CursorComponent>().each()){
+            c.type = Components::CursorType::NONE;
+            cursor = id;
+        }
+        
+        auto* hoveredFaction = manager.getComponent<Components::FactionComponent>(hoveredEntity);
+        auto* selectedFaction = manager.getComponent<Components::FactionComponent>(selection);
+        auto* cursorComp = manager.getComponent<Components::CursorComponent>(cursor);
+
+        if(selection == NullEntityID){
+            // Nothing is selected
+            // Only display friendly cursor if hovered entity is friendly otherwise none
+            if(hoveredFaction->faction == Components::Faction::PLAYER_1){
+                cursorComp->type = Components::CursorType::FRIENDLY;
+            }
+        }else{
+            // There is a previous selection here
+            if(selectedFaction->faction == Components::Faction::PLAYER_1 && hoveredFaction->faction != Components::Faction::PLAYER_1){
+                cursorComp->type = Components::CursorType::ATTACK;
+            }else{
+                cursorComp->type = Components::CursorType::FRIENDLY;
+            }
+        }
     }
 }
 

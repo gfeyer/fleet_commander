@@ -5,9 +5,15 @@
 
 namespace Components
 {
+    enum class CursorType : unsigned int {
+        NONE = 0,
+        FRIENDLY = 1,
+        ATTACK = 2,
+    };
+
     struct CursorComponent
     {
-        bool visible = false;
+        CursorType type = CursorType::NONE;
     };
 } 
 

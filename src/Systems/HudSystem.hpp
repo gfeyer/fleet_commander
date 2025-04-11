@@ -10,6 +10,7 @@
 #include "Components/TagComponent.hpp"
 #include "Components/GarissonComponent.hpp"
 #include "Components/FactionComponent.hpp"
+#include "Components/CursorComponent.hpp"
 
 #include "Config.hpp"
 #include <TGUI/TGUI.hpp>
@@ -236,19 +237,46 @@ namespace Systems {
         cursor->setVisible(false);
 
         // Update cursor
-        for(auto&& [id, hover, faction]: manager.view<Components::HoveredComponent, Components::FactionComponent>().each()){
-            if(faction.faction == Components::Faction::PLAYER_1){
+        // for(auto&& [id, hover, faction]: manager.view<Components::HoveredComponent, Components::FactionComponent>().each()){
+        //     if(faction.faction == Components::Faction::PLAYER_1){
+        //         cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_SELECT));
+        //     } else {
+        //         cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_TARGET));
+        //     }
+            
+        //     cursor->setSize({64, 64});     // optional resize
+        //     cursor->setPosition({hover.position.x-32, hover.position.y-32}); // screen coordinates
+            
+        //     gui.getWindow()->setMouseCursorVisible(false);
+        //     cursor->setVisible(true);
+        //     break;
+        // }
+        
+        for(auto&& [id, hoveredComp]: manager.view<Components::HoveredComponent>().each()){
+
+            EntityID cursorEntity = NullEntityID;
+
+            for(auto&& [id, c] : manager.view<Components::CursorComponent>().each()){
+                cursorEntity = id;
+                break;
+            }
+
+            auto* cursorComp = manager.getComponent<Components::CursorComponent>(cursorEntity);
+
+            if(cursorComp->type == Components::CursorType::NONE){
+                break;
+            }
+
+            if(cursorComp->type == Components::CursorType::FRIENDLY){
                 cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_SELECT));
-            } else {
+            }else if(cursorComp->type == Components::CursorType::ATTACK){
                 cursor->getRenderer()->setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_POINTER_TARGET));
             }
-            
+
             cursor->setSize({64, 64});     // optional resize
-            cursor->setPosition({hover.position.x-32, hover.position.y-32}); // screen coordinates
-            
+            cursor->setPosition({hoveredComp.position.x-32, hoveredComp.position.y-32}); // screen coordinates
             gui.getWindow()->setMouseCursorVisible(false);
             cursor->setVisible(true);
-            break;
         }
 
         // Game Over Panel - initialization
