@@ -36,6 +36,10 @@ namespace Resource::Paths{
     // Mouse
     constexpr const char* TEXTURE_POINTER_SELECT = "assets/texture/select.png";
     constexpr const char* TEXTURE_POINTER_TARGET = "assets/texture/target.png";
+
+    // Atlas
+    constexpr const char* EXPLOSIONS_ATLAS = "assets/texture/explosions.json";
+    constexpr const char* EXPLOSIONS_TEXTURE = "assets/texture/explosions.png";
 }
 
 
@@ -53,9 +57,9 @@ private:
     ~ResourceManager();
 
     void loadTexture(const char* path);
-    void loadAtlas(const char* path);
     void loadTheme(const char* path);
     void loadFont(const char* path);
+    void loadAtlas(AtlasFormat type, const char* path);
 
 public:
     // Get the singleton instance

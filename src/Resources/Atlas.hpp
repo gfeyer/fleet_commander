@@ -8,14 +8,20 @@
 
 namespace Resource {
 
+    enum class AtlasFormat {
+        XML,
+        JSON
+    };
+
     class Atlas {
         public:
-            Atlas(const std::string& path);
+            Atlas(AtlasFormat format, const std::string& path);
             sf::IntRect getRect(const std::string& name) const;
             sf::IntRect getFrame(const std::string& name, size_t idx) const; // animation
 
         private:
-            void parseAtlas(const std::string& path);
+            void parseXMLAtlas(const std::string& path);
+            void parseJSONAtlas(const std::string& path);
 
         private:
             std::map<std::string, sf::IntRect> atlas;

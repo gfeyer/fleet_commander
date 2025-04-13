@@ -29,6 +29,9 @@ ResourceManager::ResourceManager() {
 
     loadTexture(Paths::TEXTURE_POINTER_SELECT);
     loadTexture(Paths::TEXTURE_POINTER_TARGET);
+
+    // Load atlas
+    loadAtlas(AtlasFormat::JSON, Paths::EXPLOSIONS_ATLAS);
 }
 
 ResourceManager::~ResourceManager() {
@@ -44,8 +47,8 @@ void ResourceManager::loadTexture(const char *path)
     textures.insert_or_assign(path, std::move(texture));
 }
 
-void ResourceManager::loadAtlas(const char *path) {
-    auto atlas = std::make_unique<Atlas>(path);
+void ResourceManager::loadAtlas(AtlasFormat type, const char *path) {
+    auto atlas = std::make_unique<Atlas>(type, path);
     atlases.insert_or_assign(path, std::move(atlas));
 }
 

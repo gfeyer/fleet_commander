@@ -35,6 +35,10 @@ target_link_libraries(FleetCommander PRIVATE
 find_package(tinyxml2 CONFIG REQUIRED)
 target_link_libraries(FleetCommander PRIVATE tinyxml2::tinyxml2)
 
+# Json
+find_package(nlohmann_json CONFIG REQUIRED)
+target_link_libraries(FleetCommander PRIVATE nlohmann_json::nlohmann_json)
+
 # Set the C++ standard
 target_compile_features(FleetCommander PRIVATE cxx_std_17)
 
