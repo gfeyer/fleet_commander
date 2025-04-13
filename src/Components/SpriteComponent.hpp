@@ -7,6 +7,7 @@ namespace Components{
     struct SpriteComponent {
         sf::Sprite sprite;
         bool isVisible = true;
+        int layer = 0;
     };
 
 }

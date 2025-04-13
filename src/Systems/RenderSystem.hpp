@@ -75,13 +75,29 @@ namespace Systems {
             
         }
 
-        // Draw Sprites
+        // Draw Sprites on Layer 0
         for(auto&& [id, transform, sprite] : manager.view<
                     Components::TransformComponent, 
                     Components::SpriteComponent
                 >().each()) {
             
             if(sprite.isVisible == false) continue;
+            if(sprite.layer != 0) continue;
+            
+            sprite.sprite.setPosition(transform.getPosition());
+            sprite.sprite.setRotation(transform.getRotation());
+            sprite.sprite.setScale(transform.getScale());
+            window.draw(sprite.sprite);
+        }
+
+        // Draw Sprites on Layer 1
+        for(auto&& [id, transform, sprite] : manager.view<
+            Components::TransformComponent, 
+            Components::SpriteComponent
+        >().each()) {
+    
+            if(sprite.isVisible == false) continue;
+            if(sprite.layer != 1) continue;
             
             sprite.sprite.setPosition(transform.getPosition());
             sprite.sprite.setRotation(transform.getRotation());

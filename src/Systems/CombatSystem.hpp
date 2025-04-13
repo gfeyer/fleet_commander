@@ -12,11 +12,13 @@
 #include "Game/Builder.hpp"
 
 #include "Utils/Logger.hpp"
+#include "Utils/Random.hpp"
 
 namespace Systems {
         void CombatSystem(Game::GameEntityManager& manager, float dt) {
 
             std::vector<EntityID> toRemoveEntities;
+            std::vector<sf::Vector2f> toAddExplosionsAtPositions;
 
             for(auto&& [id, attackOrder, originGarisson, faction] : manager.view<
                 Components::AttackOrderComponent, 
@@ -127,17 +129,19 @@ namespace Systems {
                             targetFaction->faction = attackingFaction;
                             targetGarisson->incrementDroneCount();
                         }
+
+                        toAddExplosionsAtPositions.push_back(move.targetPosition);
                     }
                 }
             }
-
+            
+            for(auto& position : toAddExplosionsAtPositions){
+                position.x += Utils::getRandomFloat(-128.f, 128.f);
+                position.y += Utils::getRandomFloat(-128.f, 128.f);
+                Game::createExplosionAnimation(manager, position);
+            }
+  
             for (auto id : toRemoveEntities) {
-                auto* transformComp = manager.getComponent<Components::TransformComponent>(id);
-
-                if (transformComp) {
-                    Game::createExplosionAnimation(manager, transformComp->transform.getPosition());
-                }
-
                 manager.removeEntity(id);
             }
         }

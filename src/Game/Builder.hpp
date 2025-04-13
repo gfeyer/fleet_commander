@@ -103,7 +103,8 @@ namespace Game {
         auto* sprite = manager.getComponent<Components::SpriteComponent>(animID);
         sprite->sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_EXPLOSIONS_ATLAS));
         sprite->sprite.setTextureRect(sf::IntRect(0, 0, 1, 1));
-        manager.addComponent<Components::AnimationComponent>(animID, "expl_11", 24);
+        sprite->layer = 1;
+        manager.addComponent<Components::AnimationComponent>(animID, "expl_11", 24, false, 0.05f);
         return animID;
     }
 }
