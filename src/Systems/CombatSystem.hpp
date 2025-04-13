@@ -4,8 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-
-
+#include "Game/Builder.hpp"
 #include "Components/MoveComponent.hpp"
 #include "Components/AttackOrderComponent.hpp"
 #include "Components/GarissonComponent.hpp"
@@ -133,6 +132,12 @@ namespace Systems {
             }
 
             for (auto id : toRemoveEntities) {
+                auto* transformComp = manager.getComponent<Components::TransformComponent>(id);
+
+                if (transformComp) {
+                    Game::createExplosionAnimation(manager, transformComp->transform.getPosition());
+                }
+
                 manager.removeEntity(id);
             }
         }

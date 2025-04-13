@@ -17,8 +17,10 @@ namespace Systems {
 
     void AnimationSystem(Game::GameEntityManager& manager, float dt) {
 
+        std::vector<EntityID> toRemoveEntities;
+
         //const Resource::Atlas& atlas
-        auto atlas = Resource::ResourceManager::getInstance().getAtlas(Resource::Paths::EXPLOSIONS_ATLAS);
+        static const auto& atlas = Resource::ResourceManager::getInstance().getAtlas(Resource::Paths::EXPLOSIONS_ATLAS);
         // auto atlas_texture = Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_EXPLOSIONS_ATLAS);
 
         // Get a view of entities with both Animation and Sprite components
@@ -51,6 +53,7 @@ namespace Systems {
                 // Check if animation reached the end
                 if (anim.currentFrame >= anim.totalFrames) {
                     anim.justCompleted = true; // Signal completion for this frame
+                    toRemoveEntities.push_back(id);
 
                     if (anim.loop) {
                         anim.currentFrame = 0; // Wrap around for looping animations
@@ -73,11 +76,10 @@ namespace Systems {
                 try {
                     // Get the rectangle from the shared atlas using the generated key
                     sf::IntRect newRect = atlas.getRect(frameKey);
-                    log_info << "frameKey: " << frameKey << ", newRect: x: " << newRect.left << ", y: " << newRect.top << ", w: " << newRect.width << ", h: " << newRect.height;
 
                     // Update the sprite's texture and texture rect
                     spriteComp.sprite.setTextureRect(newRect);
-                    // spriteComp.sprite.setTexture(atlas_texture);
+                    spriteComp.sprite.setOrigin(newRect.width / 2, newRect.height / 2);
 
                 } catch (const std::exception& e) {
                     // Handle cases where the generated frame key isn't found in the Atlas
@@ -93,6 +95,11 @@ namespace Systems {
             // --- End Frame Advancement ---
         }
         // --- End Entity Loop ---
+
+        for (EntityID id : toRemoveEntities) {
+            manager.removeEntity(id);
+        }
+    
     }
 
 } // namespace Systems

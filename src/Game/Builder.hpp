@@ -94,7 +94,18 @@ namespace Game {
 
         return droneID;
     }
-    
+
+    EntityID createExplosionAnimation(GameEntityManager& manager, sf::Vector2f position = sf::Vector2f(0.f, 0.f)){
+        // Add explosion animation
+        EntityID animID = manager.createEntity();
+        manager.addComponent<Components::TransformComponent>(animID, position, 0.f, sf::Vector2f(3, 3));
+        manager.addComponent<Components::SpriteComponent>(animID);
+        auto* sprite = manager.getComponent<Components::SpriteComponent>(animID);
+        sprite->sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_EXPLOSIONS_ATLAS));
+        sprite->sprite.setTextureRect(sf::IntRect(0, 0, 1, 1));
+        manager.addComponent<Components::AnimationComponent>(animID, "expl_11", 24);
+        return animID;
+    }
 }
 
 

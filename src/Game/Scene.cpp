@@ -100,14 +100,6 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
     // Signal Handlers
     // manager.registerSignalHandlers();
 
-    // Add a test animation
-    EntityID animID = manager.createEntity();
-    manager.addComponent<Components::TransformComponent>(animID, sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(1, 1));
-    manager.addComponent<Components::SpriteComponent>(animID);
-    auto* sprite = manager.getComponent<Components::SpriteComponent>(animID);
-    sprite->sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_EXPLOSIONS_ATLAS));
-    sprite->sprite.setTextureRect(sf::IntRect(0, 0, 1, 1));
-    manager.addComponent<Components::AnimationComponent>(animID, "expl_11", 24);
 }
 
 Scene::~Scene()

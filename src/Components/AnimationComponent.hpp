@@ -19,8 +19,9 @@ namespace Components {
         bool justCompleted = false;
 
         AnimationComponent(const std::string& newName, size_t numFrames,
-                          float newFrameDuration = 0.1f,
-                          bool shouldLoop = true, bool playImmediately = true)
+                            bool shouldLoop = false,
+                            float newFrameDuration = 0.1f, 
+                            bool playImmediately = true)
         {
             if (animationName != newName || totalFrames != numFrames) { // Only reset if different
                 animationName = newName;
