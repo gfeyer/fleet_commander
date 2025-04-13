@@ -8,6 +8,7 @@ namespace Components{
         sf::Sprite sprite;
         bool isVisible = true;
     };
+
 }
 
 #endif // SPRITE_COMPONENT_HPP

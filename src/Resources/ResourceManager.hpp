@@ -39,7 +39,7 @@ namespace Resource::Paths{
 
     // Atlas
     constexpr const char* EXPLOSIONS_ATLAS = "assets/texture/explosions.json";
-    constexpr const char* EXPLOSIONS_TEXTURE = "assets/texture/explosions.png";
+    constexpr const char* TEXTURE_EXPLOSIONS_ATLAS = "assets/texture/explosions.png";
 }
 
 

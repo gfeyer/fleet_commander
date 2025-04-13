@@ -21,6 +21,7 @@
 #include "Components/AIComponent.hpp"
 #include "Components/DebugOverlayComponent.hpp"
 #include "Components/CursorComponent.hpp"
+#include "Components/AnimationComponent.hpp"
 
 #include "Systems/MovementSystem.hpp"
 #include "Systems/RenderSystem.hpp"
@@ -36,6 +37,7 @@
 #include "Systems/DroneTransferSystem.hpp"
 #include "Systems/DebugOverlaySystem.hpp"
 #include "Systems/SpriteUpdateSystem.hpp"
+#include "Systems/AnimationSystem.hpp"
 
 #include "Game/Builder.hpp"
 #include "Game/MapGenerator.hpp"
@@ -97,6 +99,15 @@ Scene::Scene(sf::RenderWindow& window) : windowRef(window)
 
     // Signal Handlers
     // manager.registerSignalHandlers();
+
+    // Add a test animation
+    EntityID animID = manager.createEntity();
+    manager.addComponent<Components::TransformComponent>(animID, sf::Vector2f(0.f, 0.f), 0.f, sf::Vector2f(1, 1));
+    manager.addComponent<Components::SpriteComponent>(animID);
+    auto* sprite = manager.getComponent<Components::SpriteComponent>(animID);
+    sprite->sprite.setTexture(Resource::ResourceManager::getInstance().getTexture(Resource::Paths::TEXTURE_EXPLOSIONS_ATLAS));
+    sprite->sprite.setTextureRect(sf::IntRect(0, 0, 1, 1));
+    manager.addComponent<Components::AnimationComponent>(animID, "expl_11", 24);
 }
 
 Scene::~Scene()
@@ -119,6 +130,8 @@ void Scene::update(float dt)
     Systems::AI::AISystem(manager, dt);
     Systems::GameStateSystem(manager, dt);
     Systems::DebugOverlaySystem(manager, dt);
+    Systems::AnimationSystem(manager, dt);
+
 
     // Handle Camera Movement
     // Needs to be in the update loop

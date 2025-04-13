@@ -32,6 +32,7 @@ ResourceManager::ResourceManager() {
 
     // Load atlas
     loadAtlas(AtlasFormat::JSON, Paths::EXPLOSIONS_ATLAS);
+    loadTexture(Paths::TEXTURE_EXPLOSIONS_ATLAS);
 }
 
 ResourceManager::~ResourceManager() {
